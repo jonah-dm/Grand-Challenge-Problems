@@ -2,12 +2,13 @@
 
 ## Background
 
-Density functional theory (DFT) is the workhorse for computing the properties of molecules and materials: formation and reaction energies, structures, band gaps, phonons, magnetism and dynamics. It is exact in principle. In practice, two limits remain:
+Density functional theory (DFT) is the workhorse for computing the properties of molecules and materials: formation and reaction energies, structures, band gaps, phonons, magnetism and dynamics. For the ground-state energy and density it is exact in principle: the Hohenberg–Kohn theorems guarantee an exact functional exists, and Kohn–Sham theory makes it computable. But the Kohn–Sham construction is only exact for ground-state quantities. The Kohn–Sham eigenvalue gap is *not* the fundamental band gap even with the exact functional: the two differ by the derivative discontinuity of the XC energy, which no smooth semilocal functional can produce. Excited states, quasiparticle energies and response properties likewise lie outside ground-state DFT and need its generalizations (GKS, TDDFT, GW). Three limits follow:
 
-- **Accuracy.** All of the unknown physics is packed into the exchange–correlation (XC) functional. Today's functionals are typically off by 2–10 kcal/mol and fail qualitatively for band gaps, strong correlation and charge transfer. Chemical accuracy (≈1 kcal/mol) still requires methods like CCSD(T), which scale as O(N⁷).
+- **Accuracy.** All of the unknown physics is packed into the exchange–correlation (XC) functional. Today's functionals are typically off by 2–10 kcal/mol on energies and fail qualitatively for strong correlation and charge transfer. Chemical accuracy (≈1 kcal/mol) still requires methods like CCSD(T), which scale as O(N⁷).
+- **Scope.** For quantities that are not ground-state properties, above all band gaps, a better functional is not enough: the theory itself has to be extended, and the extensions (generalized Kohn–Sham, TDDFT, relativistic and superconducting DFT) each bring their own unknown functionals and unresolved formal questions.
 - **Cost.** Standard Kohn–Sham DFT scales as O(N³), and hybrid functionals are worse. That caps routine calculations at roughly 10³ atoms, well below what interfaces, disordered materials and devices need.
 
-These problems test whether AI systems can make real progress on either front. Each task is posed so that its answers can be **scored automatically and re-run as models improve**.
+These problems test whether AI systems can make real progress on any of these fronts. Each task is posed so that its answers can be **scored automatically and re-run as models improve**.
 
 ## Tasks
 
