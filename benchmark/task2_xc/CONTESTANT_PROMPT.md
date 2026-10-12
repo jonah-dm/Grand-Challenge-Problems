@@ -26,7 +26,9 @@ as a combination of ~20 common libxc functionals on random densities and checks 
 limit, the Lieb-Oxford bound and negativity. Verdicts WRAPPER, MIX or NEAR-EXISTING are
 disqualified; only DISTINCT is scored. Run it yourself:
   OMP_NUM_THREADS=1 python audit.py file:results/{MODEL}/submission.py
-A reviewer also reads every submission. State in NOTES.md exactly what is new, what physical
+A reviewer also reads every submission.
+Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the most common failure):
+  OMP_NUM_THREADS=1 python check_derivs.py file:results/{MODEL}/submission.py State in NOTES.md exactly what is new, what physical
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
