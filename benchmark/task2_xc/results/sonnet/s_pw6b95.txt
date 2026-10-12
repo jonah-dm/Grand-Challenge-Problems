@@ -1,1 +1,0 @@
-pw6b95 def2-svp AEmae 3.28 IPmae 6.23 WTMAD 1.54  IPerr [np.float64(9.6), np.float64(0.9), np.float64(-8.2)]

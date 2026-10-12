@@ -1,1 +1,0 @@
-mn15 def2-svp AEmae 4.21 IPmae 3.14 WTMAD 1.70  IPerr [np.float64(0.1), np.float64(0.2), np.float64(-9.2)]

@@ -30,7 +30,11 @@ def run_species(atoms, charge, spin, basis, xc, sub):
     mf = (dft.RKS if spin == 0 else dft.UKS)(mol)
     mf.grids.level = 4
     if sub is not None:
-        hyb = getattr(sub, "HYB", 0.0)
+        hyb = float(getattr(sub, "HYB", 0.0))
+        if hyb > 0:
+            # PySCF decides whether to build exact exchange from mf.xc's *name*, not from the
+            # hyb passed to define_xc_; a hybrid dummy name makes it honor the custom hyb.
+            mf.xc = "HF"
         mf = mf.define_xc_(sub.eval_xc, "GGA" if not getattr(sub, "META", False) else "MGGA", hyb=hyb)
     else:
         mf.xc = xc

@@ -1,1 +1,0 @@
-r2scan0 def2-svp AEmae 10.10 IPmae 9.16 WTMAD 4.18  IPerr [np.float64(13.4), np.float64(-1.7), np.float64(-12.4)]

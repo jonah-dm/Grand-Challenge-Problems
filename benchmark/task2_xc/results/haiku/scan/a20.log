@@ -18,3 +18,9 @@
   HCN                -90.96230153  115.9s
   H2CO              -111.63969333  211.1s
   OH                 -73.99945800   40.1s
+  CH2_triplet        -37.95849005  102.6s
+  B_cation           -23.60902816    9.3s
+  F_cation           -97.12377875    8.8s
+  HF_cation          -97.81194121   28.5s
+
+file:results/haiku/scan/a20.py: AE MAE=18.37  IP MAE=36.07  WTMAD=8.66  time=1155s
