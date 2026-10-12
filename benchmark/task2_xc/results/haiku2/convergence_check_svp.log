@@ -1,0 +1,26 @@
+H_atom -0.4586161133292196 True 0.7
+Li_atom -7.209952971023418 True 1.2
+B_atom ASSERT (no fxc: plain SCF not converged)
+C_atom ASSERT (no fxc: plain SCF not converged)
+N_atom -53.646679703277286 True 2.1
+O_atom ASSERT (no fxc: plain SCF not converged)
+F_atom ASSERT (no fxc: plain SCF not converged)
+H2 -1.0775799491367928 True 1.4
+LiH -7.747039950200523 True 3.0
+CH4 -39.62319382472548 True 7.2
+NH3 -55.51829955511435 True 5.9
+H2O -75.2104814506077 True 4.3
+HF -99.02877520569317 True 3.1
+N2 -107.70539350253088 True 3.3
+CO -111.4602091050454 True 5.1
+F2 -196.78610312770735 True 4.0
+C2H2 -75.80153382156163 True 6.7
+HCN -91.74778860188235 True 4.8
+H2CO -112.57644256411734 True 7.5
+OH ASSERT (no fxc: plain SCF not converged)
+CH2_triplet -38.326783608358895 True 5.4
+B_cation -23.777440164217698 True 1.3
+F_cation ASSERT (no fxc: plain SCF not converged)
+HF_cation ASSERT (no fxc: plain SCF not converged)
+
+[exited with code 0]

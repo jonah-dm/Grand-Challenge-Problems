@@ -1,0 +1,52 @@
+  H_atom              -0.49919693    0.6s
+  Li_atom             -7.47723351    3.9s
+  B_atom             -24.61770676    1.5s
+  C_atom             -37.78677025    1.4s
+  N_atom             -54.49753206    1.3s
+  O_atom             -74.93261659    1.7s
+  F_atom             -99.53937517    1.5s
+  H2                  -1.16599875    0.4s
+Traceback (most recent call last):
+  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 88, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 63, in main
+    E[name], conv, dt = run_species(atoms, charge, spin, a.basis, a.functional, sub)
+                        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 48, in run_species
+    mf = mf.newton().run()
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/lib/misc.py", line 693, in run
+    self.kernel(*args)
+    ~~~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/soscf/newton_ah.py", line 751, in kernel
+    kernel(self, mo_coeff, mo_occ, dm0, conv_tol=self.conv_tol,
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           conv_tol_grad=self.conv_tol_grad,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           max_cycle=self.max_cycle,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+           callback=self.callback, verbose=self.verbose)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/soscf/newton_ah.py", line 538, in kernel
+    rotaiter.send((mo_coeff, mo_occ, dm, vhf, e_tot))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/soscf/newton_ah.py", line 340, in _rotate_orb_cc
+    g_kf, h_op, h_diag = mf.gen_g_hop(mo_coeff, mo_occ, fock_ao)
+                         ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/soscf/newton_ah.py", line 92, in gen_g_hop_rhf
+    vind = mf.gen_response(mo_coeff, mo_occ, singlet=None, hermi=1,
+                           with_nlc=False)
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/scf/_response_functions.py", line 56, in _gen_rhf_response
+    rho0, vxc, fxc = ni.cache_xc_kernel(mol, mf.grids, mf.xc,
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+                                        mo_coeff, mo_occ, spin)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/numint.py", line 2573, in cache_xc_kernel
+    vxc, fxc = ni.eval_xc_eff(xc_code, rho, deriv=2, xctype=xctype, spin=spin)[1:3]
+               ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/numint.py", line 2793, in eval_xc_eff
+    out = self.eval_xc1(xc_code, rho, spin, deriv, omega)
+  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/libxc.py", line 1219, in _eval_xc1
+    assert fxc is not None
+           ^^^^^^^^^^^^^^^
+AssertionError

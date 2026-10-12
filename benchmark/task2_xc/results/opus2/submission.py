@@ -1,23 +1,38 @@
-"""opus2: Log-symmetric iso-orbital-normed hybrid meta-GGA (LSIN-h).
+"""opus2: "BIG" -- bounded-indicator, integrated-gradient-expansion meta-GGA exchange
+(+ r2SCAN correlation as a building block).
 
-E_xc = a E_x^HF + (1-a) E_x^LSIN[rho, sigma, tau] + E_c^{r2SCAN}
+E_xc = HYB*E_x^HF + (1-HYB)*E_x^BIG[rho, sigma, tau] + E_c^{r2SCAN}
 
-New piece: exchange enhancement factor
-    Fx(s, alpha) = [F0(p) + (F1(p,alpha) - F0(p)) * w(alpha)] * g(s)
-with the log-symmetric interpolation w(alpha) = 2 alpha / (1 + alpha^2)
-(w(0)=w(inf)=0, w(1)=1, w'(1)=0, w(alpha)=w(1/alpha)); see NOTES.md.
-All constants are fixed by exact constraints / norms, not fit to data.
+Exchange enhancement factor (spin scaling applied exactly):
+    Fx(p, alpha) = [ F0 + (F1(p) - F0) * W(alpha) ] * g(s)
+    F0      = 1 + kappa0                        (iso-orbital, alpha = 0; kappa0 = 0.174 tight 2e bound)
+    F1(p)   = 1 + kappa1 - kappa1/(1 + mu1 p/kappa1)  (kappa1 = 0.804 Lieb-Oxford)
+    W       = 4*beta,  beta = ah/(1+ah) in [0,1)   (W linear in a *bounded* indicator)
+    ah      = alpha^2 (1+eps)/(alpha+eps)          (numerical smoothing at alpha=0 only)
+    g(s)    = 1 - exp(-a1/sqrt(s))                 (Fx ~ s^-1/2, nonuniform scaling)
+Constants: mu1 is NOT a free parameter: it is fixed so that the *integrated* second-order
+gradient expansion coefficient is exactly 10/81 once the linear (alpha-1) slope of W is
+transformed to p by integration by parts (int rho^{4/3}(alpha-1) = -(20/27) int rho^{4/3} p).
+a1 is fixed by the exact exchange energy of the hydrogen atom (-5/16 Ha).
+The alpha -> infinity limit Fx -> (2 F1 - F0) g follows from linearity in beta, with no
+extra parameter. See NOTES.md.
 """
 import numpy as np
 from pyscf.dft import libxc
 
 HYB = 0.25          # PBE0 perturbation-theory argument (n=4), not fitted
 META = True
+ETA = 0.1
 
 MU = 10.0 / 81.0            # second-order gradient expansion of exchange
-C_ALPHA = 146.0 / 2025.0 * (9.0 / 20.0) ** 2   # 4th-order GE (q~ = 9/20 (alpha-1)) term
 KAPPA1 = 0.804              # Lieb-Oxford (pointwise Fx <= 1.804)
 KAPPA0 = 0.174              # tight two-electron / iso-orbital bound Fx <= 1.174
+# integrated 2nd-order GE: linear (alpha-1) slope dFx/dalpha|_1 = -KAPPA0/2 contributes
+# -(20/27)*(-KAPPA0/2) to the effective mu (int rho^4/3 (alpha-1) = -(20/27) int rho^4/3 p),
+# so MU1 = 10/81 - (20/27)*KAPPA0/2 restores the exact 10/81.
+EPS = 0.05                  # numerical smoothing of alpha near 0 only
+SLOPE = 0.5 * (1.0 + 2.0 * EPS) / (1.0 + EPS)   # dw/dalpha at alpha=1
+MU1 = MU - (20.0 / 27.0 + 5.0 * ETA / 3.0) * KAPPA0 * SLOPE   # incl. eta-regularization shift
 
 _CX = -0.75 * (3.0 / np.pi) ** (1.0 / 3.0)
 _CF = 0.3 * (3.0 * np.pi ** 2) ** (2.0 / 3.0)
@@ -25,11 +40,10 @@ _CF = 0.3 * (3.0 * np.pi ** 2) ** (2.0 / 3.0)
 
 def _fx(p, alpha, a1):
     s = np.sqrt(p + 1e-30)
-    x1 = MU * p + C_ALPHA * (alpha - 1.0) ** 2 / (1.0 + (alpha - 1.0) ** 2)
-    f1 = 1.0 + KAPPA1 - KAPPA1 / (1.0 + x1 / KAPPA1)
+    f1 = 1.0 + KAPPA1 - KAPPA1 / (1.0 + MU1 * p / KAPPA1)
     f0 = 1.0 + KAPPA0 + 0.0 * p
-    a2 = alpha * alpha
-    w = 2.0 * a2 / (1.0 + a2 * a2)
+    ah = alpha * alpha * (1.0 + EPS) / (alpha + EPS)   # smooth at alpha=0 (dah/dalpha=0), ah(1)=1
+    w = 2.0 * ah / (1.0 + ah)                 # linear in bounded beta = ah/(1+ah): w = 4 beta
     g = 1.0 - np.exp(-a1 / np.sqrt(s))
     return (f0 + (f1 - f0) * w) * g
 
@@ -41,7 +55,7 @@ def _ex_unpol(rho, sigma, tau, a1):
     p = sigma / (4.0 * kf2 * rho * rho)
     tw = sigma / (8.0 * rho)
     tu = _CF * rho ** (5.0 / 3.0)
-    alpha = (tau - tw) / tu
+    alpha = (tau - tw) / (tu + ETA * tw)   # regularized iso-orbital indicator (eta=0.1, chosen for SCF stability)
     alpha = np.where(np.real(alpha) < 0, 0.0 * alpha, alpha)
     return _CX * rho ** (4.0 / 3.0) * _fx(p, alpha, a1)
 

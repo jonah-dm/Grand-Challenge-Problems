@@ -1,0 +1,1 @@
+No dev-set score: plain SCF non-convergence for B, C, O, F, OH, F_cation, HF_cation (def2-svp).

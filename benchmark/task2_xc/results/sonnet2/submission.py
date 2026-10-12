@@ -44,12 +44,17 @@ def _ex_unpol_density(n2, s2, z):
     return ex_lda * (1 + h)
 
 
+def _zsat(z, k=40.0):
+    """smooth saturation z -> min(z,1) (z>1 is unphysical); analytic, so SCF stays smooth"""
+    return 1 - np.log(1 + np.exp(k * (1 - z))) / k
+
+
 def _E(ra, rb, saa, sab, sbb, ta, tb):
     """semilocal xc energy per volume (complex-step safe); exact-exchange part removed."""
     n = ra + rb
     sig = saa + 2 * sab + sbb
     z = sig / (8 * n * (ta + tb))
-    z = np.where(np.real(z) > 1, 1.0 + 0 * z, z)
+    z = _zsat(z)
     # exchange (spin scaling)
     ex = 0.0
     for r, s in ((ra, saa), (rb, sbb)):
