@@ -44,8 +44,14 @@ def run_species(atoms, charge, spin, basis, xc, sub):
     mf.max_cycle = 100
     t = time.time()
     mf.run()
+    if not mf.converged:  # derivative-free fallback first (custom functionals rarely provide fxc)
+        mf.damp, mf.level_shift, mf.diis_space, mf.max_cycle = 0.5, 0.5, 12, 300
+        mf.run(dm0=mf.make_rdm1())
     if not mf.converged:
-        mf = mf.newton().run()
+        try:
+            mf = mf.newton().run()
+        except Exception:
+            pass
     return mf.e_tot, mf.converged, time.time() - t
 
 

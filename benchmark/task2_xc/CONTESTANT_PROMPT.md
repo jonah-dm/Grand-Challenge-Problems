@@ -42,6 +42,17 @@ Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the mos
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
+PRIOR ART. Earlier rounds of this benchmark produced the attempts in results/prior_art/*.md (read
+them first). None beat r2SCAN. Known failure modes: one-orbital (z or alpha) factors that make
+the SCF unstable or underbind X-H bonds; wrong spin-polarized derivatives; constraint-only
+exchange that nearly rebuilds r2SCAN. The best idea so far (sonnet2) halved the IP error by
+making correlation vanish for one-electron densities, at a cost in atomization energies. Build
+on or go beyond these; do not repeat them.
+
+HIDDEN TEST CLASSES. Final ranking uses hidden sets with: first-row and SECOND-ROW atomization
+energies, ionization potentials, a reaction BARRIER HEIGHT, a NONCOVALENT interaction and PROTON
+AFFINITIES. The dev set has only first-row AEs and IPs. Design for all of these.
+
 BASELINES TO BEAT (dev-set WTMAD, lower is better): PBE 2.95, r2SCAN 1.28, B3LYP 0.97,
 wB97M-V 0.56. See README.md, kit/dev_set.py, score.py and results/baselines/*.json.
 
@@ -55,7 +66,7 @@ RULES
   (a smaller --basis such as def2-svp is fine for quick checks; final scoring uses def2-qzvp).
 - Do NOT modify score.py, reference.py, README.md or anything under kit/. Do NOT read or write
   outside results/{MODEL}/. Do not install packages.
-- Time budget: 60 minutes of wall time. A full dev-set run at def2-qzvp takes ~10 min on one
+- Time budget: 90 minutes of wall time. A full dev-set run at def2-qzvp takes ~10 min on one
   thread; use def2-svp for iteration and reserve one QZ run for your final submission. Leave your best submission.py and score.json in place.
 - Write results/{MODEL}/NOTES.md: what is new, the physical justification, exact conditions
   satisfied/violated, your dev-set score, and what you would try with more time. Report your
