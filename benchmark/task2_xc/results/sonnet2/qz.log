@@ -21,3 +21,6 @@
   CH2_triplet        -39.10042392   48.3s
   B_cation           -24.31953652    3.8s
   F_cation           -98.98110614    5.6s
+  HF_cation          -99.74654783   18.2s
+
+file:results/sonnet2/submission.py: AE MAE=3.21  IP MAE=3.32  WTMAD=1.35  time=550s

@@ -13,18 +13,28 @@ Acceptable routes include:
     constructions, density-matrix or orbital-dependent terms, machine-learned components)
     whose design is motivated by physics rather than by this benchmark;
   - machine-learned functionals whose architecture is built to satisfy known exact
-    conditions by construction, trained on data you generate or derive yourself.
+    conditions by construction, trained on data you generate or derive yourself (e.g. exact
+    exchange energies of densities you compute, model systems, or exact-condition samples).
+Suggested, not required: start from a specific failure of the best baseline on the dev set
+(e.g. one-electron self-interaction in atomic IPs; X-H bond underbinding), identify the exact
+condition whose violation explains it, and build the functional around satisfying it.
 Not acceptable:
   - returning an existing libxc functional, or a linear mix of existing functionals;
   - re-fitting the parameters of an existing functional form to this benchmark;
-  - any parameter chosen by fitting to the dev set. The dev set exists only so you can check
+  - any continuous parameter chosen by fitting to the dev set. Choosing between a handful of
+    physically motivated candidate forms using dev-set scores is allowed, but you must list
+    every candidate you compared and its score in NOTES.md; undisclosed selection is
+    disqualifying. The dev set exists only so you can check
     that your code works and see roughly where you stand. Final scoring is on HIDDEN sets that
     include property classes and elements absent from the dev set; a functional tuned to the
     dev set will lose there.
 An automated audit (audit.py) is run on every submission: it fits your functional's energy density
 as a combination of ~20 common libxc functionals on random densities and checks the uniform-gas
-limit, the Lieb-Oxford bound and negativity. Verdicts WRAPPER, MIX or NEAR-EXISTING are
-disqualified; only DISTINCT is scored. Run it yourself:
+limit, the Lieb-Oxford bound and negativity. WRAPPER and MIX are disqualified. NEAR-EXISTING
+is not automatically disqualified: a functional derived independently from exact constraints can
+legitimately land close to an existing one (constraints alone nearly rebuild r2SCAN). It goes
+to the reviewer, who checks that the derivation is documented and the constants are derived,
+not copied. DISTINCT is scored directly. Run it yourself:
   OMP_NUM_THREADS=1 python audit.py file:results/{MODEL}/submission.py
 A reviewer also reads every submission.
 Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the most common failure):
