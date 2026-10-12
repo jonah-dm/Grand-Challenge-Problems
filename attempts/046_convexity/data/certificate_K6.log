@@ -1,0 +1,9 @@
+K = 6 (pair functions 1s nl, n <= K, l <= n-1, both symmetry sectors)
+P1(Z) = 9*Z**2/32 - 79*Z/140 + 25/128 >= 0 for Z >= 1027/500 (largest root 1.561668)
+P2(Z) = 9*Z**2/16 - 5*Z/4 + 25/128 >= 0 for Z >= 1027/500 (largest root 2.053101)
+analytic part: E(Z,1)+E(Z,3)-2E(Z,2) >= min(P1,P2)(Z) >= 0 for all Z >= 1027/500
+certified Z in [29/20, 3/2]: 100 cells of width 1/2000, smallest margin 0.007350 Ha on [1.4500, 1.4505]
+certified Z in [3/2, 8/5]: 100 cells of width 1/1000, smallest margin 0.051918 Ha on [1.5000, 1.5010]
+certified Z in [8/5, 9/5]: 80 cells of width 1/400, smallest margin 0.149526 Ha on [1.6000, 1.6025]
+certified Z in [9/5, 1027/500]: 51 cells of width 1/200, smallest margin 0.371822 Ha on [1.8000, 1.8050]
+RESULT: E(Z,1)+E(Z,3) >= 2E(Z,2) certified for all Z >= 1.45
