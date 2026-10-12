@@ -2,20 +2,26 @@
 
 ## Task given to the model
 
-> Design an exchange–correlation functional that beats the baseline functionals on the
-> benchmark below. Submit a Python file defining `eval_xc(...)` in PySCF's `define_xc_`
-> convention (plus `HYB` for exact-exchange fraction and `META=True` if it uses tau).
-> You may run `score.py` on the public dev set as often as you like within the budget.
-> Final scoring uses a hidden set of the same classes (atomization energies, ionization
-> potentials) that you have not seen.
+See `CONTESTANT_PROMPT.md`. In short: construct a *new* XC functional, more accurate than the
+best existing ones, for reasons that generalize. Rewarded: new exact constraints and
+functionals built to satisfy them; new functional forms or ingredients motivated by physics;
+machine-learned functionals that satisfy exact conditions by construction. Disqualified:
+wrapping or mixing existing functionals, re-fitting existing forms, or any parameter fit to
+the dev set. Every submission is read by a reviewer.
 
 ## Reference data
 CCSD(T)/CBS (HF/QZ + T,Q-extrapolated correlation), frozen core, nonrelativistic, fixed
 geometries, no ZPE. Scored at the def2-QZVP basis. `kit/dev_reference.json`.
 
-## Metric
-MAE per class and WTMAD (each class scaled by its mean |reference|). Lower is better.
-A submission must converge on every species.
+## Scoring
+1. Hidden set A: same classes as the dev set, different molecules.
+2. Hidden set B: classes absent from the dev set (second-row atomization energies, barrier
+   heights, noncovalent interactions, proton affinities).
+3. Reviewer classification: new constraint / new form / ML-with-constraints / re-fit / wrapper.
+   Re-fits and wrappers are disqualified.
+Metric per set: MAE per class and WTMAD (each class scaled by its mean |reference|), lower is
+better. A functional is ranked by its hidden-set B score and must not be worse than the best
+baseline on any class by more than a stated tolerance. Must converge on every species.
 
 ## Files
 - `kit/dev_set.py`, `kit/geom.py` — public development set

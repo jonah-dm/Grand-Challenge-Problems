@@ -17,8 +17,8 @@ Find approximations to DFT that scale linearly with system size without losing c
 *Scored by:* measured scaling exponent, and error versus the standard O(N³) calculation (target ≤ 1 kcal/mol) on a fixed suite of insulators, semiconductors and metals.
 
 **2. Accuracy.**
-Design an XC functional, by parametrization or any other means, that outperforms [reference functional] on [properties] across [benchmark set].
-*Scored by:* error on a hidden test set against CCSD(T), QMC or experimental reference data, with no property class allowed to get worse than a set tolerance.
+Construct a new XC functional that outperforms [reference functional] on [properties] across [benchmark set], for reasons that generalize: by discovering and enforcing exact constraints that existing functionals violate, by introducing new physically motivated forms or ingredients, or by machine-learned constructions that satisfy exact conditions by construction. Re-fitting existing functional forms, or any parameter tuned to the benchmark, does not count.
+*Scored by:* error on hidden test sets against CCSD(T), QMC or experimental reference data, including property classes absent from the development set, with no property class allowed to get worse than a set tolerance; plus a reviewer's judgment that the construction is new.
 
 **3. Theory.**
 - (a) Find tighter bounds or higher-order expansions of known properties of the exact functional (e.g. the Lieb–Oxford bound, the gradient expansion, scaling relations).

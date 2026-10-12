@@ -21,3 +21,6 @@
   CH2_triplet        -39.14458004   41.0s
   B_cation           -24.34439420    5.1s
   F_cation           -99.09143605   11.2s
+  HF_cation          -99.85753785   48.5s
+
+m06-2x: AE MAE=2.02  IP MAE=1.82  WTMAD=0.84  time=563s
