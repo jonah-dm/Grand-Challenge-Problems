@@ -1,0 +1,12 @@
+NTHREADS=1 python score.py dev_set kit/dev_reference.json b3lyp --basis def2-tzvp --out results/opus/scr/b3lyp.json > results/opus/scr/b3lyp.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json pw6b95 --basis def2-tzvp --out results/opus/scr/pw6b95.json > results/opus/scr/pw6b95.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json m06-2x --basis def2-tzvp --out results/opus/scr/m06-2x.json > results/opus/scr/m06-2x.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json mn15 --basis def2-tzvp --out results/opus/scr/mn15.json > results/opus/scr/mn15.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json b97-1 --basis def2-tzvp --out results/opus/scr/b97-1.json > results/opus/scr/b97-1.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json scan0 --basis def2-tzvp --out results/opus/scr/scan0.json > results/opus/scr/scan0.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json r2scan0 --basis def2-tzvp --out results/opus/scr/r2scan0.json > results/opus/scr/r2scan0.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json tpssh --basis def2-tzvp --out results/opus/scr/tpssh.json > results/opus/scr/tpssh.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json pbe0 --basis def2-tzvp --out results/opus/scr/pbe0.json > results/opus/scr/pbe0.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json b1b95 --basis def2-tzvp --out results/opus/scr/b1b95.json > results/opus/scr/b1b95.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json mpw1b95 --basis def2-tzvp --out results/opus/scr/mpw1b95.json > results/opus/scr/mpw1b95.log 2>&1
+NTHREADS=1 python score.py dev_set kit/dev_reference.json b98 --basis def2-tzvp --out results/opus/scr/b98.json > results/opus/scr/b98.log 2>&1
