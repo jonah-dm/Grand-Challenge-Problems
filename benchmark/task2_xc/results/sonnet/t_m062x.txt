@@ -1,0 +1,1 @@
+m062x def2-tzvp AEmae 2.02 IPmae 1.82 WTMAD 0.84  IPerr [np.float64(1.6), np.float64(1.2), np.float64(-2.7)]
