@@ -7,7 +7,7 @@ E_xc = a E_x^HF + (1-a) E_x^SL[n_a, n_b] + E_c^G
           mu0 = beta*pi^2/3 (cancels the PBE-correlation gradient term in the slowly varying limit)
           mu1 = derived so that E_x^SL[H atom] = -5/16 Ha exactly (one-electron norm)
           kappa = 0.804 (Lieb-Oxford)
- E_c^G  : PBE correlation x (1 - zeta^2 z^2): vanishes for every fully polarized one-orbital density.
+ E_c^G  : PBE correlation x (1 - zeta^4 z^2): vanishes for every fully polarized one-orbital density.
 """
 import numpy as np
 from pyscf.dft import libxc
@@ -82,7 +82,7 @@ def _gate(na, nb, sig, tau):
     n = na + nb
     zeta = (na - nb) / n
     z = _zclip(sig / (8 * n * tau))
-    return 1 - zeta**2 * z**2
+    return 1 - zeta**4 * z**2
 
 
 def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=None):

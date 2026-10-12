@@ -86,8 +86,15 @@ At def2-TZVP (AE MAE / IP MAE / WTMAD):
 | g4 | z^2 | 1-zeta^4 z^2 | H | 1.67 | 3.79 | 5.31 |
 | w4 | z^4 | 1-zeta^2 z^2 | H | 1.71 | 4.06 | 4.20 |
 | w4g4 | z^4 | 1-zeta^4 z^2 | H | 1.82 | 4.13 | 5.76 |
-QZ results: see the final section. g4, w4 and w4g4 were all run at QZ, and the submitted
-form was chosen among them by QZ WTMAD.
+At def2-QZVP (final basis):
+| candidate | QZ WTMAD | AE MAE | IP MAE |
+|---|---|---|---|
+| PBE0 (reference) | 1.31 | 2.91 | 4.66 |
+| g4 (**submitted**) | **1.59** | 3.63 | 4.87 |
+| w4 | 1.64 | 3.94 | 3.76 |
+| w4g4 | 1.58 | 3.53 | 5.31 |
+g4 and w4g4 tie (difference 0.01). I submitted g4 because w = z^2 is the lower-order and
+smoother choice, which is better for SCF stability.
 No continuous parameter was adjusted. The only choices made after seeing dev scores were the
 powers in w(z) (1, 2, 4) and in the gate (zeta^2 vs zeta^4), and H vs He norm, all listed above.
 
@@ -111,3 +118,11 @@ powers in w(z) (1, 2, 4) and in the gate (zeta^2 vs zeta^4), and H vs He norm, a
   right only by cancellation.
 - Range separation (the harness supports only global HYB) for barrier heights and IPs, and a
   nonlocal VV10-type term for noncovalent interactions.
+
+## Final dev-set score (def2-QZVP, score.json)
+**WTMAD = 1.59** (AE MAE 3.63 kcal/mol, IP MAE 4.87 kcal/mol). All species converged.
+This does **not** beat the baselines: PBE 2.95 (beaten), r2SCAN 1.28, B3LYP 0.97, wB97M-V 0.56.
+It is also worse than plain PBE0 at QZ (1.31). Satisfying the joint one-electron condition
+exactly makes the H atom exact. It does not improve AEs on its own, because the residual
+atom-versus-molecule imbalance (C-H overbinding, O/F underbinding) is set by the many-electron
+behaviour of the iso-orbital exchange, which a one-electron norm does not constrain.
