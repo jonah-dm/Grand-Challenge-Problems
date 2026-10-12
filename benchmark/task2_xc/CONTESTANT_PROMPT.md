@@ -43,11 +43,22 @@ argument justifies it, and which exact conditions your functional satisfies and 
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
 PRIOR ART. Earlier rounds of this benchmark produced the attempts in results/prior_art/*.md (read
-them first). None beat r2SCAN. Known failure modes: one-orbital (z or alpha) factors that make
-the SCF unstable or underbind X-H bonds; wrong spin-polarized derivatives; constraint-only
-exchange that nearly rebuilds r2SCAN. The best idea so far (sonnet2) halved the IP error by
-making correlation vanish for one-electron densities, at a cost in atomization energies. Build
-on or go beyond these; do not repeat them.
+them first; *3.md are the latest). None beat B3LYP (0.97) yet. Frontier so far:
+  - sonnet3 (dev WTMAD 1.00): 25% hybrid meta-GGA; correlation = E_c^PBE[n_a,n_b] - sum_s z_s^2
+    E_c^PBE[n_s,0] (Stoll partition: no same-spin correlation in a channel holding one orbital).
+  - opus3 (1.59): joint one-electron condition on (1-a)E_x^SL + E_c; H atom exact by construction;
+    showed no PBE-form iso-orbital exchange can meet both H and He norms.
+Known failure modes: one-orbital exchange norms that underbind X-H bonds; gates that kill genuine
+opposite-spin correlation in open-shell atoms (N2, C2H2 overbind); wrong spin-polarized
+derivatives; constraint-only exchange rebuilding r2SCAN. Build on or go beyond these; do not
+repeat them. Ideas named but untried: a per-spin same-spin removal paired with an opposite-spin
+correlation built for it; an iso-orbital exchange meeting both H and He norms (s^-1/2 tail);
+range separation for IPs/barriers; nonlocal correlation for noncovalent interactions.
+
+HARNESS. Besides HYB and META, submission.py may define RSH = (omega, alpha, beta) for a
+range-separated hybrid (alpha*HF + beta*short-range HF with erfc(omega r)/r; eval_xc then gets
+omega and must return the matching semilocal part) and NLC = (b, C) to have the harness add a
+VV10 nonlocal correlation term. score.py reports WTMAD and MCM (plain mean of class MAEs).
 
 HIDDEN TEST CLASSES. Final ranking uses hidden sets with: first-row and SECOND-ROW atomization
 energies, ionization potentials, a reaction BARRIER HEIGHT, a NONCOVALENT interaction and PROTON

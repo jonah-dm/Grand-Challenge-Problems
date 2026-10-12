@@ -5,7 +5,14 @@ usage: python score.py <set_module> <reference.json> <functional> [--basis def2-
 <functional> is either a PySCF/libxc functional string (e.g. 'pbe', 'b3lyp', 'r2scan',
 'wb97m-v') or 'file:path/to/submission.py'. A submission module must define
     eval_xc(xc_code, rho, spin, relativity, deriv, omega, verbose) -> (exc, vxc, fxc, kxc)
-following pyscf.dft.libxc.define_xc_ conventions, and optionally HYB (exact-exchange fraction).
+following pyscf.dft.libxc.define_xc_ conventions, and optionally
+    HYB  = global exact-exchange fraction (default 0.0)
+    RSH  = (omega, alpha, beta) range separation: alpha*HF(full) + beta*HF(short-range, erfc(omega r)/r)
+           (default (0,0,0)); eval_xc then receives omega and must return the matching semilocal part
+    NLC  = (b, C) parameters of a VV10 nonlocal correlation term added by the harness (default None)
+    META = True if eval_xc uses tau
+Metrics: WTMAD (classes scaled by mean |reference|) and MCM (plain mean of class MAEs, kcal/mol).
+MCM is the ranking metric on hidden set B, where small-magnitude classes dominate WTMAD.
 
 Metric: MAE per class and weighted total MAD (WTMAD-2 style: each class scaled by its
 mean |reference| so energy classes with large magnitudes do not dominate).
@@ -31,11 +38,18 @@ def run_species(atoms, charge, spin, basis, xc, sub):
     mf.grids.level = 4
     if sub is not None:
         hyb = float(getattr(sub, "HYB", 0.0))
-        if hyb > 0:
-            # PySCF decides whether to build exact exchange from mf.xc's *name*, not from the
-            # hyb passed to define_xc_; a hybrid dummy name makes it honor the custom hyb.
-            mf.xc = "HF"
-        mf = mf.define_xc_(sub.eval_xc, "GGA" if not getattr(sub, "META", False) else "MGGA", hyb=hyb)
+        rsh = tuple(getattr(sub, "RSH", (0.0, 0.0, 0.0)))   # (omega, alpha, beta): alpha*HF + beta*SR-HF
+        nlc = getattr(sub, "NLC", None)   # (b, C) VV10 parameters, or None
+        # PySCF decides whether to build exact exchange / VV10 from mf.xc's *name*, not from the
+        # coefficients passed to define_xc_; a dummy name of the right kind makes it honor them.
+        if nlc:
+            mf.xc = "wB97X-V"
+        elif hyb > 0 or rsh[0] != 0:
+            mf.xc = "HF" if rsh[0] == 0 else "wB97X"
+        mf = mf.define_xc_(sub.eval_xc, "GGA" if not getattr(sub, "META", False) else "MGGA", hyb=hyb, rsh=rsh)
+        if nlc:
+            mf.nlc = "VV10"; mf.nlcgrids.level = 1
+            mf._numint.nlc_coeff = lambda *a, **k: (((nlc[0], nlc[1]), 1.0),)
     else:
         mf.xc = xc
         if "-v" in xc.lower() or "vv10" in xc.lower():
@@ -80,12 +94,13 @@ def main():
         mean_abs_ref = sum(abs(r["ref"]) for r in rows) / len(rows)
         summary[cls] = {"MAE": mae, "n": len(rows), "scaled": mae / mean_abs_ref * 100}
     wtmad = sum(v["scaled"] * v["n"] for v in summary.values()) / sum(v["n"] for v in summary.values())
+    mean_class_mae = sum(v["MAE"] for v in summary.values()) / len(summary)
     out = {"functional": a.functional, "basis": a.basis, "energies": E, "meta": meta,
-           "items": errs, "summary": summary, "WTMAD": wtmad,
+           "items": errs, "summary": summary, "WTMAD": wtmad, "MCM": mean_class_mae,
            "all_converged": all(m["converged"] for m in meta.values()),
            "total_seconds": sum(m["seconds"] for m in meta.values())}
     print(f"\n{a.functional}: " + "  ".join(f"{c} MAE={v['MAE']:.2f}" for c, v in summary.items())
-          + f"  WTMAD={wtmad:.2f}  time={out['total_seconds']:.0f}s")
+          + f"  WTMAD={wtmad:.2f}  MCM={mean_class_mae:.2f}  time={out['total_seconds']:.0f}s")
     if a.out:
         json.dump(out, open(a.out, "w"), indent=1)
 
