@@ -1,0 +1,28 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 4.471517392394889e-07,
+ "mix_R2": 0.9999536071017675,
+ "mix_components": {
+  "PBE": 0.158,
+  "PBE0": 0.3161,
+  "M06-2X": 0.0091,
+  "M05-2X": 0.0067,
+  "MN12-L": 0.0019,
+  "MN15-L": 0.0062,
+  "MN15": 0.0019,
+  "PW6B95": 0.0119,
+  "RPBE": 0.2004,
+  "SCAN0": 0.0578,
+  "HSE06": 0.1244,
+  "CAM-B3LYP": 0.0012
+ },
+ "closest_single": {
+  "name": "PBE0",
+  "R2": 0.9997034661270607
+ },
+ "verdict": "NEAR-EXISTING"
+}

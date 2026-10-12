@@ -78,6 +78,22 @@ def main():
     ex0 = np.asarray(exc_of("LDA_X", r0, np.zeros(n) + 1e-30, t0, np.zeros(n), "LDA"))
     e_lda_eff = e_lda - res["HYB"] * ex0
     res["UEG_max_rel_dev"] = float(np.max(np.abs(e0 - e_lda_eff) / np.abs(e_lda_eff)))
+    # spin-polarized one-orbital probe: fully polarized densities with tau = tau_W (z = 1).
+    # Reports exc relative to LDA exchange there, and how far the submission differs from its closest
+    # unpolarized match in this regime (self-interaction physics is invisible to unpolarized samples).
+    try:
+        rr = 10 ** np.linspace(-3, 0.5, n); zz = np.zeros(n)
+        kf = (3 * np.pi**2 * rr) ** (1 / 3); sg = (2 * kf * rr * 0.5) ** 2; tw = sg / (8 * rr)
+        if kind == "MGGA":
+            ra = np.array([rr, np.sqrt(sg), zz, zz, zz, tw]); rb = np.zeros_like(ra)
+        else:
+            ra = np.array([rr, np.sqrt(sg), zz, zz]); rb = np.zeros_like(ra)
+        e_pol = np.asarray(sub.eval_xc("", np.array([ra, rb]), 1, 0, 1, None, 0)[0])
+        ex_lda_pol = -(3 / 4) * (3 / np.pi) ** (1 / 3) * rr ** (1 / 3) * 2 ** (1 / 3)
+        res["POL1_exc_over_LDAx"] = float(np.mean(e_pol / ex_lda_pol))
+        res["POL1_ok"] = bool(np.all(np.isfinite(e_pol)))
+    except Exception as ex:
+        res["POL1_ok"] = False; res["POL1_error"] = str(ex)[:120]
     # wrapper / mix detection
     cols, names = [], []
     for f in LIB:
