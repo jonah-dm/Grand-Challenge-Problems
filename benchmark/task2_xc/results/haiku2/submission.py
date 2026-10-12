@@ -5,9 +5,11 @@ Exchange (spin-scaled): E_x = 1/2 [X(2n_up, 4 s_uu, 2 tau_up) + X(2n_dn, 4 s_dd,
   F(p) = 1 + kappa*(1 - exp(-mu*p/kappa)),  p = s/(4 kF^2 n^2)  (reduced gradient squared)
          mu = 10/81 (exact gradient-expansion coefficient), kappa = 0.804 (ceiling 1 + kappa).
   z    = tau_W / tau, tau_W = s/(8 n)  (iso-orbital indicator; z = 1 for a single orbital)
-  G(z) = 1 - z/(1+z)  in [1/2, 1]; G = 1 in the uniform-gas limit; 1/2 at z = 1.
-         Approximate one-orbital scaling (exact exchange there is -1/2 of the Hartree energy),
-         not an exact pointwise identity.
+  G(z) = 1 - (1/4) z/(1+z)  in [3/4, 1]; G = 1 in the uniform-gas limit.
+         A mild suppression of exchange in the one-orbital-like region. It does NOT enforce the
+         exact one-electron exchange (a pointwise local form cannot), and the factor 1/4 is a
+         chosen constant, not fitted. A stronger 1/2 scaling was tested and rejected: it
+         gives an H atom energy of -0.358 Ha vs. exact -0.5.
 Correlation: PW92 spin-interpolated LDA correlation plus the PBE-type gradient term with an
   exponential cutoff, H = gamma*phi^3 ln(1 + (beta/gamma) t^2 exp(-A t^2)); beta, gamma are the
   standard nonempirical constants. No dev-set fitting.
@@ -48,7 +50,7 @@ def _exchange_X(n, s, tau):
     p = s / (4.0 * kf ** 2 * n ** 2)
     fx = 1.0 + KAPPA * (1.0 - np.exp(-MU * p / KAPPA))
     z = (s / (8.0 * n)) / tau
-    gz = 1.0 - z / (1.0 + z)
+    gz = 1.0 - 0.25 * z / (1.0 + z)
     return ex_lda * fx * gz
 
 

@@ -18,7 +18,7 @@ MU = 10.0 / 81.0            # second-order gradient expansion of exchange
 C_ALPHA = 146.0 / 2025.0 * (9.0 / 20.0) ** 2   # 4th-order GE (q~ = 9/20 (alpha-1)) term
 KAPPA1 = 0.804              # Lieb-Oxford (pointwise Fx <= 1.804)
 KAPPA0 = 0.174              # tight two-electron / iso-orbital bound Fx <= 1.174
-A1 = None                   # set by hydrogen-atom norm below (module import)
+
 _CX = -0.75 * (3.0 / np.pi) ** (1.0 / 3.0)
 _CF = 0.3 * (3.0 * np.pi ** 2) ** (2.0 / 3.0)
 
@@ -27,8 +27,9 @@ def _fx(p, alpha, a1):
     s = np.sqrt(p + 1e-30)
     x1 = MU * p + C_ALPHA * (alpha - 1.0) ** 2 / (1.0 + (alpha - 1.0) ** 2)
     f1 = 1.0 + KAPPA1 - KAPPA1 / (1.0 + x1 / KAPPA1)
-    f0 = 1.0 + KAPPA0 - KAPPA0 / (1.0 + MU * p / KAPPA0)
-    w = 2.0 * alpha / (1.0 + alpha * alpha)
+    f0 = 1.0 + KAPPA0 + 0.0 * p
+    a2 = alpha * alpha
+    w = 2.0 * a2 / (1.0 + a2 * a2)
     g = 1.0 - np.exp(-a1 / np.sqrt(s))
     return (f0 + (f1 - f0) * w) * g
 
@@ -66,7 +67,8 @@ def _hydrogen_norm():
     return 0.5 * (lo + hi)
 
 
-A1 = _hydrogen_norm()
+
+A1 = 4.948698694818636   # hydrogen-atom exact-exchange norm (from _hydrogen_norm())
 H = 1e-20
 
 
@@ -84,7 +86,7 @@ def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=Non
     rho = np.asarray(rho, dtype=float)
     thr = 1e-14
     if spin == 0:
-        r, gx, gy, gz, lap, tau = rho[:6]
+        r, gx, gy, gz, tau = rho[0], rho[1], rho[2], rho[3], rho[-1]
         sig = gx * gx + gy * gy + gz * gz
         m = r > thr
         e = np.zeros_like(r); vr = np.zeros_like(r); vs = np.zeros_like(r); vt = np.zeros_like(r)
@@ -101,7 +103,7 @@ def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=Non
     out_e = np.zeros_like(rt)
     vrho = np.zeros((rt.size, 2)); vsig = np.zeros((rt.size, 3)); vtau = np.zeros((rt.size, 2))
     for k, rs in enumerate((ra, rb)):
-        r, gx, gy, gz, lap, tau = rs[:6]
+        r, gx, gy, gz, tau = rs[0], rs[1], rs[2], rs[3], rs[-1]
         sig = gx * gx + gy * gy + gz * gz
         m = r > thr
         # Ex[ra,rb] = 1/2 sum_s Ex_unpol[2 rho_s]
