@@ -1,0 +1,23 @@
+{
+ "META": true,
+ "HYB": 0.0,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 3.502180760251538e-07,
+ "mix_R2": 0.9999258926431049,
+ "mix_components": {
+  "PBE": 0.664,
+  "M06-2X": 0.0077,
+  "MN12-L": 0.0061,
+  "MN15-L": 0.0046,
+  "B97-1": 0.0059,
+  "RPBE": 0.3096,
+  "CAM-B3LYP": 0.0174
+ },
+ "closest_single": {
+  "name": "PBE",
+  "R2": 0.9996059753508475
+ },
+ "verdict": "NEAR-EXISTING"
+}

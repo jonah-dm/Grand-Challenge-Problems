@@ -18,3 +18,9 @@
   HCN                -93.34527631    4.5s
   H2CO              -114.41853085    8.3s
   OH                 -75.68553975    2.4s
+  CH2_triplet        -39.11545266    5.1s
+  B_cation           -24.30057355    0.4s
+  F_cation           -99.03589462    1.0s
+  HF_cation          -99.80267181    2.9s
+
+pbe0: AE MAE=3.68  IP MAE=4.93  WTMAD=1.61  time=53s

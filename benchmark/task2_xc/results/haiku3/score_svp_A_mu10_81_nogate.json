@@ -1,5 +1,5 @@
 {
- "functional": "file:results/haiku3/submission.py",
+ "functional": "file:results/haiku3/cand_A_mu10_81_nogate.py",
  "basis": "def2-svp",
  "energies": {
   "H_atom": -0.5043179382792329,
@@ -30,99 +30,99 @@
  "meta": {
   "H_atom": {
    "converged": true,
-   "seconds": 0.9245858192443848
+   "seconds": 2.2038841247558594
   },
   "Li_atom": {
    "converged": true,
-   "seconds": 1.011357307434082
+   "seconds": 3.1491310596466064
   },
   "B_atom": {
    "converged": true,
-   "seconds": 1.1150219440460205
+   "seconds": 3.328826427459717
   },
   "C_atom": {
    "converged": true,
-   "seconds": 1.4728243350982666
+   "seconds": 4.157760858535767
   },
   "N_atom": {
    "converged": true,
-   "seconds": 1.4029662609100342
+   "seconds": 4.29736065864563
   },
   "O_atom": {
    "converged": true,
-   "seconds": 1.2988929748535156
+   "seconds": 3.3737006187438965
   },
   "F_atom": {
    "converged": true,
-   "seconds": 1.236374855041504
+   "seconds": 3.47088885307312
   },
   "H2": {
    "converged": true,
-   "seconds": 0.5586833953857422
+   "seconds": 2.402620315551758
   },
   "LiH": {
    "converged": true,
-   "seconds": 1.8103022575378418
+   "seconds": 5.1183013916015625
   },
   "CH4": {
    "converged": true,
-   "seconds": 5.962636947631836
+   "seconds": 17.797935485839844
   },
   "NH3": {
    "converged": true,
-   "seconds": 3.9096317291259766
+   "seconds": 15.061010360717773
   },
   "H2O": {
    "converged": true,
-   "seconds": 2.3986051082611084
+   "seconds": 8.066735982894897
   },
   "HF": {
    "converged": true,
-   "seconds": 1.8599514961242676
+   "seconds": 5.942832946777344
   },
   "N2": {
    "converged": true,
-   "seconds": 3.017439126968384
+   "seconds": 7.8860955238342285
   },
   "CO": {
    "converged": true,
-   "seconds": 3.1254773139953613
+   "seconds": 6.741182565689087
   },
   "F2": {
    "converged": true,
-   "seconds": 3.0707459449768066
+   "seconds": 5.397565841674805
   },
   "C2H2": {
    "converged": true,
-   "seconds": 6.749554634094238
+   "seconds": 13.9972243309021
   },
   "HCN": {
    "converged": true,
-   "seconds": 5.559607267379761
+   "seconds": 15.415650129318237
   },
   "H2CO": {
    "converged": true,
-   "seconds": 8.91750454902649
+   "seconds": 27.228026151657104
   },
   "OH": {
    "converged": true,
-   "seconds": 3.333977222442627
+   "seconds": 10.436484575271606
   },
   "CH2_triplet": {
    "converged": true,
-   "seconds": 6.4637556076049805
+   "seconds": 16.156203508377075
   },
   "B_cation": {
    "converged": true,
-   "seconds": 1.228900671005249
+   "seconds": 2.8526368141174316
   },
   "F_cation": {
    "converged": true,
-   "seconds": 1.7907195091247559
+   "seconds": 3.8565480709075928
   },
   "HF_cation": {
    "converged": true,
-   "seconds": 3.1128289699554443
+   "seconds": 8.317805767059326
   }
  },
  "items": {
@@ -243,5 +243,5 @@
  },
  "WTMAD": 3.4990406194474275,
  "all_converged": true,
- "total_seconds": 71.33234524726868
+ "total_seconds": 196.65641236305237
 }

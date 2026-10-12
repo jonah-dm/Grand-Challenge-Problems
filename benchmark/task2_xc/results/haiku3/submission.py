@@ -23,7 +23,8 @@ from scipy.optimize import brentq
 HYB = 0.0
 META = True
 
-MU_GE = 10.0 / 81.0
+MU_GE = 0.2195   # PBE value; # z->0 gradient coefficient (candidate-dependent, see NOTES)
+GATE = False          # one-electron correlation gate (candidate-dependent, see NOTES)
 KAPPA0 = 0.804
 EPS_N = 1e-16
 EPS_T = 1e-16
@@ -49,6 +50,28 @@ def _ex_pol(ra, rb, saa, sbb, ta, tb, kappa1, mu1=None):  # kappa1 slot unused f
     m1 = MU1 if mu1 is None else mu1
     return 0.5 * (_fx_vol(2.0 * ra + EPS_N, 4.0 * saa + EPS_S, 2.0 * ta + EPS_T, kappa1, m1)
                   + _fx_vol(2.0 * rb + EPS_N, 4.0 * sbb + EPS_S, 2.0 * tb + EPS_T, kappa1, m1))
+
+
+def _gate(ra, rb, saa, sab, sbb, ta, tb):
+    """1 - zeta^2 z^2 with z = tau_W/tau on the total density: exactly 0 for one-orbital
+    fully polarized densities (one-electron correlation vanishes), 1 for unpolarized."""
+    n = ra + rb + EPS_N
+    zeta = (ra - rb) / n
+    tw = (saa + 2.0 * sab + sbb + EPS_S) / (8.0 * n)
+    z = tw / (ta + tb + EPS_T)
+    return 1.0 - zeta * zeta * z * z
+
+
+def _gate_derivs(ra, rb, saa, sab, sbb, ta, tb):
+    base = [ra, rb, saa, sab, sbb, ta, tb]
+    g0 = np.real(_gate(*base))
+    h = 1e-30
+    gr = []
+    for i in range(7):
+        args = [np.asarray(b, dtype=complex) for b in base]
+        args[i] = args[i] + 1j * h
+        gr.append(np.imag(_gate(*args)) / h)
+    return g0, gr
 
 
 def _h_atom_exchange(kappa1, mu1):
@@ -112,10 +135,22 @@ def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=Non
     ex_c, vc = libxc.eval_xc(",PBE", rho[:, :4], 1, relativity, 1, omega, verbose)[:2]
     ntot = ra_ + rb_
     nsafe = np.maximum(ntot, 1e-30)
-    exc = (f0 + ntot * np.asarray(ex_c)) / nsafe
-    vrho = np.stack([gr[0] + np.asarray(vc[0])[:, 0], gr[1] + np.asarray(vc[0])[:, 1]], axis=-1)
-    vc1 = np.asarray(vc[1])
+    ex_c = np.asarray(ex_c)
+    vrho_c = np.asarray(vc[0]).copy(); vc1 = np.asarray(vc[1]).copy()
+    if GATE:
+        g0, gg = _gate_derivs(ra_, rb_, saa, sab, sbb, ta, tb)
+        ec_vol = ntot * ex_c
+        # chain rule: d(g*ec_vol) = g*d(ec_vol) + ec_vol*dg
+        vrho_c = np.stack([g0 * vrho_c[:, 0] + ec_vol * gg[0], g0 * vrho_c[:, 1] + ec_vol * gg[1]], axis=-1)
+        vc1 = np.stack([g0 * vc1[:, 0] + ec_vol * gg[2], g0 * vc1[:, 1] + ec_vol * gg[3],
+                        g0 * vc1[:, 2] + ec_vol * gg[4]], axis=-1)
+        ex_c = g0 * ex_c
+        vtau_c = ec_vol * np.stack([gg[5], gg[6]], axis=-1)
+    else:
+        vtau_c = 0.0
+    exc = (f0 + ntot * ex_c) / nsafe
+    vrho = np.stack([gr[0] + vrho_c[:, 0], gr[1] + vrho_c[:, 1]], axis=-1)
     vsigma = np.stack([gr[2] + vc1[:, 0], vc1[:, 1], gr[3] + vc1[:, 2]], axis=-1)
-    vtau = np.stack([gr[4], gr[5]], axis=-1)
+    vtau = np.stack([gr[4], gr[5]], axis=-1) + vtau_c
     vlapl = np.zeros_like(vrho)
     return exc, (vrho, vsigma, vlapl, vtau), None, None

@@ -8,7 +8,9 @@ vanishes for H, and for every fully polarised one-orbital density, AND the same-
 correlation vanishes for He/H2-like two-electron singlets, which the zeta^2 z^2 gate of
 sonnet2 cannot do. Exchange: z-blend of GE2 (mu=10/81) and s^-1/2-tail one-orbital form (see below).
 """
+import os
 import numpy as np
+_MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','stoll')
 
 HYB = 0.25
 META = True
@@ -39,7 +41,8 @@ def _ex_unpol_density(n2, s2, z):
     """exchange energy density (per volume) of an unpolarized gas of density n2, s^2=s2"""
     ex_lda = -0.75 * (3 / np.pi) ** (1 / 3) * n2 ** (4 / 3)
     # (i) many-orbital / slowly varying regime (z->0): PBE-form, exact GE2 coefficient mu=10/81
-    h_gga = KAPPA * (1 - 1 / (1 + MU_GE * s2 / KAPPA))
+    _m = MU_GE if _MUMODE == 'ge2' else MU
+    h_gga = KAPPA * (1 - 1 / (1 + _m * s2 / KAPPA))
     # (ii) one-orbital regime (z->1), e.g. density tails: F_x ~ s^(-1/2) at large s (exact tail
     #      behaviour of the exchange energy density), mu = mu_PBE at small s, max(F_x)-1 = kappa (LO)
     s5 = s2 * np.sqrt(s2)
@@ -83,7 +86,8 @@ def _E(ra, rb, saa, sab, sbb, ta, tb):
     corr = tot
     for r, sg_s, t_s in ((ra, saa, ta), (rb, sbb, tb)):
         zs = _zsat(sg_s / (8 * r * t_s))
-        corr = corr - zs**2 * _ec_pol(r, sg_s)
+        if _GATE == 'stoll':
+            corr = corr - zs**2 * _ec_pol(r, sg_s)
     return ex * (1 - HYB) + corr
 
 
