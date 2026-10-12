@@ -15,3 +15,4 @@ for k,(cls,ex) in S.ITEMS.items():
 def sc(l): return sum(abs(e) for _,e,_ in l)/len(l)/(sum(r for *_,r in l)/len(l))*100
 w=(sc(ae)*len(ae)+sc(ip)*len(ip))/(len(ae)+len(ip))
 print(xc,basis,'AEmae %.2f IPmae %.2f WTMAD %.2f'%(sum(abs(e) for _,e,_ in ae)/len(ae),sum(abs(e) for _,e,_ in ip)/len(ip),w),' IPerr',[round(e,1) for _,e,_ in ip],flush=True)
+json.dump(E,open('results/sonnet/E_%s_%s.json'%(xc,basis),'w'))
