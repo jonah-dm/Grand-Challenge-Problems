@@ -5,20 +5,20 @@
  "NEG_frac_positive": 0.0,
  "LO_frac_violating": 0.0,
  "UEG_max_rel_dev": 1.5802508380840383e-15,
- "mix_R2": 0.9978433842005676,
+ "mix_R2": 0.9983129041145647,
  "mix_components": {
-  "LDA,PW": 0.6289,
-  "M05": 0.0225,
-  "M05-2X": 0.007,
-  "MN15-L": 0.0071,
-  "RPBE": 0.0539,
-  "PW91": 0.0396,
-  "BHANDHLYP": 0.0078,
-  "CAM-B3LYP": 0.0284
+  "LDA,PW": 0.1639,
+  "M05": 0.0138,
+  "MN12-L": 0.0067,
+  "MN15-L": 0.0269,
+  "RPBE": 0.2552,
+  "PW91": 0.2544,
+  "SCAN0": 0.0621,
+  "BHANDHLYP": 0.0147
  },
  "closest_single": {
-  "name": "SCAN0",
-  "R2": 0.962639663269759
+  "name": "PBE0",
+  "R2": 0.9692481892329241
  },
  "verdict": "DISTINCT"
 }

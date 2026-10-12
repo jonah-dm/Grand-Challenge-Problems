@@ -12,8 +12,9 @@ import numpy as np
 
 HYB = 0.25
 META = True
-KAPPA0 = 0.174
+MU_GE = 10.0 / 81.0
 KAPPA, MU, BETA = 0.804, 0.2195149727645171, 0.06672455060314922
+CTAIL = 4.0 / (5.0 * KAPPA / MU) ** 1.25   # sets max(F_x-1)=kappa exactly (LO)
 GAMMA = (1 - np.log(2)) / np.pi**2
 EPS = 1e-14
 
@@ -37,10 +38,14 @@ def _pw92(rs, zeta):
 def _ex_unpol_density(n2, s2, z):
     """exchange energy density (per volume) of an unpolarized gas of density n2, s^2=s2"""
     ex_lda = -0.75 * (3 / np.pi) ** (1 / 3) * n2 ** (4 / 3)
-    # one-orbital (z->1) tightening: F_x <= 1.174 for any two-electron/one-orbital density
-    # (exact LO-type bound, Perdew et al. SCAN constraint), smooth interpolation in z^2
-    kap = KAPPA - (KAPPA - KAPPA0) * z**2
-    h = kap * (1 - 1 / (1 + MU * s2 / kap))
+    # (i) many-orbital / slowly varying regime (z->0): PBE-form, exact GE2 coefficient mu=10/81
+    h_gga = KAPPA * (1 - 1 / (1 + MU_GE * s2 / KAPPA))
+    # (ii) one-orbital regime (z->1), e.g. density tails: F_x ~ s^(-1/2) at large s (exact tail
+    #      behaviour of the exchange energy density), mu = mu_PBE at small s, max(F_x)-1 = kappa (LO)
+    s5 = s2 * np.sqrt(s2)
+    h_orb = MU * s2 / (1 + CTAIL * s5)
+    w = z**2
+    h = (1 - w) * h_gga + w * h_orb
     return ex_lda * (1 + h)
 
 

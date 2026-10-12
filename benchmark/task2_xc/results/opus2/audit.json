@@ -1,0 +1,24 @@
+{
+ "META": true,
+ "HYB": 0.0,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 3.502180774367297e-07,
+ "mix_R2": 0.998129089166212,
+ "mix_components": {
+  "LDA,PW": 0.2218,
+  "SCAN": 0.0844,
+  "MN12-L": 0.0067,
+  "MN15-L": 0.0252,
+  "PW91": 0.265,
+  "wB97M-V": 0.0219,
+  "B97M-V": 0.3436,
+  "CAM-B3LYP": 0.0658
+ },
+ "closest_single": {
+  "name": "SCAN",
+  "R2": 0.9909060194909323
+ },
+ "verdict": "DISTINCT"
+}
