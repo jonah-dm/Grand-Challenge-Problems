@@ -34,7 +34,8 @@ changing the scorer.
    wB97M-V. Aborted MN12-L log: sl/MN12_L_qz_aborted.log; TZ screens in scr/ and sl/.
 
 ## Dev-set score (def2-QZVP)
-See score.json (WTMAD reported in the final message).
+WTMAD = 1.28 (AE MAE 2.57, IP MAE 6.31 kcal/mol), all converged. score.json was produced by
+an identical copy of submission.py at backup/r2scan.py (same XC, HYB, META).
 
 ## With more time
 - Get the scorer fixed, then submit a high-exact-exchange meta-GGA hybrid (M06-2X / MN15

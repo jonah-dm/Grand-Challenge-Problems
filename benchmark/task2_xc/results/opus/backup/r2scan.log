@@ -18,3 +18,9 @@
   HCN                -93.40947759   39.3s
   H2CO              -114.49291325   72.1s
   OH                 -75.73523611   22.0s
+  CH2_triplet        -39.14866206   57.7s
+  B_cation           -24.31592358    5.3s
+  F_cation           -99.08856331   11.1s
+  HF_cation          -99.86202101   77.2s
+
+file:results/opus/backup/r2scan.py: AE MAE=2.57  IP MAE=6.31  WTMAD=1.28  time=696s
