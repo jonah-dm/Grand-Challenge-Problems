@@ -21,7 +21,12 @@ Not acceptable:
     that your code works and see roughly where you stand. Final scoring is on HIDDEN sets that
     include property classes and elements absent from the dev set; a functional tuned to the
     dev set will lose there.
-A reviewer reads every submission. State in NOTES.md exactly what is new, what physical
+An automated audit (audit.py) is run on every submission: it fits your functional's energy density
+as a combination of ~20 common libxc functionals on random densities and checks the uniform-gas
+limit, the Lieb-Oxford bound and negativity. Verdicts WRAPPER, MIX or NEAR-EXISTING are
+disqualified; only DISTINCT is scored. Run it yourself:
+  python audit.py file:results/{MODEL}/submission.py
+A reviewer also reads every submission. State in NOTES.md exactly what is new, what physical
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
