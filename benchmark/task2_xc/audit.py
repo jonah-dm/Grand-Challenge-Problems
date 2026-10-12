@@ -17,8 +17,10 @@ import numpy as np
 from pyscf.dft import libxc
 from scipy.optimize import nnls
 
-LIB = ["LDA,PW", "PBE", "PBE0", "BLYP", "B3LYP", "TPSS", "SCAN", "R2SCAN", "M06-L", "M06-2X",
-       "B97-1", "revPBE", "RPBE", "PW91", "BP86", "wB97X-V", "wB97M-V", "SCAN0", "HSE06", "B97M-V"]
+LIB = ["LDA,PW", "PBE", "PBE0", "BLYP", "B3LYP", "TPSS", "SCAN", "R2SCAN", "M06-L", "M06", "M06-2X",
+       "M05", "M05-2X", "M08-HX", "M11", "MN12-L", "MN15-L", "MN15", "PW6B95", "B97-1", "B97-2", "B97-D",
+       "revPBE", "RPBE", "PW91", "BP86", "B88,P86", "PBEsol", "wB97X-V", "wB97M-V", "SCAN0", "HSE06",
+       "B97M-V", "TPSSh", "revTPSS", "HCTH", "OLYP", "X3LYP", "BHANDHLYP", "CAM-B3LYP", "MPW1K", "BMK"]
 
 
 def load(path):

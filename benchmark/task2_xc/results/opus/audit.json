@@ -1,0 +1,17 @@
+{
+ "META": true,
+ "HYB": 0.0,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 3.5021792682157766e-07,
+ "mix_R2": 1.0,
+ "mix_components": {
+  "R2SCAN": 1.0
+ },
+ "closest_single": {
+  "name": "R2SCAN",
+  "R2": 1.0
+ },
+ "verdict": "WRAPPER"
+}

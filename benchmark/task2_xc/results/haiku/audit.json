@@ -1,0 +1,17 @@
+{
+ "META": false,
+ "HYB": 0.0,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.00175,
+ "LO_frac_violating": 0.0215,
+ "UEG_max_rel_dev": 0.19222705847377924,
+ "mix_R2": 1.0,
+ "mix_components": {
+  "BLYP": 1.0
+ },
+ "closest_single": {
+  "name": "BLYP",
+  "R2": 1.0
+ },
+ "verdict": "WRAPPER"
+}

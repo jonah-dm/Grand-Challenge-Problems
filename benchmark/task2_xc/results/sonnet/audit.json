@@ -1,0 +1,19 @@
+{
+ "META": true,
+ "HYB": 0.44800000000000006,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.066,
+ "UEG_max_rel_dev": 0.1271568055208398,
+ "mix_R2": 1.0,
+ "mix_components": {
+  "M06-2X": 0.4,
+  "MN15": 0.4,
+  "PW6B95": 0.2
+ },
+ "closest_single": {
+  "name": "M06",
+  "R2": 0.9285455769064528
+ },
+ "verdict": "MIX"
+}
