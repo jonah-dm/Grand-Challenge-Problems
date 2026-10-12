@@ -11,6 +11,7 @@ from pyscf import gto, scf, cc, lib
 from geom import to_str
 
 HARTREE2KCAL = 627.5094740631
+_NCORE = {z: (0 if z <= 2 else 1 if z <= 10 else 5) for z in range(1, 19)}  # 1s | 1s2s2p
 
 
 def ccsd_t(atoms, charge, spin, basis):
@@ -21,7 +22,7 @@ def ccsd_t(atoms, charge, spin, basis):
     mf.run()
     if not mf.converged:
         mf = scf.newton(mf).run()
-    ncore = sum(1 for a, _ in atoms if a not in ("H", "He"))  # 1s core per heavy atom
+    ncore = sum(_NCORE[gto.charge(a)] for a, _ in atoms)  # frozen core orbitals
     if ncore == 0 or mol.nelectron - 2 * ncore <= 0:
         frozen = 0 if ncore == 0 else None
     else:
