@@ -1,0 +1,5 @@
+exec(open('hdiag.py').read().split('mf2=')[0])
+mf2=dft.UKS(mol); mf2.grids.level=4; mf2.xc='HF'; mf2=mf2.define_xc_(mz.eval_xc,'MGGA',hyb=mz.HYB)
+print('E zeta2 at opus4 dm', mf2.energy_tot(dm), 'E off', mf.energy_tot(dm))
+n,exc,vxc=mf2._numint.nr_uks(mol,g,mf2.xc,dm); print('nr_uks exc',exc)
+n,exc,vxc=mf._numint.nr_uks(mol,g,mf.xc,dm); print('nr_uks exc off',exc)

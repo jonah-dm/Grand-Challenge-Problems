@@ -54,6 +54,10 @@ def _H_exact_b():
 def _one_orbital_constants():
     if X1 == 'H':
         return (MU, _H_exact_b())
+    if X1 == 'HHe':       # H, He, Ne1s, Ar1s, Be1s, Li1s HF orbitals all exact (fit7.py)
+        return (1.9843, 16.6604)
+    if X1 == 'LIB':       # + H2+ (R<=2), HeH2+ (fit7.py)
+        return (2.59, 23.772)
     return (MU, 1.0)
 
 

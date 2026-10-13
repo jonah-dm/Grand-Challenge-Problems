@@ -1,0 +1,4 @@
+zeta2 E(H) -0.50176 barrier 1534.11 kcal/mol (exact 9.6) H2 De 107.18 (exact 109.5)
+H2+ R=2.0 bohr: E-E(H) = -69.68 kcal/mol
+H2+ R=4.0 bohr: E-E(H) = -31.59 kcal/mol
+H2+ R=6.0 bohr: E-E(H) = -13.53 kcal/mol

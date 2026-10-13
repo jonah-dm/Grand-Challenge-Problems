@@ -1,0 +1,25 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 4.471517392394889e-07,
+ "POL1_exc_over_LDAx": 0.8333778226462758,
+ "POL1_ok": true,
+ "mix_R2": 0.9986899703052972,
+ "mix_components": {
+  "M05": 0.0958,
+  "MN12-L": 0.0051,
+  "B97-2": 0.0183,
+  "B97-D": 0.0395,
+  "RPBE": 0.2691,
+  "TPSSh": 0.3896,
+  "OLYP": 0.0086
+ },
+ "closest_single": {
+  "name": "HSE06",
+  "R2": 0.9945504073707792
+ },
+ "verdict": "DISTINCT"
+}
