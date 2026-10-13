@@ -20,3 +20,9 @@
   C_cation           -37.29515043   10.9s
   N_cation           -53.91141052   10.4s
   O_cation           -74.41147169   10.5s
+  H2O_cation         -75.82896059   53.0s
+  NH3_cation         -56.03433825   83.9s
+  H2O                -76.30123358   40.3s
+  NH3                -56.43779965   59.8s
+
+file:results/opus7c/submission.py: AE MAE=4.64  IP MAE=6.17  WTMAD=1.83  MCM=5.41  time=1385s

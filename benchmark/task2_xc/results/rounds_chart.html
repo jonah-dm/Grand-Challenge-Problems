@@ -77,7 +77,7 @@ td.n { text-align: right; font-family: var(--font-mono); }
   <tbody id="tb"></tbody>
 </table>
 </div>
-<p class="note">Round 1: loose rules, all three submitted existing functionals (Haiku BLYP, Sonnet a Minnesota blend, Opus r²SCAN). Round 2: novelty rules; Haiku's functional did not converge. Round 3: prior-art and hidden-class disclosure added. Round 4: range separation and nonlocal correlation allowed; Opus diagnosed and fixed the missing singlet correlation in Sonnet's round-3 gate. Rounds 5–6: publication-worthy bar with theory and construction tracks and a literature-check reviewer; the round-5 "theorem" (no Laplacian-free semilocal exchange is charge-linear) was found to be mostly known. Baselines on the same set: PBE 7.32 / 2.95, r²SCAN 2.57 / 1.28, B3LYP 1.70 / 0.97, ωB97M-V 1.34 / 0.56 (AE MAE / WTMAD).</p>
+<p class="note">Round 1: loose rules, all three submitted existing functionals (Haiku BLYP, Sonnet a Minnesota blend, Opus r²SCAN). Round 2: novelty rules; Haiku's functional did not converge. Round 3: prior-art and hidden-class disclosure added. Round 4: range separation and nonlocal correlation allowed; Opus diagnosed and fixed the missing singlet correlation in Sonnet's round-3 gate. Rounds 5–6: publication-worthy bar with theory and construction tracks and a literature-check reviewer; the round-5 "theorem" (no Laplacian-free semilocal exchange is charge-linear) was found to be mostly known. Round 7: on the hidden set of unseen property classes the range-separated functionals score 1.19–1.22 vs 1.41 for ωB97M-V (11 items; a signal, not a result). Baselines on the same set: PBE 7.32 / 2.95, r²SCAN 2.57 / 1.28, B3LYP 1.70 / 0.97, ωB97M-V 1.34 / 0.56 (AE MAE / WTMAD).</p>
 
 <script>
 const data = [
@@ -95,7 +95,8 @@ const data = [
   {r:4,m:"Opus",  sub:"Pair-aware same-spin removal (constant-free)", ae:2.39, ip:3.89, w:1.08},
   {r:5,m:"Sonnet",sub:"Reproduction of Opus R4 form; theory: obstruction theorem + Laplacian escape", ae:2.39, ip:3.89, w:1.08},
   {r:5,m:"Opus",  sub:"Theory track: bounded C1 enforcement F_q (H₂⁺ −29→−6 kcal/mol; barrier 9.06). Construction track scored 1.94", ae:3.59, ip:4.44, w:1.55},
-  {r:6,m:"Opus",  sub:"Construction: range-separated (100% LR-HF) amplitude-quadratic SR exchange. Theory track (flat-plane T4) scored 1.37", ae:2.08, ip:8.27, w:1.21},
+  {r:6,m:"Opus",  sub:"Construction: range-separated (100% LR-HF) amplitude-quadratic SR exchange; hidden-B MCM 1.22 vs ωB97M-V 1.41. Theory track (flat-plane T4) scored 1.37", ae:2.08, ip:8.27, w:1.21},
+  {r:7,m:"Opus",  sub:"Round 6 + per-channel spin scaling; IP error traced to core–valence exchange; hidden-B MCM 1.19 (best of all)", ae:1.95, ip:7.89, w:1.14},
 ];
 const baselines = [
   {n:"PBE", ae:7.32, w:2.95},{n:"r²SCAN", ae:2.57, w:1.28},{n:"B3LYP", ae:1.70, w:0.97},{n:"ωB97M-V", ae:1.34, w:0.56}];
@@ -104,11 +105,11 @@ const tip = document.getElementById("tip");
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function draw(id, key, ymax, target){
   const svg = document.getElementById(id); const W=520,H=330, L=44,R=96,T=16,B=36;
-  const x = r => L + (r-1)*(W-L-R)/5, y = v => T + (H-T-B)*(1 - v/ymax);
+  const x = r => L + (r-1)*(W-L-R)/6, y = v => T + (H-T-B)*(1 - v/ymax);
   let s = "";
   for(let v=0; v<=ymax; v+= (ymax>5?2:1)) s += `<line class="gr" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="tk" x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
   s += `<line class="ax" x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}"/>`;
-  [1,2,3,4,5,6].forEach(r=> s += `<text class="tk" x="${x(r)}" y="${H-B+18}" text-anchor="middle">R${r}</text>`);
+  [1,2,3,4,5,6,7].forEach(r=> s += `<text class="tk" x="${x(r)}" y="${H-B+18}" text-anchor="middle">R${r}</text>`);
   s += `<text class="lb" x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle">round</text>`;
   baselines.forEach(b=>{ const v=b[key]; if(v<=ymax) s += `<line class="bl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="lb" x="${W-R+6}" y="${y(v)+4}">${b.n} ${v.toFixed(2)}</text>`; });
   if(target) s += `<line class="tg" x1="${L}" x2="${W-R}" y1="${y(target)}" y2="${y(target)}"/><text class="lb" x="${W-R+6}" y="${y(target)+4}">1 kcal/mol</text>`;

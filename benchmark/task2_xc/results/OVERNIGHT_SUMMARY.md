@@ -7,25 +7,33 @@ significantly better than existing functionals appears.
 
 ## Leaderboard (post-harness-fix rescoring; lower is better)
 
-Dev = 17 first-row atomization energies and IPs (public). Hidden A = 17 new molecules, same classes.
-Hidden B = 11 items in four unseen classes (second-row AE, H+H₂ barrier, water dimer, proton
-affinities), ranked by MCM = mean of class MAEs in kcal/mol. [TABLE FILLED IN FROM
-results/rescored/ WHEN THE CHAIN FINISHES; pre-fix numbers in results/hiddenA, hiddenB.]
+Dev = 17 first-row atomization energies and IPs (public). Hidden A = 17 new molecules, same classes
+(WTMAD). Hidden B = 11 items in four unseen classes: second-row atomization energies, H+H₂ barrier,
+water dimer, proton affinities (MCM = mean of class MAEs, kcal/mol). All meta-GGA submissions were
+rescored after the τ-derivative harness fix; numbers below are post-fix (results/rescored/).
 
-| Functional | Dev WTMAD | Hidden A WTMAD | Hidden B MCM | Note |
-|---|---|---|---|---|
-| ωB97M-V (best existing) | 0.56 | 0.70 | 1.41 | bar |
-| B3LYP | 0.97 | 1.13 | 2.12 | |
-| r²SCAN | 1.28 | — | 2.63 | |
-| PBE | 2.95 | 3.46 | 3.90 | |
-| sonnet3 (R3) | 1.03 | 1.18 | 2.19 | best new on dev and hidden A |
-| opus7c (R7) | 1.14 | * | * | best new AE MAE (1.95); delocalization error removed; IPs +8 |
-| opus6c (R6) | 1.21 | * | * | first range-separated; H₂⁺ +0.09 kcal/mol |
-| sonnet4 (R4) | 1.30 | 1.96 | 1.72 | best new on hidden B (pre-fix) |
-| opus2 (R2) | 3.23 | 2.23 | 1.80 | constraint-only exchange; worst dev, 2nd on hidden B |
+| Functional | Dev | Hidden A | Hidden B MCM | B: AE2 / barrier / NCI / PA | Note |
+|---|---|---|---|---|---|
+| ωB97M-V (best existing) | 0.56 | 0.70 | 1.41 | 2.71 / 0.70 / 0.17 / 2.06 | fitted, with VV10 |
+| B3LYP | 0.97 | 1.13 | 2.12 | 1.92 / 5.30 / 0.62 / 0.63 | |
+| r²SCAN | 1.28 | 1.39 | 2.63 | 2.59 / 7.03 / 0.04 / 0.85 | |
+| PBE | 2.95 | 3.46 | 3.90 | 8.65 / 5.91 / 0.12 / 0.90 | |
+| **opus7c** (R7) | 1.14 | 1.83 | **1.19** | 3.28 / 0.79 / 0.04 / 0.64 | LC hybrid, derived ω; no fitted parameter |
+| **opus6c** (R6) | 1.21 | 2.08 | **1.22** | 3.37 / 0.83 / 0.04 / 0.64 | first range-separated submission |
+| opus6t (R6) | 1.37 | 1.42 | 1.97 | 4.63 / 0.79 / 1.20 / 1.27 | |
+| sonnet3 (R3) | 1.03 | 1.18 | 2.19 | 4.00 / 3.79 / 0.50 / 0.47 | best new on dev and hidden A |
+| opus5t (R5) | 1.55 | 1.63 | 2.04 | 6.01 / **0.53** / 0.68 / 0.96 | best barrier of any functional |
+| sonnet4 (R4) | 1.35 | 1.96 | 1.72 | 2.60 / 2.93 / 0.43 / 0.90 | |
+| haiku4 (R4) | 1.32 | 1.24 | 2.22 | 4.21 / 2.99 / 0.84 / 0.85 | |
+| opus2 (R2) | 2.87 | 1.99 | 2.62 | 2.96 / 5.94 / 0.04 / 1.55 | pre-fix "best on B" was a bug artifact |
+| opus4, sonnet5c | 1.10 | 1.29 | unconverged | H₃ transition state SCF fails | excluded on B |
 
-No new functional beats B3LYP overall; none approaches ωB97M-V. With 17/17/11 items the hidden-set
-rankings among the new functionals are within noise; the gap to ωB97M-V is not.
+Headline: on the unseen-class set B, the round-6 and round-7 range-separated functionals score
+1.22 and 1.19, better than ωB97M-V's 1.41, with no fitted parameter; they lose to B3LYP and
+ωB97M-V on the first-row sets (hidden A 1.83–2.08) because of a +8–10 kcal/mol ionization-potential
+defect that round 7 traced to core–valence exchange. With 11 items on set B this is a signal, not a
+result: the per-class picture (better barriers, dimer and proton affinities; worse second-row
+atomization) is consistent, but a few-hundred-item set is needed before it is quotable.
 
 ## What happened, round by round
 1. Loose rules (45 min): all three models submitted existing functionals (BLYP, r²SCAN, a
@@ -61,11 +69,13 @@ rankings among the new functionals are within noise; the gap to ωB97M-V is not.
   known, plus a few small creditable items (the s⁻² characterization and closed form; T4's
   quantitative bound; the hydrogenic SR branch and the finiteness ⇒ 100% LR-HF argument; the
   bathtub bound). Not a paper; a short note at most, pending expert review.
-- Significant improvement over existing functionals: no. The agents matched B3LYP-class
-  accuracy with zero fitted parameters, which is itself notable, and solved specific targeted
-  defects (delocalization, barriers) with derived constants, but each fix cost accuracy elsewhere.
-  The agents' own diagnoses (exchange and correlation errors of 5–50 kcal/mol that cancel;
-  core–valence exchange on ionization) explain why.
+- Significant improvement over existing functionals: partial. On the unseen-class hidden set the
+  round-6/7 range-separated functionals beat ωB97M-V (1.19–1.22 vs 1.41) with zero fitted
+  parameters, driven by barrier heights, the dimer and proton affinities; on first-row sets they
+  trail B3LYP because of the IP defect. The agents' own diagnoses (exchange and correlation errors
+  of 5–50 kcal/mol that cancel; core–valence exchange on ionization) say what the next construction
+  needs: exact exchange localized to the core–valence region (local hybrid / local range
+  separation), which the harness does not yet support.
 
 ## Rules that mattered, in order of effect
 1. Disqualify wrappers, mixes and re-fits; automatic audit. (Ended reward hacking.)
@@ -78,7 +88,8 @@ rankings among the new functionals are within noise; the gap to ωB97M-V is not.
 
 ## What the benchmark needs before results are quotable
 - Hundreds of items per class with CCSD(T)/CBS or better references (current: 17/17/11).
-- Laplacian support in the harness (PySCF's MGGA path cannot pass it); local-hybrid support.
+- Laplacian support in the harness (PySCF's MGGA path cannot pass it); local-hybrid / local
+  range-separation support (the next step both round-7 diagnosis and the literature point to).
 - A fixed compute budget per contestant on dedicated cores (contention distorted timings).
 - Expert review of the theory items flagged above; a literature-check step is mandatory.
 - Refresh hidden sets before any public release (this session's agents never saw them, but the

@@ -37,3 +37,6 @@ hiddenB opus6t: file:results/opus6t/submission.py: AE2 MAE=4.63  BH MAE=0.79  NC
 hiddenA opus6c: file:results/opus6c/submission.py: AE MAE=5.51  IP MAE=6.36  WTMAD=2.08  MCM=5.94  time=1297s
 hiddenB opus6c: file:results/opus6c/submission.py: AE2 MAE=3.37  BH MAE=0.83  NC MAE=0.04  PA MAE=0.64  WTMAD=2.03  MCM=1.22  time=1263s
 R6-DONE
+hiddenA opus7c: file:results/opus7c/submission.py: AE MAE=4.64  IP MAE=6.17  WTMAD=1.83  MCM=5.41  time=1385s
+hiddenB opus7c: file:results/opus7c/submission.py: AE2 MAE=3.28  BH MAE=0.79  NC MAE=0.04  PA MAE=0.64  WTMAD=1.97  MCM=1.19  time=1229s
+R7-DONE
