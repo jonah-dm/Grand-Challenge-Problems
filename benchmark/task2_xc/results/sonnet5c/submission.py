@@ -33,6 +33,8 @@ _CX = -0.75 * (3 / np.pi) ** (1 / 3)
 def _h1(s2, p):
     """one-orbital enhancement increment h(s) = a s^2 / (1 + b s^4)   (tail ~ s^-2: fractional-amplitude scaling)"""
     a, b = p
+    if X1 == 'Hs':     # s^-1/2 tail, constant chosen so that max_s h = kappa (Lieb-Oxford saturated)
+        return a * s2 / (1 + b * s2 * np.sqrt(s2))
     return a * s2 / (1 + b * s2 * s2)
 
 
@@ -54,6 +56,8 @@ def _H_exact_b():
 def _one_orbital_constants():
     if X1 == 'H':
         return (MU, _H_exact_b())
+    if X1 == 'Hs':
+        return (MU, 4.0 / (5.0 * KAPPA / MU) ** 1.25)
     if X1 == 'HHe':       # H, He, Ne1s, Ar1s, Be1s, Li1s HF orbitals all exact (fit7.py)
         return (1.9843, 16.6604)
     if X1 == 'LIB':       # + H2+ (R<=2), HeH2+ (fit7.py)

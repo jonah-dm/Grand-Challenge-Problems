@@ -153,7 +153,7 @@ They are LDA -35, PBE -61, r2SCAN -57, B3LYP -54.
 | PBE0 | -0.3136 | 0.373 | 0.145 | -48.4 |
 | B3LYP | -0.3146 | 0.387 | 0.155 | -53.6 |
 | sonnet3 / opus4 | -0.3106 | 0.372 | 0.145 | -48.0 |
-| **opus5t (exact-density norm)** | -0.3126 | **0.318** | **0.100** | **-26.8** |
+| **opus5t B1 (exact-density norm)** | -0.3126 | **0.318** | **0.100** | **-26.8** |
 | exact | -0.3125 | 0.250 | 0.0625 | 0 |
 
 Every existing functional tested violates C1. The construction removes about 45% of the violation of
@@ -163,7 +163,7 @@ its own base. The rest is the price of boundedness (T2).
   H norm, a bounded iso-orbital F cannot reduce the fractional violation. C1 needs F(0) > 1 in polarized
   one-orbital regions, hence F_LO.
 
-## Self-consistent H2+ (aug-cc-pVTZ; exact = UHF in same basis), E(H2+) - E(H), kcal/mol (work/barrier.py)
+## Self-consistent H2+ (computed with the B1 constant c_q=2.2089; B2 differs by 2.7% in c_q) (aug-cc-pVTZ; exact = UHF in same basis), E(H2+) - E(H), kcal/mol (work/barrier.py)
 | R (bohr) | exact | opus4 base (vtau fixed) | opus5t |
 |---|---|---|---|
 | 2 | -64.3 | -66.9 | -69.7 |
@@ -191,3 +191,79 @@ It is numerical, not fitted, and I did not vary it.
 ## Checks
 - check_derivs: OK (check_derivs.log). audit: DISTINCT (audit.log; closest PBE0 R^2 = 0.970).
 - All 24 dev species converge (QZ).
+
+## Candidates compared (all disclosed; no continuous parameter tuned to the dev set)
+"off" is the opus4 form with the vtau bug fixed. It is the base, not a submission candidate, because it contains nothing new.
+| candidate | C1 weight | c_q (H norm) | SVP WTMAD | QZ WTMAD (AE / IP MAE) | H+H2 barrier, def2-QZVP (ref 9.6) |
+|---|---|---|---|---|---|
+| base (opus4, vtau fixed) | none | - | 1.83 | 1.10 (2.42 / 3.93) | 7.21 |
+| zeta2, before the vtau fix (non-variational) | zeta^2 z_s^2 | 2.2089 | 2.16 | not run | SCF unusable |
+| B1 zeta2, exact-density H norm | zeta^2 z_s^2 | 2.2089 | 1.85 | 1.31 (2.93 / 4.49) | **TS SCF did NOT converge** (score.py fallbacks, 995 s) |
+| **B2 zeta2, self-consistent QZ H norm (SUBMITTED)** | zeta^2 z_s^2 | 2.1501 | not run | **1.55** (3.59 / 4.44) | **9.06** (converged) |
+| bounded form with F(0)=1 | zeta^2 z_s^2 | 20.6 | not run (no C1 gain at the exact density, f(1/2)=0.419) | | |
+Selection: B1 has the better dev score, and its norm is the one Section 4 defines. But B1's H3 transition state
+did not converge with the harness's own fallback sequence at def2-QZVP. The README requires convergence on
+every species, and the barrier is a hidden class. So I submit B2. B2 uses the same form, with the H norm
+imposed self-consistently, E_SCF(H) = -0.5000000 at def2-QZVP and grid 4 (work/scnorm.py; this is still
+H-atom data, not dev data). B2 converges on all dev species and on the TS. The cost is dev 1.31 -> 1.55:
+removing B1's 1.1 kcal/mol H-atom overbinding moves X-H AEs up by about 1-3 kcal/mol.
+This selection used dev scores and convergence. Both are disclosed.
+Barrier: TS = linear H3 with r = 0.930 A, UKS, harness settings (score.run_species, def2-QZVP, grid 4).
+Barrier = E(TS) - E(H) - E(H2), using the H and H2 energies from the same QZ dev runs (work/ts_conv.py).
+
+## Honest assessment
+- Dev set (first-row AEs and IPs, closed-shell molecules vs open-shell atoms): the C1 construction is
+  **worse** than its base, 1.31 (B1) / 1.55 (B2, submitted) vs 1.10. Closed-shell molecules are identical by construction. The change
+  comes from the atoms and radicals. Polarized atoms with large-s valence tails (N, quartet) are raised too
+  much (N2 +7.7, HCN +4.2). The H atom is overbound by 1.1 kcal/mol (H2O -6.1, HF -5.8). IP(B) gets worse
+  (+8.1), contrary to my phase-1 prediction, because the B atom's high-density polarized region receives F -> F_LO.
+- Delocalization physics: large gains, in the direction C1 predicts. Stretched H2+ error at R = 6 bohr goes
+  from -28.5 to -6.1 kcal/mol. The H+H2 barrier goes from 7.2 to about 9 (ref 9.6). These are the hidden barrier
+  class and charge-transfer-type situations.
+- Hidden PA and NCI items are closed shell, so they are unchanged from the base.
+- Hidden second-row AEs: expect the same polarized-atom overshoot as N2 for P, S, Cl.
+
+## Exact conditions: satisfied / violated (submitted B2)
+Satisfied:
+- UEG (w = 0 when z_s = 0);
+- exchange spin scaling (each channel uses its own n_s, s_s, z_s and the local zeta);
+- local LO (F <= 1.804);
+- e_x <= 0;
+- H atom exact self-consistently at def2-QZVP (E = -0.5000000; at the exact density E_x^sl is 0.8% less negative than -5/16);
+- C1 for correlation at every lambda;
+- C1 for exchange asymptotically (large s) in polarized one-orbital channels; at finite s, about 45% of the
+  violation is removed (fractional H);
+- closed-shell energies identical to the base;
+- all of opus4's correlation conditions.
+Violated:
+- C1 exactly (impossible for bounded F, T2);
+- SCAN's 1.174 one-orbital bound, pointwise near nuclei in w-regions;
+- exchange GE2 (10/81);
+- no -1/r potential;
+- no dispersion;
+- (B1 only: its relaxed H atom was 1.1 kcal/mol below exact; B2 fixes this by construction).
+
+## What is new (summary)
+1. C1: E_xc[lambda n1, 0] = -lambda^2 J[n1] for fractional fully polarized one-orbital densities. It is derived
+   from the Lieb functional, and the hole normalization is -lambda. The energy content overlaps with PPLB for N <= 1.
+   The pointwise amplitude-scaling statement and its use as a constraint on enhancement factors are new.
+2. T2: no-go theorem. C1 for all lambda forces F(s, z=1) = c s^-2 with c = 5/9 (H norm). That form is 5x the
+   exact value on Gaussians, so no LO-bounded (n, grad n, tau) functional satisfies C1. Global hybrids with a < 1
+   cannot either.
+3. Bounded construction F_q = F_LO/(1 + F_LO s^2/c_q), with c_q from the H norm (2.2089 at the exact density; 2.1501 self-consistent, submitted). It is weighted by
+   zeta^2 z_s^2. It halves the fractional-H violation and the stretched-H2+ error, and lifts the H+H2 barrier.
+   Also shown: an F(0)=1 bounded form cannot help (f(1/2) = 0.419).
+4. Harness finding: the vtau slot bug in PySCF define_xc_ for vxc tuples with a zeros vlapl.
+
+## With more time
+- Restrict F_LO's high-F small-s part to low-density regions (e.g. multiply the C1 weight by a k_F,sigma/omega-type
+  low-density indicator motivated by T2(c)). This removes the N-atom and B-atom overshoot while keeping the
+  fragment (low-density) effect.
+- A Laplacian-level C1 form (T2(d)) with a bounded regularisation at critical points.
+- RSH with alpha = 1 for the interfragment part, which C1 shows is beyond any semilocal form.
+- Check second-row atoms (P, S, Cl) and more barriers before trusting the hidden-set direction.
+
+## Final dev-set score (def2-QZVP, submitted B2): WTMAD 1.55 (AE MAE 3.59, IP MAE 4.44, MCM 4.01), all 24 species converged. score.json.
+This is worse than the base (1.10), sonnet3 (1.00) and B3LYP (0.97). The case for the submission is the derivation (C1, T2), the
+halved delocalization error, and the H+H2 barrier (9.06 vs 7.21 for the base; ref 9.6). The base's dev advantage partly reflects
+error cancellation in atoms that C1 removes.

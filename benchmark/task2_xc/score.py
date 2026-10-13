@@ -46,7 +46,17 @@ def run_species(atoms, charge, spin, basis, xc, sub):
             mf.xc = "wB97X-V"
         elif hyb > 0 or rsh[0] != 0:
             mf.xc = "HF" if rsh[0] == 0 else "wB97X"
-        mf = mf.define_xc_(sub.eval_xc, "GGA" if not getattr(sub, "META", False) else "MGGA", hyb=hyb, rsh=rsh)
+        meta = bool(getattr(sub, "META", False))
+        fn = sub.eval_xc
+        if meta:
+            # PySCF drops None entries of vxc and then truncates to (rho, sigma, tau): a zeros array in the
+            # Laplacian slot would displace vtau. Normalize the Laplacian slot to None.
+            def fn(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=None, _f=sub.eval_xc):
+                out = list(_f(xc_code, rho, spin, relativity, deriv, omega, verbose))
+                if deriv > 0 and out[1] is not None and len(out[1]) == 4:
+                    v = list(out[1]); v[2] = None; out[1] = tuple(v)
+                return tuple(out)
+        mf = mf.define_xc_(fn, "MGGA" if meta else "GGA", hyb=hyb, rsh=rsh)
         if nlc:
             mf.nlc = "VV10"; mf.nlcgrids.level = 1
             mf._numint.nlc_coeff = lambda *a, **k: (((nlc[0], nlc[1]), 1.0),)

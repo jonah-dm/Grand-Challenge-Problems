@@ -4,7 +4,8 @@ NEW (see NOTES.md): for a fractional one-orbital spin density lambda*n1 (0<lambd
 E_xc = -lambda^2 J[n1] (Lieb ensemble functional), i.e. exchange must scale as amplitude^2.
 Theorem: an (s,z) meta-GGA meets this for all lambda only with F(s,z=1)=c s^-2, c=5/9 from the H norm,
 which is unbounded. Bounded construction: F_q(s) = F_LO/(1+F_LO s^2/c_q) (-> c_q s^-2 at large s,
--> F_LO = 1+kappa at s->0), c_q = 2.20886 fixed by E_x^sl[H] = -5/16. Applied only where C1's premise
+-> F_LO = 1+kappa at s->0), c_q fixed by the H norm (default 'scf': E_SCF(H) = -0.5 at def2-QZVP, c_q = 2.15010;
+'exact': E_x^sl[n_H] = -5/16 at the exact density, c_q = 2.20886). Applied only where C1's premise
 holds: w_s = zeta^2 z_s^2 (single-orbital channel in a polarized region). Closed shells: identical
 to opus4 (sonnet3 exchange + pair-aware Stoll correlation, both prior art, inherited unchanged).
 O5_W env switch exists only for the disclosed candidate comparison (default = submitted form).
@@ -18,7 +19,7 @@ F_LO = 1.804
 ZREG = 1e-2   # numerical regulator of z_s in the C1 weight
 # H-atom norm of F_q: 'exact' = E_x^sl[n_H] = -5/16 at the exact density (work/norm.py);
 # 'scf' = E_SCF(H) = -0.5 at the self-consistent def2-QZVP density (work/scnorm.py)
-_NORM = os.environ.get('O5_NORM', 'exact')
+_NORM = os.environ.get('O5_NORM', 'scf')
 C_Q = 2.1500991092371597 if _NORM == 'scf' else 2.208864761915739
 
 HYB = 0.25

@@ -5,7 +5,7 @@
  "NEG_frac_positive": 0.0,
  "LO_frac_violating": 0.0,
  "UEG_max_rel_dev": 1.5802508380840383e-15,
- "POL1_exc_over_LDAx": 1.1861437121067266,
+ "POL1_exc_over_LDAx": 1.1825491063839764,
  "POL1_ok": true,
  "mix_R2": 0.9980790095952042,
  "mix_components": {
