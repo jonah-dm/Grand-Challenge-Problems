@@ -1,0 +1,25 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 1.5802508380840383e-15,
+ "POL1_exc_over_LDAx": 0.7776018195195391,
+ "POL1_ok": true,
+ "mix_R2": 0.9980790095952042,
+ "mix_components": {
+  "LDA,PW": 0.1989,
+  "M05": 0.0169,
+  "MN12-L": 0.009,
+  "MN15-L": 0.023,
+  "RPBE": 0.2436,
+  "PW91": 0.2774,
+  "BHANDHLYP": 0.0241
+ },
+ "closest_single": {
+  "name": "PBE0",
+  "R2": 0.9704376787764685
+ },
+ "verdict": "DISTINCT"
+}

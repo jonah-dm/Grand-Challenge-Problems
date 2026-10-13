@@ -11,7 +11,7 @@ All switches via env vars are only for the disclosed candidate comparison; defau
 import os
 import numpy as np
 
-X1 = os.environ.get('S5_X1', 'H')            # one-orbital branch: 'none' | 'H' | 'HHe' | 'LIB'
+X1 = os.environ.get('S5_X1', 'Hs')            # one-orbital branch: 'none' | 'H' | 'HHe' | 'LIB'
 CORR = os.environ.get('S5_CORR', 'pair')     # 'pbe' | 'stoll' | 'pair'
 ZX = os.environ.get('S5_ZX', 'tot')         # 'chan': per-spin-channel z (exact spin scaling) | 'tot': total z
 PW = float(os.environ.get('S5_WP', '2'))     # w = z^PW   (2: smallest integer keeping GE2 of the GGA branch)

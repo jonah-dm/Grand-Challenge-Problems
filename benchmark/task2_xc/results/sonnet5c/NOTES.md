@@ -45,7 +45,8 @@ of -10% (H) to +11.5% (R=7) at lambda=1 and +7..+34%, +39..+75% at lambda=.75, .
 Consequences:
  (i) Delocalisation (fractional-charge) error of semilocal exchange on one-orbital densities is not curable by
      any improvement of F(s, z): this is a no-go, not a fitting problem. Changing the tail exponent changes
-     nothing (rows 3 and 4 agree to 0.2%) because the energy sits at s < 3.
+     the one-orbital library errors by < 0.2% (rows 3 and 4) because the library energy sits at s < 3. (In molecules the
+     branch tail DOES matter, see the QZ table below: that statement is only about the library.)
  (ii) The error is SIGN-DEFINITE: semilocal exchange over-binds low-amplitude one-orbital densities.
  (iii) The escape: add the one shape invariant w = n lap(n)/|grad n|^2 (amplitude- and scale-invariant). Then
      F = s^-2 G(w) satisfies (A) exactly for every G and G is free to reproduce shapes. In this harness lap(n) is
@@ -70,48 +71,89 @@ H-exact constraint can be generalised to a whole family of one-orbital shapes at
 violation is a theorem about (n, grad n, tau) functionals, not a choice of form.
 
 ### 4. What is submitted (Laplacian-free; honest summary)
-    E_xc = 1/4 E_x^HF + 3/4 E_x^SL + E_c^G
-    E_x^SL : per spin channel, e_x = e_x^LDA(2n_s)/2 * [ (1-w) F_gga(s) + w F_1(s) ],  w = z^2, z = tau_W/tau (total density)
-    F_gga  = 1 + kappa - kappa/(1 + mu s^2/kappa), kappa = 0.804 (Lieb-Oxford), mu = beta pi^2/3 = 0.2195 (PBE GE2/xc gradient cancellation)
-    F_1    = 1 + mu s^2/(1 + b s^4)   (z = 1 branch)
-             * small-s coefficient mu (same as GGA branch, continuity of the GE2 coefficient through w -> 0)
-             * tail s^-2: the only power compatible with the amplitude ray (A) (section 3). Numerically immaterial (rows 3, 4 of the table).
-             * b = 0.037713 solved at import so that E_x[H 1s] = -5/16 Ha exactly (derived, nothing fitted).
-    w = z^2: smallest integer exponent for which the weight does not alter the second-order gradient coefficient of the GGA branch
-             (z ~ O(s^2) in a slowly varying gas, so w ~ s^4).
-    E_c^G  : PBE correlation with the Stoll same-spin part removed in one-orbital channels and re-assigned in two-electron-singlet
-             pair regions: E_c = E_c^PBE - sum_s z_s^2 [1 - z_s'^2 (1 - zeta^2)] E_c^PBE[n_s, 0]. THIS IS PRIOR ART (opus4, round 4 =
-             B95/TPSS Stoll gating + pair reassignment); I did not derive it and claim nothing for it.
+    E_xc = 1/4 E_x^HF + 3/4 E_x^SL + E_c^G          (HYB = 0.25, META = True; no RSH, no NLC)
+    E_x^SL : per spin channel, e_x = e_x^LDA(2n_s)/2 * [ (1-w) F_gga(s) + w F_1(s) ],  w = z^2, z = tau_W/tau (TOTAL density)
+    F_gga  = 1 + kappa - kappa/(1 + mu s^2/kappa), kappa = 0.804 (Lieb-Oxford), mu = beta pi^2/3 = 0.2195 (PBE-type GE2/xc gradient cancellation)
+    F_1    = 1 + mu s^2/(1 + C s^3), C = 4/(5 kappa/mu)^1.25 (z = 1 branch)   -- THIS BRANCH IS THE PRIOR-ART ONE (sonnet3/opus4);
+             it gives E_x[H] = -0.3098 (exact -0.3125, 0.85% off), i.e. it is NOT H-exact. Kept because it scored best (see table).
+    E_c^G  : PBE correlation with Stoll same-spin part removed in one-orbital channels and re-assigned in two-electron-singlet pair
+             regions: E_c = E_c^PBE - sum_s z_s^2 [1 - z_s'^2 (1 - zeta^2)] E_c^PBE[n_s, 0]   (PRIOR ART: opus4 = B95/TPSS Stoll gate + pair
+             reassignment).
+So the submitted FUNCTIONAL is a re-derivation of opus4's (dev WTMAD 1.08 reproduced exactly). I claim NO novelty for the functional.
+The novelty I claim is the analysis around it (below). I could not find a Laplacian-free construction that beats it; the attempts and
+their scores are all listed.
 
-What is new here vs KNOWN_CONDITIONS.md and prior_art:
- 1. Condition (A) as a scaling relation on E_x of one-orbital densities, the obstruction theorem (3), its parametrisation-free
-    minimax numbers (3b) and the Laplacian-extended escape (3, iii). Quantitative: any (n, grad n, tau) exchange violates (A) by
-    >= 5.3% / 11.6% / 20.9% at lambda down to 0.75 / 0.5 / 0.25.
- 2. Joint exactness of a single two-constant one-orbital branch on six HF/hydrogenic 1s densities (H, He, Ne, Ar, Be, Li 1s):
-    h = a s^2/(1+b s^4) with (a, b) = (1.984, 16.66) reproduces -J of all six to < 0.05% (`fit7.py`; the "joint H+He-exact
-    iso-orbital exchange" example from the task). I implemented it (candidate HHe) and it FAILS in molecules (below): it makes
-    exchange of Ne 404 mEh too negative (`ex_eval.py`), because z-weighting also activates it in shell/valence regions that are
-    not single-orbital. So exactness of an isolated one-orbital density does not transfer. That is a documented negative result.
- 3. The exact-exchange partition diagnostic (`diag_x.py`, `ex_eval.py`, `decomp.py`): splits the AE error of any hybrid into an
-    exchange part (vs exact HF exchange on HF densities) and a correlation part (vs CCSD(T) minus HF). Finding: for the
-    best baseline-like forms both parts are 20-50 kcal/mol per atomization energy and cancel to ~3 (table below). No
-    constraint-only construction escapes this cancellation; it is why one-orbital exactness (which only changes the exchange part)
-    moves the total by +-5..10 kcal/mol and cannot help by itself.
+What I claim as new vs KNOWN_CONDITIONS.md and prior_art:
+ 1. Condition (A) as a scaling relation on E_x of nodeless one-orbital densities (valid because any nodeless phi is the ground state of
+    some one-electron potential, so E[lambda] = lambda E[1] holds in that potential), the obstruction theorem (sec. 3), its
+    parametrisation-free minimax numbers (3b) and the Laplacian-extended escape (3, iii). Quantitative: any (n, grad n, tau) exchange
+    violates (A) by >= 5.3% / 11.6% / 20.9% at lambda down to 0.75 / 0.5 / 0.25 (library-restricted, discretised LP, so a numerical
+    theorem, not a proof). The sign-definite over-binding (PBE +62% at lambda = 0.5) is a statement about E_x alone.
+ 2. Joint exactness of ONE two-constant one-orbital branch on six HF/hydrogenic 1s densities (H, He, Ne, Ar, Be, Li 1s):
+    h = a s^2/(1+b s^4), (a, b) = (1.984, 16.66) reproduces -J of all six to < 0.05% (`fit7.py`) -- the "joint H+He-exact iso-orbital
+    exchange" example from the task, extended to cores. Implemented as candidate c4. NEGATIVE RESULT: it makes molecules over-bind by
+    +10..+24 kcal/mol and atomic exchange of Ne 404 mEh too negative (`ex_eval.py`), because the z-weight also activates the branch in
+    shell and valence regions that are not single-orbital. Exactness of an isolated one-orbital density does not transfer.
+ 3. An exact-exchange partition diagnostic (`diag_x.py`, `diag_all.py`, `ex_eval.py`, `decomp.py`) that splits the AE error of a
+    hybrid into an exchange part (vs exact HF exchange on HF densities) and a correlation part (vs CCSD(T) minus HF). For the
+    PBE-form-exchange/pair-correlation functional (c1) both parts are 5..54 kcal/mol per atomization energy (N2: +48.7 / -52.3,
+    H2O +19.8 / -19.4, F2 +48.0 / -53.7) and cancel to a total MAE of 3.5. No constraint-only change to exchange alone can improve the
+    total unless the correlation part moves with it; that is why every one-orbital exchange variant moves AE by +-5..10 kcal/mol
+    without a systematic gain.
+ 4. Non-SCF exchange-energy check on 17 non-dev atoms (`ex_eval2.py`, HF densities, mean |E_x^SL - E_x^HF|): PBE-form 74 mEh,
+    z-blend H-exact branch (total z, w = z^2) 31 mEh, a 2.4x improvement of absolute atomic exchange that the AE cancellation (item 3)
+    does not convert into better atomization energies.
 
 ## Phase 2 results
-### Candidate list (every candidate I compared; dev WTMAD at def2-svp; no continuous parameter tuned on these)
-| id | exchange one-orbital branch | z used in exchange | weight w | corr | AE MAE | IP MAE | WTMAD svp |
-|---|---|---|---|---|---|---|---|
-| c1 | none (PBE-form only) | - | - | pair | 4.37 | 7.47 | 2.00 |
-| c2 | H-exact | per channel (exact spin scaling) | z^2 | pair | 6.76 | 9.65 | 2.99 |
-| c3 | H-exact | total | z^2 | pair | 4.29 | 8.36 | 2.02 |
-| c4 | H,He,Ne,Ar,Be,Li-1s-exact (a=1.98,b=16.7) | per channel | z^2 | pair | 11.86 | 10.58 | 4.90 |
-| c5 | H-exact | total | z^3 | pair | 4.16 | 8.20 | 1.96 |
-| c6 | H-exact | total | z^1 | pair | 4.45 | 8.60 | 2.09 |
-Submitted: c3 (w = z^2 is the GE2-derived exponent; c5 is 0.06 better but z^3 has no derivation, so not used).
-Reading: the one-orbital branch is dev-neutral (c1 vs c3 within noise); per-channel z (the form that honours exact spin scaling)
-is clearly worse (c2) because open-shell atoms (spin channels with 1-2 orbitals) get extra exchange; the H,He-joint branch (c4)
-over-binds molecules by +10..+24 kcal/mol (same failure sonnet4 reported with a different shape).
-Non-SCF exchange-energy check on non-dev atoms (`ex_eval2.py`, HF densities, mEh error of semilocal E_x): MAE over 17 atoms
-PBE-form 74.4, H-exact branch (total z, w=z^2) 30.9, (per-channel) 31.3: the branch does improve absolute atomic exchange by a factor
-2.4, but AE cancellation with correlation takes that away.
+### Candidate list (every candidate compared)
+Dev WTMAD. svp = def2-svp, qz = def2-qzvp. All use HYB = 0.25 and the pair-aware correlation above unless stated.
+| id | one-orbital exchange branch F_1 | z in exchange | weight w | AE MAE | IP MAE | WTMAD |
+|---|---|---|---|---|---|---|
+| c1 | none (PBE-form only) | - | - | 4.37 | 7.47 | svp 2.00 ; qz 1.50 (AE 3.54, IP 3.93) |
+| c2 | H-exact, s^-2 tail (b = 0.0377) | per channel (exact spin scaling) | z^2 | 6.76 | 9.65 | svp 2.99 |
+| c3 | H-exact, s^-2 tail (b = 0.0377) | total | z^2 | 4.29 | 8.36 | svp 2.02 ; qz 1.53 (AE 3.61, IP 3.98) |
+| c4 | six-1s-exact (a = 1.98, b = 16.7) | per channel | z^2 | 11.86 | 10.58 | svp 4.90 |
+| c5 | H-exact, s^-2 tail | total | z^3 | 4.16 | 8.20 | svp 1.96 |
+| c6 | H-exact, s^-2 tail | total | z^1 | 4.45 | 8.60 | svp 2.09 |
+| c7 (SUBMITTED) | prior-art branch, C s^3 (not H-exact) | total | z^2 | - | - | **qz 1.08 (AE 2.39, IP 3.89, MCM 3.14)** |
+Selection of c7 used the QZ dev score among {c1, c3, c7}; no continuous parameter was tuned. Reading: (i) per-channel z (the form that
+honours exact spin scaling) is clearly worse (c2) because spin channels of open-shell atoms with 1-2 orbitals get extra exchange;
+(ii) my H-exact s^-2-tail branch is no better than no branch at all (1.53 vs 1.50) while the prior-art branch with the
+slower-decaying tail is 0.4 better at QZ: the large-s part of the branch carries real atomization-energy information in molecules,
+which the one-orbital library (energy at s < 3) cannot see. So derived-tail (A-compatible, s^-2) loses to the inherited tail, and I
+report that as a negative result, not a feature.
+
+### Own validation set (not dev, not hidden), CCSD(T)/CBS refs from reference.py (`val_set.py`, `val_ref*.json`), def2-tzvp
+| item | ref | sonnet5c err | PBE0 err |
+|---|---|---|---|
+| AE2:HCl | 107.20 | -1.20 | -3.06 |
+| AE2:H2S | 183.20 | +0.01 | -4.12 |
+| AE2:PH3 | 241.36 | +1.96 | -4.25 |
+| BAR:H+H2 | 9.59 | -2.31 | -3.90 |
+| PA:NH3 | 212.24 | +1.55 | +1.62 |
+| PA:H2O | 172.09 | +1.51 | +1.82 |
+| class MAE (AE2 / BAR / PA) | | 1.06 / 2.31 / 1.53 | 3.81 / 3.90 / 1.72 |
+| MCM | | 1.63 | 3.14 |
+(PBE0 is only a reference point; same basis. The validation set is tiny (3 AE2, 1 barrier, 2 PA) and was not used to choose anything.)
+
+### Audit / derivatives
+check_derivs: DERIVATIVES OK (complex-step derivatives, spin-unpolarized and polarized). audit.py: DISTINCT (closest single PBE0, R^2 = 0.970).
+
+## Exact conditions
+Satisfied: UEG limit; exact spin scaling of exchange is VIOLATED by the total-z weight (open shell only; the exact-spin-scaling variant c2 is
+worse); Lieb-Oxford (F <= 1.804 in both branches, audit 0 violations); E_c = 0 for fully polarised one-orbital densities; same-spin E_c = 0 for
+one-orbital channels with pair reassignment (prior art); GE2 coefficient of exchange is mu_PBE rather than 10/81 (xc-level cancellation).
+Violated: ensemble-amplitude scaling (A) (provably unavoidable for any Laplacian-free form, sec. 3); exact one-electron exchange for H
+(0.85% off); piecewise linearity / derivative discontinuity beyond what 25% EXX gives; no dispersion (NCI will be weak); one-electron
+exchange is not exact pointwise.
+
+## Weaknesses
+Atomization energies still rest on x/c cancellation (sec. 4 item 3). NCI not addressed (no NLC; VV10 was not scored, so no claim).
+IP of B +6, HF cation -5. Barrier (H+H2) and PA numbers are in the validation table above.
+
+## What I would try with more time
+(1) Implement the Laplacian-extended one-orbital branch F = s^-2 G(w) (sec. 3 iii) by supplying nabla^2 n through a custom NumInt (PySCF 2.14 does not
+support the Laplacian on the Vxc path, so it needs a small patch outside this harness): it satisfies (A) exactly and fits the whole
+H / H2+ / HeH2+ library to <= 3% (R = 4.5: -8%) with 4 constants, vs 30%+ for any s-only form at R = 7. (2) Re-fit the one-orbital weight
+so that the exact-exchange partition (sec. 4 item 3) is balanced against a correlation functional trained to the same partition. (3) Local
+hybrids with the exact one-orbital exchange density -n v_H/2, which would carry (A) exactly.
