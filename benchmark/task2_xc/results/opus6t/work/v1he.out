@@ -1,0 +1,4 @@
+softHe fa=1.000 fb=1.000 N=2.000 J=0.38055 F=1.136702 Exc/J=-2.02536 Ec/J=-0.02536 lower=-2.0000 tent=-0.0000 sat_up=True conv=False it=1500
+softHe fa=0.750 fb=0.750 N=1.500 J=0.38055 F=0.661572 Exc/J=-1.27080 Ec/J=-0.14580 lower=-1.1250 tent=-0.1250 sat_up=True conv=False it=1500
+softHe fa=0.500 fb=0.500 N=1.000 J=0.38055 F=0.192346 Exc/J=-1.00073 Ec/J=-0.50073 lower=-0.5000 tent=-0.5000 sat_up=True conv=False it=1500
+softHe fa=0.300 fb=0.200 N=0.500 J=0.38055 F=0.095900 Exc/J=-0.25108 Ec/J=-0.12108 lower=-0.1200 tent=-0.1200 sat_up=True conv=False it=1500

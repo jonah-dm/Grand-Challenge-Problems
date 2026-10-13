@@ -21,3 +21,6 @@
   CH2_triplet        -39.01564222   29.6s
   B_cation           -24.22463724   11.8s
   F_cation           -98.83341815   16.4s
+  HF_cation          -99.60015121   33.2s
+
+file:results/opus6c/submission.py: AE MAE=5.01  IP MAE=5.82  WTMAD=2.14  MCM=5.41  time=716s

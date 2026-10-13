@@ -44,8 +44,10 @@ def E_lib(code, lam, kind, Z=1.0, xtype='GGA'):
 if __name__ == '__main__':
     print('norm check', np.sum(W*shell(1,'H')[0]), np.sum(W*shell(1,'G')[0]))
     rows = []
-    for name in ['K0', 'K1', 'K2']:
-        os.environ['O6_K'] = name
+    for name in ['K0', 'K1', 'K2', 'K0b', 'K1b']:
+        os.environ['O6_K'] = name[:2]
+        if name.endswith('b'): os.environ['O6_OMEGA'] = '0.5767436061911404'; os.environ['O6_CAP'] = '1.174'
+        else: os.environ['O6_OMEGA'] = '0.3687078276482022'; os.environ['O6_CAP'] = '1.804'
         spec = importlib.util.spec_from_file_location('sub'+name, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'submission.py'))
         m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
         rows.append((name, (lambda mm: (lambda lam, kind='H', Z=1.0: E_sub(mm, lam, kind, Z)))(m)))

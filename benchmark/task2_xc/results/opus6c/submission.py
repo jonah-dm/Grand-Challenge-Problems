@@ -16,12 +16,12 @@ import numpy as np
 from scipy.special import erf as _erf, erfcx as _erfcx, gamma as _gamma, comb as _comb
 
 _K = os.environ.get('O6_K', 'K1')
-OMEGA = float(os.environ.get('O6_OMEGA', '0.3687078276482022'))
+OMEGA = float(os.environ.get('O6_OMEGA', '0.5767436061911404'))
 A_SR = 0.0 if _K == 'K2' else 0.25          # SR exact-exchange fraction (PBE0 1/4; K2: pure LC)
 HYB = A_SR
 RSH = (OMEGA, 1.0, A_SR - 1.0)               # 100% LR-HF, A_SR SR-HF
 META = True
-F_LO = 1.804
+F_LO = float(os.environ.get("O6_CAP", "1.174"))   # cap of the one-orbital branch
 ZREG = 1e-2
 PW = 2.0
 KAPPA, MU, BETA = 0.804, 0.2195149727645171, 0.06672455060314922

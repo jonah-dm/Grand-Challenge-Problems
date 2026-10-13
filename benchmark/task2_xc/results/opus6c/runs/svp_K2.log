@@ -14,3 +14,13 @@
   N2                -109.18053330   34.1s
   CO                -112.95836385   47.1s
   F2                -198.97605193   36.0s
+  C2H2               -77.03137881   82.5s
+  HCN                -93.10033579   52.3s
+  H2CO              -114.13592222   72.1s
+  OH                 -75.49751872   33.0s
+  CH2_triplet        -38.99011228   48.5s
+  B_cation           -24.20220551   15.1s
+  F_cation           -98.80279784   18.2s
+  HF_cation          -99.57286035   34.0s
+
+file:results/opus6c/submission.py: AE MAE=8.01  IP MAE=6.93  WTMAD=3.30  MCM=7.47  time=997s

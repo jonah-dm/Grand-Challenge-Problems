@@ -185,7 +185,7 @@ Claimed as new, beyond those papers:
    bounded C1/C2 construction, and the spin-blind joint xc form with the hybrid split [(1-a)(1+zeta^2)/2 + (1-zeta^2)/2].
 4. The numerical verifications V1/V2.
 
-## 4. Where C2 tells a construction something new: the one-orbital manifold is a property of the TOTAL density
+## 4. [PHASE-1 PROPOSAL, REFUTED IN PHASE 2, see section 6] The one-orbital manifold is a property of the TOTAL density
 C1 (round 5) was enforced with a per-channel weight zeta^2 z_s^2. C2 shows that the exact
 amplitude law holds on the one-orbital manifold only when **both** channels hold the same orbital or one is empty. This is the condition
 z_tot = tau_W[n]/tau = 1 for the total density. When the minority channel holds a different
@@ -261,6 +261,11 @@ The particle triangle is reproduced to 0.1%. On the hole triangle the exact E_c 
 that grows to the pair dynamic correlation at (1,1), as C2-HD predicts (an O(g^0) gap). The exact E_c(N) on the closed-shell axis
 has a strong kink at N = 1: left slope -1.00 J, right slope about +0.75 J. Section 3a shows that any semilocal E_c is C^1 there.
 
+
+Second shape (soft-He+ orbital, J = 0.38055; v1he.out): (0.3,0.2) E_c/J = -0.1211 [exact -0.120]; (0.5,0.5) -0.5007 [-0.500];
+(0.75,0.75) -0.1458 [tent -0.125, gap 0.021 J]; (1,1) -0.0254 [<= 0]. The compact shape has a smaller dynamic gap, closer to the
+C2-HD (high-density) limit, as the scaling argument predicts.
+
 ### V2: 3D exact one-orbital shapes, existing functionals (work/v2_dfa.py, v2.out). "!" = C2 violated
 H 1s (J = 5/16). E_c/J, correlation-only functionals:
 | | (0.5,0) | (0.25,0.25) | (0.5,0.5) | (0.75,0.25) | (0.75,0.75) | (1,0.5) | (1,1) |
@@ -325,3 +330,51 @@ another reason to use the z-blend base. B2: **DISTINCT** (closest SCAN0 R^2 = 0.
 - T4' on HF densities (work/t4_hf.py, aug-cc-pVQZ): forced-form bound for any e_c <= 0 semilocal correlation that
   obeys the flat-plane axis on hydrogenic ions: He <= -0.876 Ha, H2 <= -0.418, Li+ <= -1.418, against near-exact
   -0.042 / -0.041 / -0.0435. That is 10-33x over-correlation of real two-electron singlets.
+
+## Final scores (def2-QZVP, harness settings)
+| | dev WTMAD | MCM | AE MAE | IP MAE | H+H2 barrier (ref 9.6) | H2+ (R = 6 bohr) - H (exact UHF/QZ -6.89) |
+|---|---|---|---|---|---|---|
+| A2 base (no C1 corner) | 1.58 | 3.85 | 3.76 | 3.94 | 8.62 | -36.30 (error -29.4) |
+| **B2 submitted** | **1.37** | 3.55 | 3.16 | 3.95 | **10.38** | **-12.66 (error -5.8)** |
+All 24 dev species, the TS and H2+ converge (work/barrier.py, bar_*.log). For reference: B3LYP 0.97, r2SCAN 1.28, opus5t 1.55, sonnet5c 1.53.
+Main remaining dev errors (B2): N2 +8.4 (the polarized-atom effect, smaller than opus5t's +9.6), IP(B) +6.3 (opus5t +7.8),
+H2O/HF -5.7/-5.9, F2 -6.2, LiH +4.3. Barrier: the C1 corner overshoots by 0.8 (base 1.0 too low). The H atom with
+exact-density norms sits 1.2 kcal/mol below -0.5 at QZ (self-consistent density relaxation), as in round 5's B1.
+
+## Exact conditions: satisfied / violated (submitted B2)
+Satisfied: UEG (audit 5e-7); exchange spin scaling except in the base's total-z blend (inherited from sonnet5c); local LO
+(F <= 1.804); e_xc <= 0; H-atom exchange norm (exact density) for both the F_1 branch and the C1 branch; E_c = 0 on the C2 corner
+(1,0) for every amplitude (opus4 gate); C1 at large s in fully polarised one-orbital channels; the C2 hole-edge structure for
+integer KS (no static-correlation term where the majority channel is full); closed-shell pair correlation of PBE (opus4).
+Violated: C2(i) at zeta = 0 and in the interior (impossible by T3/T4 for any semilocal form with e_c <= 0, and harmful if
+forced: candidate C); C1 exactly (round-5 T2); exchange GE2 (10/81); no -1/r potential; no dispersion; the C2 derivative
+kink at N = 1 (impossible for semilocal forms, section 3a).
+
+## What is new (summary, positioned against Zhang-Yang 1998, MCY 2006-2009, Santra-Perdew 2019, Gould-Dobson 2013, Gould-Pittalis 2017)
+1. C2(ii), the hole-triangle sandwich -2 f_a f_b J <= E_c <= -2(1-f_a)(1-f_b) J for one-orbital spin densities of any
+   shape, and C2-HD, its exactness at leading order in the high-density limit: on the open square, correlation scales like
+   exchange. Possibly implicit in the ensemble-Hx work of Gould-Dobson/Gould-Pittalis (not checked in full text). The particle
+   triangle C2(i) is known (constancy/flat plane) and gets no credit.
+2. T3 (rigorous, hydrogenic family): the flat-plane axis forces a unique semilocal correlation
+   e_c = -(1-zeta^2) 5 pi/(4(3pi^2)^{2/3}) n^{4/3} s^-2 on s >= (3 pi)^{-1/3}, with a Gaussian failure factor of 5.
+3. **T4/T4' (the main result for "two-electron singlets / flat-plane axis")**: any semilocal correlation with e_c <= 0
+   that satisfies the flat-plane axis on hydrogenic ions over-correlates every two-electron singlet. The bound is
+   E_c <= -0.523 Z for hydrogenic pairs; on HF densities, He <= -0.876, H2 <= -0.418, Li+ <= -1.418 Ha (exact about -0.04).
+4. Verification: an exact 1D Lieb-functional computation of the whole occupation square (particle equality to 0.1%; tent
+   plus a smooth dynamic gap; kink at N = 1). The first demonstration that all tested GGA/meta-GGA correlations violate the
+   hole-triangle bound (at (3/4,3/4)).
+5. Construction lesson (a negative result, then a correction): integer-occupation KS channels live on the hole edge f_a = 1,
+   where the C2 static-correlation tent vanishes. A spin-blind/static-correlation term enforced locally (candidate C) destroys
+   open-shell atoms, because their valence is locally near the one-orbital manifold (z_tot 0.7-0.97). The C2-consistent integer-KS
+   construction is per-channel C1 exchange plus correlation that vanishes on the (1,0) corner. That form is prior art (opus5t), here
+   on a DISTINCT base. The functional itself contains no new construction element; its novelty is the theory that selects it.
+
+## With more time
+- Read Gould-Dobson 2013 / Gould-Pittalis 2017 in full to settle whether C2(ii)/C2-HD is already explicit there.
+- Fractional-occupation (ensemble) calculations, where the particle-triangle SB form is the right object. Test SB in an
+  ensemble-KS code on stretched H2 (RKS), where C2 predicts exact dissociation if the manifold indicator were known.
+- A Laplacian-level manifold indicator. The hydrogenic nuclear value s = (3 pi N)^{-1/3} is an occupation meter, which suggests that
+  q/p-type variables could tell the particle triangle from the pair corner, attacking T3b.
+- Self-consistent H norm (removes the 1.2 kcal/mol H overbinding) and second-row atoms before trusting hidden-set AE2.
+
+## Final dev-set score (def2-QZVP, submitted B2): WTMAD 1.37, MCM 3.55 (AE MAE 3.16, IP MAE 3.95), all converged. score.json.
