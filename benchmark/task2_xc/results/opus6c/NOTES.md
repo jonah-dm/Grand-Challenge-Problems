@@ -146,3 +146,47 @@ flat-plane / two-electron singlets (not addressed); dispersion (no VV10).
   erfcx (to be derived symbolically and checked against quadrature in phase 2).
 - Gaussian test (to compute): exact SR self-exchange of a normalized Gaussian n = (2a/pi)^{3/2} e^{-2ar^2} is
   E^SR = -sqrt(a/pi) (1 - omega/sqrt(a + omega^2)) (Fourier: n(k) = e^{-k^2/(8a)}). Compare with the branch.
+
+---------------------------------------------------------------------------------------------
+# Phase 2 (04:13 onward): implementation, verification, scores
+
+## Implementation facts
+- R(b) in closed form. The integration-by-parts recurrence 2n J_{n+1} = (2n-1-2b) J_n + 2b J_{n-1}, with J_1 = (pi/2) erfcx(sqrt b) and
+  J_2 = (pi/4)(1-2b) erfcx(sqrt b) + sqrt(pi b)/2, gives J_4 = I(b). It is checked against quadrature to 1e-12 for b <= 50 (work/rfun.py).
+  For b < 1e-5 the series Q = 1/5 - b/10 + b^2/6 is used, and for b > 400 the asymptotic series of J_4. Both are complex-step safe.
+- PySCF convention verified in the source: RSH = (omega, alpha, beta) means alpha*LR-HF + (alpha+beta)*SR-HF. So RSH = (omega, 1, a-1).
+- check_derivs: DERIVATIVES OK (unpolarized and polarized). Audit: DISTINCT (closest single BHANDHLYP, R^2 = 0.916; mix R^2 = 0.979).
+  NEG and LO are clean. The audit's UEG check reports a deviation of 0.64. This is an artifact of the audit, which assumes a global hybrid:
+  eval_xc returns only the SR semilocal part. At s = 0 and z = 0 it is (1-a) SR-LDA exchange plus PW92, and the HF parts supply the rest.
+  For the UEG, LR-HF + a SR-HF equals LR-LDA + a SR-LDA, so the total is LDA.
+- omega* (L4) solved exactly: 0.368708 for the cap 1+kappa = 1.804.
+
+## A failure of the first submission form, found in phase 2: variational flattening (and its fix)
+K1 (omega* = 0.3687, cap 1.804) is accurate at the exact H density (E_xc = -0.31225, fractional H nearly exact, table below). But the
+self-consistent H atom at def2-QZVP came out at -0.50633 Ha, 7.5 kcal/mol too low (work/hdiag.py). The SCF density flattens around the
+nucleus: n(0) drops from 0.318 to 0.228, and b drops from the hydrogenic 7.36 to about 3. This raises Q(b) and the branch up to the cap
+over a finite region. The minimal-basis SVP H is fine (-0.4995), so the effect only appears in flexible bases. This is the bounded
+analogue of opus5c's "charge-linear potential makes the H density non-stationary". Q(b < 1/omega^2) is not fixed by any hydrogenic
+density (neutral H has the smallest b of the family). It is an extrapolation, and the 1.804 cap leaves it too much room.
+Fix, on the known list: in a one-orbital channel the tight bound is the two-electron/one-orbital bound F_x <= 1.174 (exchange spin
+scaling maps a one-orbital channel onto a two-electron singlet density, the class the bound holds for). So the cap is 1.174, and L4
+with the same rule gives **omega* = 0.576744**. With this, H at def2-QZVP is -0.500773 (0.49 kcal/mol low), and -0.49944 at SVP.
+This change came after a phase-2 run. It is disclosed as candidate K1b. It is a re-derivation with a tighter KNOWN bound, not a
+tuned number (L4 is unchanged; only the bound inserted into it changed).
+
+## One-electron tests at exact densities (work/frac.py; E_xc in Ha, f(lambda) = E_xc[lambda n_H]/(-5/16), exact f(1/2) = 0.25,
+## f(1/4) = 0.0625; "H2+ inf" = 2E_xc[n_H/2] + 5/32 in kcal/mol, exact 0; Gaussian ratio = E_x/exact at lambda = 1; last column
+## = 4E[n_G/2]/E[n_G], exact 1 (amplitude homogeneity on a non-hydrogenic shape))
+    func          Exc[H]  f(1/2)  f(1/4)  H2+inf kc |                   | Gauss(a=1) E/exact  He+(Z=2) E
+    K0          -0.30646  0.2728  0.0760      -8.96 | Gauss  0.953  He+ -0.60368 (exact -0.62500)  fG(1/2)/fG(1)*4  1.202
+    K1          -0.31225  0.2510  0.0630      -0.39 | Gauss  1.140  He+ -0.61571 (exact -0.62500)  fG(1/2)/fG(1)*4  1.116
+    K2          -0.31210  0.2512  0.0632      -0.49 | Gauss  1.187  He+ -0.61254 (exact -0.62500)  fG(1/2)/fG(1)*4  1.149
+    K0b         -0.31036  0.2611  0.0683      -4.34 | Gauss  0.964  He+ -0.60843 (exact -0.62500)  fG(1/2)/fG(1)*4  1.119
+    K1b         -0.31247  0.2506  0.0628      -0.23 | Gauss  1.055  He+ -0.60856 (exact -0.62500)  fG(1/2)/fG(1)*4  1.074
+    PBE         -0.31192  0.4125  0.1717     -63.73 | Gauss  0.976  He+ -0.61811 (exact -0.62500)  fG(1/2)/fG(1)*4  1.641
+    PBE0        -0.31356  0.3734  0.1449     -48.40 | Gauss  0.987  He+ -0.62139 (exact -0.62500)  fG(1/2)/fG(1)*4  1.478
+    B3LYP       -0.31457  0.3867  0.1546     -53.61 | Gauss  0.986  He+ -0.62328 (exact -0.62500)  fG(1/2)/fG(1)*4  1.524
+    HYB_GGA_XC_LC_WPBE  -0.31849  0.2957  0.0864     -17.91 | Gauss  0.989  He+ -0.62371 (exact -0.62500)  fG(1/2)/fG(1)*4  1.290
+    CAM-B3LYP   -0.31116  0.3293  0.1143     -31.10 | Gauss  0.970  He+ -0.61444 (exact -0.62500)  fG(1/2)/fG(1)*4  1.373
+    WB97X       -0.31385  0.3035  0.0952     -20.98 | Gauss  1.003  He+ -0.62316 (exact -0.62500)  fG(1/2)/fG(1)*4  1.332
+    R2SCAN      -0.31250  0.3952  0.1559     -56.94 | Gauss  0.996  He+ -0.62500 (exact -0.62500)  fG(1/2)/fG(1)*4  1.582
