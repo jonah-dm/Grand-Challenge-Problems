@@ -12,7 +12,7 @@ import os
 import numpy as np
 from scipy.special import erf as _erf
 OMEGA = float(os.environ.get('O4_OMEGA', '0'))
-_MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','pair'); PW=float(os.environ.get('O4_PW','2'))
+_MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','pairz'); PW=float(os.environ.get('O4_PW','2')); XSPIN=int(os.environ.get('O4_XSPIN','1'))
 
 HYB = 0.25
 META = True
@@ -86,11 +86,13 @@ def _E(ra, rb, saa, sab, sbb, ta, tb):
     z = _zsat(z)
     # exchange (spin scaling)
     ex = 0.0
-    for r, s in ((ra, saa), (rb, sbb)):
+    for r, s, t in ((ra, saa, ta), (rb, sbb, tb)):
         n2 = 2 * r
         kf = (3 * np.pi**2 * n2) ** (1 / 3)
         s2 = 4 * s / (4 * kf**2 * n2**2)       # sigma_unpol = 4 sigma_s
-        ex = ex + 0.5 * _ex_unpol_density(n2, s2, z)
+        # exact spin scaling: channel s sees only its own iso-orbital indicator z_s
+        zx = _zsat(s / (8 * r * t)) if XSPIN else z
+        ex = ex + 0.5 * _ex_unpol_density(n2, s2, zx)
     # correlation
     zeta = (ra - rb) / n
     rs = (3 / (4 * np.pi * n)) ** (1 / 3)

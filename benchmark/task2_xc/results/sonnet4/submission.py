@@ -6,8 +6,10 @@ from pyscf.dft import libxc
 
 HYB = 0.25
 META = True
-_XV = os.environ.get("XS4_X", "twonorm")     # twonorm | pbe | hnorm
+_XV = os.environ.get("XS4_X", "pbe")     # twonorm | pbe | hnorm
 _WP = float(os.environ.get("XS4_W", "2"))
+_CO = float(os.environ.get("XS4_C", "1.3607362"))   # opposite-spin rescale in singlet 2e regions (He exact Ec)
+_PP = float(os.environ.get("XS4_P", "1"))
 _GP = float(os.environ.get("XS4_G", "2"))   # gate exponent on z_s (2 = Stoll z^2); 0 = no gate
 
 KAPPA = 0.804
@@ -108,25 +110,41 @@ def _core(ra, rb, saa, sab, sbb, ta, tb):
     # correlation
     ec, c_na, c_nb, c_aa, c_ab, c_bb = _pbec(ra, rb, saa, sab, sbb)
     E = E + ec; va = va + c_na; vb = vb + c_nb; Vaa = Vaa + c_aa; Vab = Vab + c_ab; Vbb = Vbb + c_bb
+    # Stoll-gated same-spin part and rescaled two-electron-singlet opposite-spin part
+    ss = []
+    for (n, sg, t) in ((ra, saa, ta), (rb, sbb, tb)):
+        e, dn, ds = _pbec_ss(n, sg)
+        ok = (n > EPS) & (t > 1e-20)
+        nn = np.where(ok, n, 1.0); tt = np.where(ok, t, 1.0); sx = np.where(ok, sg, 0.0)
+        z0_ = sx / (8 * nn * tt)
+        z = np.where(ok, _cap(z0_), 0.0); dc = np.where(ok, _dcap(z0_), 0.0)
+        dzn = -z0_ * dc / nn; dzt = -z0_ * dc / tt
+        dzs = np.where(sx > 0, z0_ * dc / np.maximum(sx, 1e-30), dc / (8 * nn * tt))
+        ss.append((e, dn, ds, z, dzn, dzs, dzt))
+    (ea, dna, dsa, za, dzna, dzsa, dzta), (eb, dnb, dsb, zb, dznb, dzsb, dztb) = ss
     if _GP > 0:
-        for (n, sg, t, which) in ((ra, saa, ta, 0), (rb, sbb, tb, 1)):
-            e, dn, ds = _pbec_ss(n, sg)
-            ok = (n > EPS) & (t > 1e-20)
-            nn = np.where(ok, n, 1.0); tt = np.where(ok, t, 1.0); ss = np.where(ok, sg, 0.0)
-            z0_ = ss / (8 * nn * tt)
-            z = _cap(z0_); dc = _dcap(z0_)
-            G = np.where(ok, z ** _GP, 0.0)
-            dG = np.where(ok, _GP * z ** (_GP - 1), 0.0)   # dG/dz
-            dzn = -z0_ * dc / nn; dzt = -z0_ * dc / tt
-            dzs = np.where(ss > 0, z0_ * dc / np.maximum(ss, 1e-30), dc / (8 * nn * tt))
+        for (e, dn, ds, z, dzn, dzs, dzt, which) in ((ea, dna, dsa, za, dzna, dzsa, dzta, 0), (eb, dnb, dsb, zb, dznb, dzsb, dztb, 1)):
+            G = z ** _GP; dG = _GP * z ** (_GP - 1)
             E = E - G * e
-            dn_t = G * dn + e * dG * dzn
-            ds_t = G * ds + e * dG * dzs
-            dt_t = e * dG * dzt
+            dn_t = G * dn + e * dG * dzn; ds_t = G * ds + e * dG * dzs; dt_t = e * dG * dzt
             if which == 0:
                 va = va - dn_t; Vaa = Vaa - ds_t; Vta = Vta - dt_t
             else:
                 vb = vb - dn_t; Vbb = Vbb - ds_t; Vtb = Vtb - dt_t
+    if _CO > 1:
+        lam = _CO - 1
+        eo = ec - ea - eb                       # PBE opposite-spin part (Stoll)
+        gz = np.where((za > 0) & (zb > 0), (za * zb) ** _PP, 0.0)
+        dg_a = np.where(za > 0, _PP * gz / np.maximum(za, 1e-30), 0.0)
+        dg_b = np.where(zb > 0, _PP * gz / np.maximum(zb, 1e-30), 0.0)
+        E = E + lam * gz * eo
+        va = va + lam * (gz * (c_na - dna) + eo * (dg_a * dzna))
+        vb = vb + lam * (gz * (c_nb - dnb) + eo * (dg_b * dznb))
+        Vaa = Vaa + lam * (gz * (c_aa - dsa) + eo * (dg_a * dzsa))
+        Vbb = Vbb + lam * (gz * (c_bb - dsb) + eo * (dg_b * dzsb))
+        Vab = Vab + lam * gz * c_ab
+        Vta = Vta + lam * eo * dg_a * dzta
+        Vtb = Vtb + lam * eo * dg_b * dztb
     return E, va, vb, Vaa, Vab, Vbb, Vta, Vtb
 
 

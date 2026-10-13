@@ -1,7 +1,19 @@
 You are a contestant in a benchmark. Working directory: /home/user/Grand-Challenge-Problems/benchmark/task2_xc
 
-TASK: Construct a new exchange-correlation (XC) functional for Kohn-Sham DFT that is more
-accurate than the best existing functionals, and that is accurate for reasons that generalize.
+TASK: Produce a publication-worthy advance in exchange-correlation (XC) functionals for Kohn-Sham
+DFT: a result that is new (not in KNOWN_CONDITIONS.md) AND significantly more accurate than the
+best existing functionals on property classes you have not seen, for reasons that generalize.
+Your TRACK is given in your launch message:
+  THEORY track: derive a new exact condition on E_xc (an inequality, sum rule, limit or scaling
+    relation not on the known list). Prove it, or verify it numerically on exact or near-exact
+    data you generate yourself (HF densities give exact exchange; near-exact correlation energies
+    of He, Li, Be, Ne and hydrogenic ions are tabulated and you may quote them). Show which
+    existing functionals violate it. Then build a functional that enforces it and score it.
+  CONSTRUCTION track: build a functional that satisfies a KNOWN condition that no existing
+    functional satisfies (e.g. the flat-plane condition in a semilocal or local-hybrid form;
+    exact one-electron exchange for all one-orbital densities, not just the H norm; a joint
+    H+He-exact iso-orbital exchange), with every constant derived. Score it.
+Either way the deliverable is judged first on the derivation, then on hidden-set accuracy.
 
 WHAT COUNTS. The benchmark rewards new physics or new construction methods, not re-fitting.
 Acceptable routes include:
@@ -81,7 +93,9 @@ RULES
   (a smaller --basis such as def2-svp is fine for quick checks; final scoring uses def2-qzvp).
 - Do NOT modify score.py, reference.py, README.md or anything under kit/. Do NOT read or write
   outside results/{MODEL}/. Do not install packages.
-- Time budget: 90 minutes of wall time. A full dev-set run at def2-qzvp takes ~10 min on one
+- Time budget: 180 minutes of wall time. Phase 1 (first 60 min): derivation only, no SCF runs;
+  write it to NOTES.md with the claim stated precisely and checked against KNOWN_CONDITIONS.md.
+  Phase 2: implement, verify derivatives, score. A full dev-set run at def2-qzvp takes ~10 min on one
   thread; use def2-svp for iteration and reserve one QZ run for your final submission. Leave your best submission.py and score.json in place.
 - Write results/{MODEL}/NOTES.md: what is new, the physical justification, exact conditions
   satisfied/violated, your dev-set score, and what you would try with more time. Report your
