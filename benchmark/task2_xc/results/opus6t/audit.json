@@ -5,22 +5,22 @@
  "NEG_frac_positive": 0.0,
  "LO_frac_violating": 0.0,
  "UEG_max_rel_dev": 5.323107321501356e-07,
- "POL1_exc_over_LDAx": 1.1988052657296786,
+ "POL1_exc_over_LDAx": 1.1988052657280155,
  "POL1_ok": true,
- "mix_R2": 0.9999924860799799,
+ "mix_R2": 0.9926930687268414,
  "mix_components": {
-  "LDA,PW": 0.0148,
-  "PBE0": 0.9279,
-  "M06-2X": 0.0024,
-  "M05": 0.0025,
-  "M05-2X": 0.0063,
-  "MN15-L": 0.0016,
-  "RPBE": 0.0289,
-  "wB97M-V": 0.0034
+  "LDA,PW": 0.1815,
+  "M05": 0.0263,
+  "MN12-L": 0.0208,
+  "MN15-L": 0.03,
+  "RPBE": 0.1171,
+  "PW91": 0.3939,
+  "BHANDHLYP": 0.0365,
+  "CAM-B3LYP": 0.0031
  },
  "closest_single": {
-  "name": "PBE0",
-  "R2": 0.9999889736366674
+  "name": "SCAN0",
+  "R2": 0.9381475892948584
  },
- "verdict": "NEAR-EXISTING"
+ "verdict": "DISTINCT"
 }

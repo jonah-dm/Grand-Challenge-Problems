@@ -1,23 +1,24 @@
-"""opus6t: spin-blind one-orbital-manifold hybrid meta-GGA (round 6, theory track).
-E_xc = 1/4 E_x^HF + int { (1-W)[3/4 e_x^PBE + e_c^pair] + W e_SB }          (MODE 'C', submitted)
-  W    = zeta^2 z_tot^2,  z_tot = tau_W[n]/tau  (one-orbital manifold of the TOTAL density, NOTES sec. 4)
-  e_SB = [ (1-a)(1+zeta^2)/2 + (1-zeta^2)/2 ] * e_x^q[n,0]   (exact C2 particle-triangle structure, NOTES sec. 3c)
-  e_x^q[n,0]: fully polarised exchange of the total density with F_q = F_LO/(1+F_LO s^2/c_q), c_q from the H norm.
-  e_c^pair: PBE correlation with opus4's pair-aware Stoll gate (prior art).
-MODE 'A' = base only; MODE 'B' = opus5t-type per-channel C1 exchange (W_s = zeta^2 z_s^2), for comparison.
-All derivatives by complex step on a complex-safe numpy implementation.
+"""opus6t (round 6, theory track). Submitted: MODE 'B', BASEX 'zb'.
+E_xc = 1/4 E_x^HF + 3/4 sum_s e_x,s + e_c^pair
+  e_x,s : spin-scaled channel exchange, F_s = (1-W_s) F_base(s_s) + W_s F_q(s_s),  W_s = zeta^2 z_s^2
+          F_base = (1-z_tot^2) F_PBE + z_tot^2 F_1,  F_1 = 1 + mu s^2/(1 + B1 s^4) (H-normed; sonnet5c, prior art)
+          F_q = F_LO/(1 + F_LO s^2/c_q) (H-normed; opus5t form, prior art): the C1/C2 corner (1,0) of the occupation square
+  e_c^pair: PBE correlation with opus4's pair-aware Stoll gate (prior art); zero on the C2 corner (1,0).
+The C2 theory (NOTES.md) says that integer-occupation KS channels sit on the hole edge f_a = 1, where the static-correlation
+tent vanishes. So no static-correlation term is added. MODE 'C' (the spin-blind particle-triangle form) is kept for the record.
+It fails badly (NOTES, section 6). All derivatives are by complex step on a complex-safe numpy implementation.
 """
 import numpy as np
 
 HYB = 0.25
 META = True
-MODE = 'C'
+MODE = 'B'
 A_HF = 0.25
 KAPPA = 0.804
 MU = 0.2195149727645171
 FLO = 1.0 + KAPPA
 CQ = 2.208864      # H-atom norm, exact density (work/cq.py)
-BASEX = 'pbe'        # 'pbe' or 'zb' (sonnet5c z^2-blend with H-normed one-orbital branch, prior art)
+BASEX = 'zb'        # 'pbe' or 'zb' (sonnet5c z^2-blend with H-normed one-orbital branch, prior art)
 B1 = 0.0377299          # H norm of F_1 = 1 + mu s^2/(1 + B1 s^4) (work/cq.py)
 EPSZ = 1e-3          # z regulator (numerical only)
 PI = np.pi
