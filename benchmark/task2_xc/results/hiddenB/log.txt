@@ -2,3 +2,10 @@ pbe: AE2 MAE=8.65  BH MAE=5.91  NC MAE=0.12  PA MAE=0.90  WTMAD=8.78  time=301s
 r2scan: AE2 MAE=2.59  BH MAE=7.03  NC MAE=0.04  PA MAE=0.85  WTMAD=7.68  time=351s
 b3lyp: AE2 MAE=1.92  BH MAE=5.30  NC MAE=0.62  PA MAE=0.63  WTMAD=6.77  time=192s
   PH3               -343.12638312  179.0s
+wb97m-v: AE2 MAE=2.71  BH MAE=0.70  NC MAE=0.17  PA MAE=2.06  WTMAD=2.04  MCM=1.41  time=2232s
+file:results/sonnet2/submission.py: AE2 MAE=4.03  BH MAE=1.64  NC MAE=1.68  PA MAE=1.53  WTMAD=5.85  MCM=2.22  time=458s
+file:results/opus2/submission.py: AE2 MAE=4.49  BH MAE=1.11  NC MAE=0.67  PA MAE=0.95  WTMAD=3.76  MCM=1.80  time=375s
+file:results/haiku3/submission.py: AE2 MAE=7.36  BH MAE=4.20  NC MAE=0.80  PA MAE=0.44  WTMAD=7.81  MCM=3.20  time=341s
+file:results/opus3/submission.py: AE2 MAE=3.44  BH MAE=4.61  NC MAE=0.89  PA MAE=1.54  WTMAD=7.15  MCM=2.62  time=332s
+file:results/sonnet3/submission.py: AE2 MAE=4.32  BH MAE=3.65  NC MAE=0.48  PA MAE=0.42  WTMAD=5.75  MCM=2.22  time=1238s
+BATCH-DONE
