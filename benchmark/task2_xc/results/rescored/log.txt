@@ -1,0 +1,1 @@
+dev sonnet3: file:results/sonnet3/submission.py: AE MAE=2.27  IP MAE=3.65  WTMAD=1.03  MCM=2.96  time=407s

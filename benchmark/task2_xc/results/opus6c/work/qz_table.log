@@ -1,0 +1,19 @@
+all_converged True basis def2-qzvp
+AE:H2            -4.99  K1b   -3.10  B3LYP    0.76
+AE:LiH           -1.27  K1b   -1.01  B3LYP    0.71
+AE:CH4            2.34  K1b    3.20  B3LYP    1.40
+AE:NH3            1.05  K1b   -2.29  B3LYP    3.59
+AE:H2O            0.95  K1b   -3.89  B3LYP   -1.89
+AE:HF             0.68  K1b   -3.37  B3LYP   -2.49
+AE:N2            -0.49  K1b  -13.85  B3LYP    2.75
+AE:CO             2.93  K1b   -7.55  B3LYP   -3.12
+AE:F2            -2.20  K1b  -15.43  B3LYP   -1.39
+AE:C2H2           1.69  K1b   -4.07  B3LYP    0.12
+AE:HCN           -0.41  K1b  -10.29  B3LYP    2.02
+AE:H2CO           5.37  K1b   -3.48  B3LYP    0.40
+AE:OH             1.30  K1b   -1.38  B3LYP    1.05
+AE:CH2_triplet    3.43  K1b    4.18  B3LYP    2.10
+IP:B              9.89  K1b    8.89  B3LYP   11.50
+IP:F             10.44  K1b    4.44  B3LYP    6.78
+IP:HF             4.47  K1b   -1.39  B3LYP    0.84
+1.2093606417023783 5.173035771029504 {'AE': {'MAE': 2.0786886827201547, 'n': 14, 'scaled': 0.9189275890131218}, 'IP': {'MAE': 8.267382859338852, 'n': 3, 'scaled': 2.5647148875855756}}
