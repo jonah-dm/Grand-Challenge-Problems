@@ -18,3 +18,9 @@
   HCN                -93.62425832   10.3s
   H2CO              -114.74849704   12.3s
   OH                 -75.87215898    3.8s
+  CH2_triplet        -39.22067843    5.3s
+  B_cation           -24.33450835    0.8s
+  F_cation           -99.24641465    1.7s
+  HF_cation         -100.02694300    3.4s
+
+file:results/sonnet4/submission.py: AE MAE=20.45  IP MAE=13.02  WTMAD=8.16  MCM=16.74  time=129s

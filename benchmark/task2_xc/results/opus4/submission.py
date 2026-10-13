@@ -115,6 +115,10 @@ def _E(ra, rb, saa, sab, sbb, ta, tb):
             # in a two-electron singlet region it is reassigned to opposite-spin correlation
             zo = zb_ if r is ra else za_
             corr = corr - zs**2 * (1 - zo**PW) * _ec_pol(r, sg_s)
+        elif _GATE == 'pairz':
+            # reassignment weighted by the on-top pair indicator 4 n_a n_b / n^2 = 1 - zeta^2
+            zo = zb_ if r is ra else za_
+            corr = corr - zs**2 * (1 - zo**PW * (1 - zeta**2)) * _ec_pol(r, sg_s)
     return ex * (1 - HYB) + corr
 
 

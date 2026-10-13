@@ -7,6 +7,7 @@ from pyscf.dft import libxc
 HYB = 0.25
 META = True
 _XV = os.environ.get("XS4_X", "twonorm")     # twonorm | pbe | hnorm
+_WP = float(os.environ.get("XS4_W", "2"))
 _GP = float(os.environ.get("XS4_G", "2"))   # gate exponent on z_s (2 = Stoll z^2); 0 = no gate
 
 KAPPA = 0.804
@@ -54,7 +55,7 @@ def _ex_spin(n, sg, t):
     else:
         z = _zs(n, sg, t)
         F1 = (1 + A1 * s2) / (1 + B1 * s2 ** 1.25)
-        F = (1 - z ** 2) * Fg + z ** 2 * F1
+        F = (1 - z ** _WP) * Fg + z ** _WP * F1
     return 0.5 * CX * nn ** (4 / 3) * F
 
 
