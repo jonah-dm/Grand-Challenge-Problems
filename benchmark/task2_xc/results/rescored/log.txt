@@ -1,3 +1,8 @@
 dev sonnet3: file:results/sonnet3/submission.py: AE MAE=2.27  IP MAE=3.65  WTMAD=1.03  MCM=2.96  time=407s
 hiddenA sonnet3: file:results/sonnet3/submission.py: AE MAE=3.12  IP MAE=3.63  WTMAD=1.18  MCM=3.37  time=640s
 hiddenB sonnet3: file:results/sonnet3/submission.py: AE2 MAE=4.00  BH MAE=3.79  NC MAE=0.50  PA MAE=0.47  WTMAD=5.81  MCM=2.19  time=526s
+dev opus4: file:results/opus4/submission.py: AE MAE=2.42  IP MAE=3.93  WTMAD=1.10  MCM=3.17  time=349s
+hiddenA opus4: file:results/opus4/submission.py: AE MAE=3.51  IP MAE=3.73  WTMAD=1.29  MCM=3.62  time=632s
+hiddenB opus4: file:results/opus4/submission.py: AE2 MAE=1.08  BH MAE=651.33  NC MAE=0.68  PA MAE=0.96  WTMAD=619.01  MCM=163.51  time=1091s  UNCONVERGED: H3_TS
+dev opus2: file:results/opus2/submission.py: AE MAE=6.36  IP MAE=10.21  WTMAD=2.87  MCM=8.28  time=230s
+hiddenA opus2: file:results/opus2/submission.py: AE MAE=5.45  IP MAE=5.64  WTMAD=1.99  MCM=5.55  time=515s
