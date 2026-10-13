@@ -11,3 +11,16 @@ dev opus5t: file:results/opus5t/submission.py: AE MAE=3.59  IP MAE=4.44  WTMAD=1
 hiddenA opus5t: file:results/opus5t/submission.py: AE MAE=4.97  IP MAE=3.34  WTMAD=1.63  MCM=4.15  time=961s
 hiddenB opus5t: file:results/opus5t/submission.py: AE2 MAE=6.01  BH MAE=0.53  NC MAE=0.68  PA MAE=0.96  WTMAD=3.73  MCM=2.04  time=1103s
 dev sonnet5c: file:results/sonnet5c/submission.py: AE MAE=2.42  IP MAE=3.93  WTMAD=1.10  MCM=3.17  time=354s
+hiddenA sonnet5c: file:results/sonnet5c/submission.py: AE MAE=3.51  IP MAE=3.73  WTMAD=1.29  MCM=3.62  time=623s
+hiddenB sonnet5c: file:results/sonnet5c/submission.py: AE2 MAE=1.08  BH MAE=3071.84  NC MAE=0.68  PA MAE=0.96  WTMAD=2913.51  MCM=768.64  time=1132s  UNCONVERGED: H3_TS
+dev opus5c: file:results/opus5c/submission.py: AE MAE=4.50  IP MAE=5.52  WTMAD=1.94  MCM=5.01  time=345s
+hiddenA opus5c: file:results/opus5c/submission.py: AE MAE=5.96  IP MAE=4.96  WTMAD=2.05  MCM=5.46  time=1070s  UNCONVERGED: LiF
+hiddenB opus5c: file:results/opus5c/submission.py: AE2 MAE=5.72  BH MAE=4.12  NC MAE=0.76  PA MAE=3.26  WTMAD=7.39  MCM=3.46  time=476s
+dev sonnet2: file:results/sonnet2/submission.py: AE MAE=3.34  IP MAE=3.32  WTMAD=1.40  MCM=3.33  time=273s
+hiddenA sonnet2: file:results/sonnet2/submission.py: AE MAE=5.12  IP MAE=3.06  WTMAD=1.64  MCM=4.09  time=530s
+hiddenB sonnet2: file:results/sonnet2/submission.py: AE2 MAE=4.26  BH MAE=1.59  NC MAE=1.79  PA MAE=1.63  WTMAD=6.09  MCM=2.32  time=408s
+dev opus3: file:results/opus3/submission.py: AE MAE=3.57  IP MAE=4.87  WTMAD=1.57  MCM=4.22  time=207s
+hiddenA opus3: file:results/opus3/submission.py: AE MAE=5.07  IP MAE=4.55  WTMAD=1.78  MCM=4.81  time=456s
+hiddenB opus3: file:results/opus3/submission.py: AE2 MAE=3.33  BH MAE=4.37  NC MAE=0.90  PA MAE=1.56  WTMAD=6.90  MCM=2.54  time=333s
+dev haiku4: file:results/haiku4/submission.py: AE MAE=3.05  IP MAE=3.79  WTMAD=1.32  MCM=3.42  time=361s
+hiddenA haiku4: file:results/haiku4/submission.py: AE MAE=3.31  IP MAE=3.69  WTMAD=1.24  MCM=3.50  time=638s
