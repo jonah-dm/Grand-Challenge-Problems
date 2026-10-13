@@ -24,3 +24,16 @@ hiddenA opus3: file:results/opus3/submission.py: AE MAE=5.07  IP MAE=4.55  WTMAD
 hiddenB opus3: file:results/opus3/submission.py: AE2 MAE=3.33  BH MAE=4.37  NC MAE=0.90  PA MAE=1.56  WTMAD=6.90  MCM=2.54  time=333s
 dev haiku4: file:results/haiku4/submission.py: AE MAE=3.05  IP MAE=3.79  WTMAD=1.32  MCM=3.42  time=361s
 hiddenA haiku4: file:results/haiku4/submission.py: AE MAE=3.31  IP MAE=3.69  WTMAD=1.24  MCM=3.50  time=638s
+hiddenB haiku4: file:results/haiku4/submission.py: AE2 MAE=4.21  BH MAE=2.99  NC MAE=0.84  PA MAE=0.85  WTMAD=5.73  MCM=2.22  time=541s
+dev sonnet4: file:results/sonnet4/submission.py: AE MAE=3.14  IP MAE=3.74  WTMAD=1.35  MCM=3.44  time=219s
+hiddenA sonnet4: file:results/sonnet4/submission.py: AE MAE=6.08  IP MAE=3.76  WTMAD=1.96  MCM=4.92  time=440s
+hiddenB sonnet4: file:results/sonnet4/submission.py: AE2 MAE=2.60  BH MAE=2.93  NC MAE=0.43  PA MAE=0.90  WTMAD=4.46  MCM=1.72  time=362s
+dev haiku3: file:results/haiku3/submission.py: AE MAE=4.52  IP MAE=5.41  WTMAD=1.94  MCM=4.97  time=212s
+hiddenA haiku3: file:results/haiku3/submission.py: AE MAE=6.57  IP MAE=4.80  WTMAD=2.20  MCM=5.68  time=423s
+hiddenB haiku3: file:results/haiku3/submission.py: AE2 MAE=7.39  BH MAE=4.16  NC MAE=0.80  PA MAE=0.44  WTMAD=7.80  MCM=3.20  time=315s
+RESCORE-DONE
+hiddenA opus6t: file:results/opus6t/submission.py: AE MAE=3.88  IP MAE=4.04  WTMAD=1.42  MCM=3.96  time=633s
+hiddenB opus6t: file:results/opus6t/submission.py: AE2 MAE=4.63  BH MAE=0.79  NC MAE=1.20  PA MAE=1.27  WTMAD=4.41  MCM=1.97  time=462s
+hiddenA opus6c: file:results/opus6c/submission.py: AE MAE=5.51  IP MAE=6.36  WTMAD=2.08  MCM=5.94  time=1297s
+hiddenB opus6c: file:results/opus6c/submission.py: AE2 MAE=3.37  BH MAE=0.83  NC MAE=0.04  PA MAE=0.64  WTMAD=2.03  MCM=1.22  time=1263s
+R6-DONE
