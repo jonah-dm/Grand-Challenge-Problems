@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 benchmark/task2_xc/kit/.dev_raw.json
+*.pkl
+*.npz
+*.npy
