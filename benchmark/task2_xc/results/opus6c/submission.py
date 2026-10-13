@@ -2,20 +2,22 @@
 is exactly amplitude-quadratic in one-orbital spin channels (see NOTES.md).
 
 E_xc = E_x^{LR-HF}(w*) + a E_x^{SR-HF}(w*) + (1-a) E_x^{SR,sl}(w*) + E_c(opus4, prior art)
+SUBMITTED (K2b): a = 0 (pure LC: 100% LR-HF, 0% SR-HF), w* = 0.576744, branch cap 1.174.
 SR semilocal exchange per spin channel: (1-w_s) e^{SR,base} + w_s e^{SR,1}
   e^{SR,base}: sonnet3 z-blended enhancement (prior art), ITYH-attenuated (known)
   e^{SR,1}  = -(pi/(2 w*^2)) n_s^2 * 5 Q(b),  b = |grad n_s|^2/(4 w*^2 n_s^2),  Q = R(b)/b,
               R(b) = 1 - (32/(5 pi)) int_0^inf e^{-b u^2} (1+u^2)^-4 du   (exact SR self-exchange of every
-              hydrogenic ion at every fractional occupation; bounded: sup = on-top value), capped smoothly at F<=1.804
+              hydrogenic ion at every fractional occupation; bounded: sup = on-top value), capped smoothly at the one-orbital bound F<=1.174
   w_s = zeta^2 z_s^2 (C1 premise: single-orbital channel, other spin absent)
-w* = 0.368708: smallest omega for which the exact-C1 SR branch respects F <= 1+kappa on the H atom (derived, NOTES L4).
-Env O6_K selects the disclosed candidates (default K1 = submitted).
+w* = 0.576744: smallest omega for which the exact-C1 SR branch respects the one-orbital bound F <= 1.174 on the H atom
+(NOTES L4 + phase-2 fix; with the looser 1+kappa = 1.804 bound L4 gives 0.368708 = candidate K1/K2, which flattens the SCF H density).
+Env O6_K selects the disclosed candidates (default K2 form with omega*=0.5767, cap 1.174 = submitted 'K2b').
 """
 import os
 import numpy as np
 from scipy.special import erf as _erf, erfcx as _erfcx, gamma as _gamma, comb as _comb
 
-_K = os.environ.get('O6_K', 'K1')
+_K = os.environ.get('O6_K', 'K2')
 OMEGA = float(os.environ.get('O6_OMEGA', '0.5767436061911404'))
 A_SR = 0.0 if _K == 'K2' else 0.25          # SR exact-exchange fraction (PBE0 1/4; K2: pure LC)
 HYB = A_SR

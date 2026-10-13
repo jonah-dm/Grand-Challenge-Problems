@@ -10,3 +10,8 @@ file:results/opus3/submission.py: AE MAE=5.07  IP MAE=4.55  WTMAD=1.78  MCM=4.81
 BATCH-DONE
 file:results/opus4/submission.py: AE MAE=3.51  IP MAE=3.73  WTMAD=1.29  MCM=3.62  time=571s
 file:results/sonnet4/submission.py: AE MAE=6.08  IP MAE=3.76  WTMAD=1.96  MCM=4.92  time=404s
+file:results/haiku4/submission.py: AE MAE=3.31  IP MAE=3.69  WTMAD=1.24  MCM=3.50  time=955s
+R4-DONE
+fill A r2scan
+r2scan: AE MAE=3.09  IP MAE=5.78  WTMAD=1.39  MCM=4.44  time=466s
+FILL-DONE

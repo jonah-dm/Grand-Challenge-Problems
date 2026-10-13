@@ -1,1 +1,2 @@
 H2+ R=2.0 bohr: DFA -69.39  exact -64.31  error -5.09 kcal/mol  conv True True
+H2+ R=6.0 bohr: DFA -7.37  exact -7.46  error 0.09 kcal/mol  conv True True
