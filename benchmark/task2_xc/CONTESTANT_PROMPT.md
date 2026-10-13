@@ -58,6 +58,20 @@ Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the mos
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
+ROUND-6 FOCUS. Round 5 proved (three independent derivations, organiser-verified; see
+results/prior_art/README.md "Round 5") that no (n, grad n, tau) exchange can be free of one-electron
+delocalization error, and that the Laplacian invariant w = n*lap(n)/|grad n|^2 removes the
+obstruction. The harness cannot pass the Laplacian, so round 6 asks:
+  CONSTRUCTION: the best BOUNDED, Laplacian-free enforcement of the amplitude condition C1 that
+    keeps atomization energies at B3LYP level. opus5t's F_q fixes H2+ and the barrier but raises
+    polarized atoms (N2 +9.6, IP(B) +7.8). Find the construction that gets both: e.g. make the C1
+    weight depend on a delocalization indicator (low density AND large s AND one-orbital) rather
+    than on zeta*z alone, so atomic valence regions are left to the base functional; or enforce C1
+    through range separation (SR semilocal exchange has amplitude degree 2 where omega >> k_F).
+    Score on the dev set AND report self-consistent H2+ at R = 6 bohr and the H+H2 barrier.
+  THEORY: a second exact condition of the same kind for CORRELATION or for two-electron singlets
+    (the flat-plane axis), with the same standard of proof and numerical verification.
+
 PRIOR ART. Read results/prior_art/README.md and the *.md files there first. Four rounds of this
 benchmark re-derived, in order, PBE0, TPSS-style self-correlation gates, B95-style same-spin
 removal (sonnet3, dev WTMAD 1.00, the best so far) and SCAN-style norms, plus a pair-aware

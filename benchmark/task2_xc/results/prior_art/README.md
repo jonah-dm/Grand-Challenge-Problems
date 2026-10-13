@@ -19,3 +19,17 @@ B3LYP 1.92/5.30/0.62/0.63; sonnet3 4.32/3.65/0.48/0.42.
 LESSON: dev-set rank did not transfer. The constraint-only exchange (opus2), worst on the dev set, is the
 best new functional on unseen classes; forms selected on the dev set regressed there. Second-row AEs are
 where every new functional loses to B3LYP; barrier heights are where self-interaction work wins.
+
+## Round 5 (theory / construction tracks, 3 h)
+- opus5t, opus5c, sonnet5c independently derived the same result: for a fractional one-orbital
+  density λn₁, exact E_x = −λ²J[n₁]; a Laplacian-free semilocal exchange satisfies this iff
+  F(s, z=1) = c·s⁻² (c = 5/9 from H); that form is unbounded and shape-dependent (2.5× off for a
+  Gaussian, +126% for H₂⁺ at 2 bohr), so NO (n, ∇n, τ) functional can be one-electron
+  delocalization-free; sonnet5c's LP gives an unavoidable ≥11.6% exchange error at λ∈{1,.75,.5}
+  for any bounded F(s). Escape: the Laplacian invariant w = n∇²n/|∇n|² makes F = s⁻²G(w) exact on
+  the amplitude ray for any G (sonnet5c: few-% errors on H, H₂⁺, HeH²⁺ exact data; opus5t: closed
+  form exact for all fractional hydrogenic densities). Harness cannot pass the Laplacian.
+- Bounded partial enforcement (opus5t, F_q = F_LO/(1+F_LO s²/c_q), weight ζ²z_s²): H₂⁺ at 6 bohr
+  −28.5 → −6.1 kcal/mol, H+H₂ barrier 7.2 → 9.06 (exact 9.6); dev 1.55 (polarized atoms raised).
+- Harness bug found by opus5t (zeros vlapl displacing vtau); fixed; all META scores being redone.
+- Dev scores: opus5t 1.55, sonnet5c 1.53, opus5c 1.94.
