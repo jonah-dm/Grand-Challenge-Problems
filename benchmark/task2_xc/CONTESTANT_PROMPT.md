@@ -36,7 +36,11 @@ legitimately land close to an existing one (constraints alone nearly rebuild r2S
 to the reviewer, who checks that the derivation is documented and the constants are derived,
 not copied. DISTINCT is scored directly. Run it yourself:
   OMP_NUM_THREADS=1 python audit.py file:results/{MODEL}/submission.py
-A reviewer also reads every submission.
+A reviewer also reads every submission against KNOWN_CONDITIONS.md: re-deriving a listed
+condition or construction (TPSS/B95 self-correlation gates, SCAN-style norms, Stoll partition,
+PBE0's 1/4, ...) earns no novelty credit, however well derived. Novelty credit requires something
+not on that list, stated as such, with its derivation. Spend the first third of your budget on
+the derivation before writing any code, and record it in NOTES.md.
 Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the most common failure):
   OMP_NUM_THREADS=1 python check_derivs.py file:results/{MODEL}/submission.py State in NOTES.md exactly what is new, what physical
 argument justifies it, and which exact conditions your functional satisfies and violates.
