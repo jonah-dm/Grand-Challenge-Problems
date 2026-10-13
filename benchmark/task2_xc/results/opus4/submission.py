@@ -1,12 +1,14 @@
-"""sonnet3: spin-resolved one-orbital-gated correlation + one-orbital-aware exchange, 25% EXX.
+"""opus4: "pair-reassigned Stoll correlation" in a 25% hybrid meta-GGA.
 
-NEW CONSTRAINT (exact): in any spin channel that is described by a single orbital
-(z_sigma = tau_W,sigma/tau_sigma = 1) there is no same-spin correlation (one electron per spin
-orbital cannot correlate with itself or with a same-spin partner). So
-   E_c = E_c^PBE[na,nb] - sum_sigma z_sigma^2 * E_c^PBE[n_sigma,0]   (same-spin Stoll part gated)
-vanishes for H, and for every fully polarised one-orbital density, AND the same-spin
-correlation vanishes for He/H2-like two-electron singlets, which the zeta^2 z^2 gate of
-sonnet2 cannot do. Exchange: z-blend of GE2 (mu=10/81) and s^-1/2-tail one-orbital form (see below).
+Builds on sonnet3 (exchange and the Stoll same-spin removal are sonnet3's, kept unchanged).
+NEW (default S3_GATE='pairz', O4_PW=2):
+   E_c = E_c^PBE[na,nb] - sum_s z_s^2 * (1 - z_s'^2 (1 - zeta^2)) * E_c^PBE[n_s,0]
+z_s = tau_W,s/tau_s, s' = opposite spin, 1-zeta^2 = 4 n_a n_b/n^2 (on-top pair indicator).
+Exact condition: one electron per spin orbital has no same-spin correlation (sonnet3) AND in a
+two-electron singlet region (both channels one-orbital, both spins present) all correlation is
+opposite-spin, so the Stoll 'same-spin' piece of PBE there is opposite-spin correlation that PBE's
+own os piece misses and must be kept, not removed. He: E_c = -0.0417 (exact -0.0420; sonnet3 -0.0313).
+H atom: E_c ~ 0. See NOTES.md. Other env switches exist only for the disclosed candidate comparison.
 """
 import os
 import numpy as np
@@ -117,6 +119,10 @@ def _E(ra, rb, saa, sab, sbb, ta, tb):
             # in a two-electron singlet region it is reassigned to opposite-spin correlation
             zo = zb_ if r is ra else za_
             corr = corr - zs**2 * (1 - zo**PW) * _ec_pol(r, sg_s)
+        elif _GATE == 'pairt':
+            # reassignment only where the TOTAL density is single-orbital (z_tot = 1: both spins
+            # occupy the same spatial orbital) and both spins are present (1 - zeta^2)
+            corr = corr - zs**2 * (1 - z**PW * (1 - zeta**2)) * _ec_pol(r, sg_s)
         elif _GATE == 'pairz':
             # reassignment weighted by the on-top pair indicator 4 n_a n_b / n^2 = 1 - zeta^2
             zo = zb_ if r is ra else za_

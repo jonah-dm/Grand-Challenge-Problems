@@ -1,0 +1,11 @@
+vrho    max rel err 6.59e-10   fraction >1e-3: 0.000
+vsigma  max rel err 2.57e-07   fraction >1e-3: 0.000
+vtau    max rel err 3.07e-06   fraction >1e-3: 0.000
+vrho_a     max rel err 2.68e-10   fraction >1e-3: 0.000
+vrho_b     max rel err 4.26e-10   fraction >1e-3: 0.000
+vsigma_aa  max rel err 5.30e-06   fraction >1e-3: 0.000
+vsigma_ab  max rel err 4.73e-07   fraction >1e-3: 0.000
+vsigma_bb  max rel err 5.88e-07   fraction >1e-3: 0.000
+vtau_a     max rel err 6.00e-06   fraction >1e-3: 0.000
+vtau_b     max rel err 5.78e-06   fraction >1e-3: 0.000
+DERIVATIVES OK

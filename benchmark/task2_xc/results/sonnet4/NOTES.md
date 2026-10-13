@@ -56,7 +56,7 @@ without matching correlation breaks the exchange-correlation error cancellation 
 molecules relative to atoms in the dev set, and no NCI data to justify it.
 
 ## Final dev score (def2-qzvp)
-See score.json (written by score.py); the value is stated in the final report line below.
+def2-qzvp: AE MAE 3.02, IP MAE 3.70 kcal/mol, WTMAD 1.30, MCM 3.36, all species converged (score.json). Baselines: r2SCAN 1.28, B3LYP 0.97, PBE0 ~1.3. Does NOT beat B3LYP or sonnet3 (1.00).
 
 ## Weaknesses / with more time
 HF -11.6, H2O -5.9 (X-H, O/F underbinding: exchange SIE), CH4 +8.4, C2H2 +9.5, H2CO +9.7 (C overbinding), B IP +7.5. Not tested: second row,

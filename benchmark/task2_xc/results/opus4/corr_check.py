@@ -12,7 +12,7 @@ def ec(m, atom, spin=0):
     rho=np.array([ni.eval_rho(mol,ao,dm[s],xctype='MGGA') for s in (0,1)])
     exc=m.eval_xc('',rho,1)[0]
     return np.dot(g.weights, exc*(rho[0,0]+rho[1,0]))
-for gate,pw in [('none','2'),('stoll','2'),('pairz','2'),('pairz','1')]:
+for gate,pw in [('none','2'),('stoll','2'),('pairz','2'),('pairz','1'),('pairt','2')]:
     m=load(gate,pw)
     print(gate,pw,'H %.5f He %.5f H2 %.5f'%(ec(m,'H 0 0 0',1),ec(m,'He 0 0 0'),ec(m,'H 0 0 0; H 0 0 0.741')),flush=True)
 print('exact: H 0, He -0.04204, H2 -0.0409')
