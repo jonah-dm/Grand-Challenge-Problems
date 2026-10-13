@@ -4,20 +4,20 @@
  "SMOOTH": true,
  "NEG_frac_positive": 0.0,
  "LO_frac_violating": 0.0,
- "UEG_max_rel_dev": 0.7226555081964009,
- "POL1_exc_over_LDAx": 0.6679869636050995,
+ "UEG_max_rel_dev": 0.729638488011953,
+ "POL1_exc_over_LDAx": 0.5972690983793353,
  "POL1_ok": true,
- "mix_R2": 0.9665805601070053,
+ "mix_R2": 0.9626394365769325,
  "mix_components": {
   "SCAN": 0.1418,
-  "M05": 0.0538,
-  "MN12-L": 0.0413,
-  "wB97M-V": 0.2342,
-  "CAM-B3LYP": 0.4507
+  "M05": 0.036,
+  "MN12-L": 0.0393,
+  "wB97M-V": 0.2217,
+  "CAM-B3LYP": 0.4532
  },
  "closest_single": {
-  "name": "CAM-B3LYP",
-  "R2": 0.9076715688337225
+  "name": "SCAN0",
+  "R2": 0.9016791011420882
  },
  "verdict": "DISTINCT"
 }

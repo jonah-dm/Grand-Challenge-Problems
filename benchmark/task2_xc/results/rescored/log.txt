@@ -6,3 +6,7 @@ hiddenA opus4: file:results/opus4/submission.py: AE MAE=3.51  IP MAE=3.73  WTMAD
 hiddenB opus4: file:results/opus4/submission.py: AE2 MAE=1.08  BH MAE=651.33  NC MAE=0.68  PA MAE=0.96  WTMAD=619.01  MCM=163.51  time=1091s  UNCONVERGED: H3_TS
 dev opus2: file:results/opus2/submission.py: AE MAE=6.36  IP MAE=10.21  WTMAD=2.87  MCM=8.28  time=230s
 hiddenA opus2: file:results/opus2/submission.py: AE MAE=5.45  IP MAE=5.64  WTMAD=1.99  MCM=5.55  time=515s
+hiddenB opus2: file:results/opus2/submission.py: AE2 MAE=2.96  BH MAE=5.94  NC MAE=0.04  PA MAE=1.55  WTMAD=6.84  MCM=2.62  time=476s
+dev opus5t: file:results/opus5t/submission.py: AE MAE=3.59  IP MAE=4.44  WTMAD=1.55  MCM=4.01  time=537s
+hiddenA opus5t: file:results/opus5t/submission.py: AE MAE=4.97  IP MAE=3.34  WTMAD=1.63  MCM=4.15  time=961s
+hiddenB opus5t: file:results/opus5t/submission.py: AE2 MAE=6.01  BH MAE=0.53  NC MAE=0.68  PA MAE=0.96  WTMAD=3.73  MCM=2.04  time=1103s

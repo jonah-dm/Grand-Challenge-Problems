@@ -54,3 +54,9 @@ where every new functional loses to B3LYP; barrier heights are where self-intera
   2016); new only the hydrogenic branch and the finiteness⇒100% LR-HF argument. opus6c's branch is
   NOT bounded at fixed s as density grows (cap needed) and the cap breaks exact λ² on compact shapes
   (4E[n/2]/E[n] = 1.18 on a Gaussian); it overestimates SR self-exchange 1.45–1.81× there.
+
+## Round 7
+- opus7c: opus6c + per-channel spin scaling → dev 1.14 (AE 1.95 best; IP 7.89 unchanged). Diagnosis:
+  IP(F)/IP(HF) error is core–valence exchange inside 0.6 bohr on ionization (−21.7 kcal/mol), which
+  no single-ω RSH can supply; needs core-localized exact exchange (local hybrid / local RS). IP(B)
+  is static correlation in Be-like B⁺. Bathtub bound F ≤ 1.299 (pointwise, one-orbital maximum).

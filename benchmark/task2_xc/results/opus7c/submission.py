@@ -1,24 +1,24 @@
-"""opus7c: LC hybrid (100% LR-HF, 0% SR-HF) whose SR semilocal exchange carries opus6c's hydrogenic one-orbital branch,
-with two repairs (see NOTES.md):
-  (1) exact exchange spin scaling restored: the base enhancement of channel s uses the channel indicator z_s = tau_W,s/tau_s
-      (opus6c/sonnet3 used the total-density z, which couples the channels);
-  (2) the branch cap and omega* come from a pointwise bathtub bound on the one-orbital exchange energy density at its maximum,
-      F <= (4 pi^2/18)^(1/3) = 1.29926 (Lemma B), instead of the integrated two-electron bound 1.174 used pointwise.
-      L4 (cap just inactive at the H nucleus) then gives omega* = 0.525607.
-E_xc = E_x^{LR-HF}(w*) + E_x^{SR,sl}(w*) + E_c(opus4, prior art)
-Env O7_K selects the disclosed candidates (default S5 = submitted).
+"""opus7c (submitted candidate S1): LC hybrid (100% LR-HF, 0% SR-HF) whose SR semilocal exchange carries opus6c's hydrogenic
+one-orbital branch (omega* = 0.576744, cap 1.174, weight zeta^2 z_s^2), with exact exchange spin scaling restored: the base
+enhancement of channel s uses the channel indicator z_s = tau_W,s/tau_s (opus6c/sonnet3 used the total-density z, which couples the
+spin channels). Correlation: opus4 pair-aware Stoll PBE (prior art).
+Disclosed alternatives selectable with env O7_K (see NOTES.md): S0 = opus6c; S5 = Lemma-B cap (4 pi^2/18)^(1/3) with omega* = 0.525607;
+S7/S8 = S5/S1 plus the hydrogenic floor b >= (pi n_s)^(2/3)/omega^2.
 """
 import os
 import numpy as np
 from scipy.special import erf as _erf, erfcx as _erfcx, gamma as _gamma, comb as _comb
 
-_K = os.environ.get('O7_K', 'S5')
+_K = os.environ.get('O7_K', 'S1')
 _CAND = {  # id: (channel z in base, SR-HF fraction, omega*, cap)
     'S0': (False, 0.0, 0.5767436061911404, 1.174),
     'S1': (True, 0.0, 0.5767436061911404, 1.174),
     'S5': (True, 0.0, 0.5256070335369912, 1.299259029906918),   # cap = (4 pi^2/18)^(1/3)
+    'S7': (True, 0.0, 0.5256070335369912, 1.299259029906918),   # S5 + hydrogenic floor on b
+    'S8': (True, 0.0, 0.5767436061911404, 1.174),               # S1 + hydrogenic floor on b
 }
 CHANZ, A_SR, OMEGA, F_LO = _CAND[_K]
+HFLOOR = _K in ('S7', 'S8')
 HYB = A_SR
 RSH = (OMEGA, 1.0, A_SR - 1.0)               # 100% LR-HF, A_SR SR-HF
 META = True
@@ -114,6 +114,9 @@ def _ex_branch(r, sig_s):
     ex_lda = -0.75 * (3 / np.pi) ** (1 / 3) * n2 ** (4 / 3)
     k = (6 * np.pi**2 * r) ** (1 / 3)
     b = sig_s / (4 * OMEGA**2 * r * r)
+    if HFLOOR:   # b >= b of the hydrogenic density with the same local value: b_H = (pi n_s)^(2/3)/omega^2
+        bH = (np.pi * r) ** (2 / 3) / OMEGA**2
+        b = np.where(np.real(b) > np.real(bH), b, bH)
     F = 5.0 / 9.0 * (k / OMEGA) ** 2 * Qfun(b)
     Fc = F * (1 + (F / F_LO) ** 8) ** (-1 / 8)
     return ex_lda * Fc

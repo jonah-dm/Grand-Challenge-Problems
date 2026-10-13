@@ -44,7 +44,7 @@ def E_lib(code, lam, kind, Z=1.0, xtype='GGA'):
 if __name__ == '__main__':
     print('norm check', np.sum(W*shell(1,'H')[0]), np.sum(W*shell(1,'G')[0]))
     rows = []
-    for name in ['S0', 'S1', 'S5']:
+    for name in ['S0', 'S1', 'S5', 'S7', 'S8']:
         os.environ['O7_K'] = name
         spec = importlib.util.spec_from_file_location('sub'+name, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'submission.py'))
         m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)

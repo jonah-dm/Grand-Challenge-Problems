@@ -131,3 +131,90 @@ The a = 1/4 candidates are excluded on the proxy AE collapse. They are listed be
   S5: HCl +1.9, H2S +3.4, PH3 +4.0, SiH4 +4.0, Cl2 +5.3, IP(Cl) +10.9, IP(S) +10.7
   No candidate degrades second-row AEs. The IP(Cl), IP(S) pattern (x about +6, c about +5) is the same exchange/correlation split as in the first row.
 ## Phase 2 started 06:08 UTC
+(Phase-2 log; the summary is in section 6)
+- SVP dev (runs/svp_*.json): S5 1.74 (AE 3.74 / IP 6.99), S1 1.80 (3.87/7.08); opus6c K2b 1.73. The pre-registered rule therefore picked S5.
+- One-electron SCF tests: S5 E(H, QZ) = -0.5022847 (-1.43 kcal/mol, flattening), H2+ R=6 +0.25, R=2 -6.68, barrier 10.67.
+  S1: E(H) = -0.5013801 (-0.87), H2+ R=6 +0.09, R=2 -5.09, barrier 10.38.
+- QZ dev, both run in full: **S5 1.19** (AE 2.08 / IP 7.82; IP B +10.2, F +9.1, HF +4.2; H2 -7.4 from the H flattening).
+  **S1 1.14** (AE 1.95 / IP 7.89; IP B +9.9, F +9.6, HF +4.1). SVP ranked S5 above S1. QZ reverses this, and S1 is better on every one-electron metric.
+  **Deviation from the pre-registered rule, disclosed:** I do not submit S5. The SVP rule was a bad rule. SVP misses the H flattening, which is
+  the main S5 defect at QZ. The reasons are one-electron norms that do not depend on the dev set: S1's SCF H error is smaller (-0.87 vs -1.43),
+  and its barrier, H2+ R=2 and H2+ R=6 are all closer to exact. The QZ dev score points the same way.
+- New candidate added in Phase 2 (after the S5 SCF results; disclosed as post hoc): the **hydrogenic floor** on b. The branch is exact only on the
+  hydrogenic family, and every hydrogenic channel, at any Z and any lambda <= 1, satisfies b >= b_H(n) := (pi n_s)^(2/3)/omega^2, with equality only
+  at a lambda = 1 nucleus. So replacing b by max(b, b_H(n_s)) leaves the whole hydrogenic family exact. The change acts only where the density is flatter than
+  the hydrogenic density with the same local value: smooth maxima, bond midpoints, cusp-less Gaussian nuclei. That is exactly where the on-top
+  extrapolation Q -> 1/5 overestimates (organiser E6c). Exact-density tests are unchanged on H (f(1/2) = 0.2507/0.2508), and the Gaussian
+  ratio improves (S5 1.093 -> S7 1.081; S1 1.073 -> S8 1.063). S7 = S5 + floor, S8 = S1 + floor.
+  S7: E(H) = -0.5021143 (-1.33; the floor does not cure the SCF flattening, which is a slower decay over 0.05-0.4 bohr, not a b -> 0 artifact),
+  H2+ R=6 +0.22, **R=2 -2.62 (from -6.68)**. Proxy dev: S7 0.989, S8 1.217 (S1 1.187).
+  Rule fixed before the S8 SCF/QZ results: submit S8 instead of S1 if it improves the one-electron metrics (|H2+ R=2|, barrier) and its QZ dev WTMAD
+  is not worse than S1's by more than 0.05.
+- S8 results: E(H) = -0.5013146 (-0.83), H2+ R=6 +0.07, R=2 -1.96 (from -5.09), barrier 10.43 (S1 10.38), QZ dev 1.17 (AE 2.02 / IP 7.85).
+  Under the rule as written, S8 improves H2+ R=2 by 3.1 kcal/mol but not the barrier (+0.05 worse), so it fails. I submit S1. S8 stays a disclosed
+  alternative. Read with less weight on the dev score, it is the better one-electron functional.
+
+## 6. Final result and summary (submitted: S1; score.json at def2-QZVP, all 24 species converged)
+**Dev WTMAD 1.14** (AE MAE 1.95, IP MAE 7.89, MCM 4.92). opus6c 1.21 (AE 2.08 / IP 8.27). B3LYP 0.97, r2SCAN 1.28, wB97M-V 0.56.
+**Target (below 0.97) not reached.** Section 1 explains why none of the listed levers can reach it with this correlation.
+Per-item IP errors (kcal/mol): **IP(B) +9.93, IP(F) +9.63, IP(HF) +4.10** (opus6c: +9.89, +10.44, +4.47).
+AE errors: H2 -4.99, LiH -1.26, CH4 +2.07, NH3 +0.22, H2O +0.18, HF +0.34, N2 -2.14, CO +1.90, F2 -2.87, C2H2 +1.16, HCN -1.50,
+H2CO +4.34, OH +0.80, CH2 +3.46.
+**Delocalization fix intact:** H2+ at R = 6 bohr **+0.09 kcal/mol** (aug-cc-pVTZ vs UHF). H+H2 barrier **10.38** (ref 9.6). H2+ R = 2: -5.09.
+Fractional H at the exact density: f(1/2) = 0.2507 (exact 0.25). SCF H atom at QZ -0.50138 (-0.87 kcal/mol; flattening inherited from opus6c).
+
+### All candidates and scores (complete disclosure)
+| id | description | proxy (HF dens., TZ) | SVP dev | QZ dev | E(H) err | H2+ R=6 | H2+ R=2 | barrier |
+|---|---|---|---|---|---|---|---|---|
+| S0 | opus6c K2b | 1.255 | 1.73 (opus6c) | 1.21 (opus6c) | -0.87 | +0.09 | -5.09 | 10.42 |
+| **S1** | channel z_s (spin scaling) | 1.187 | 1.80 | **1.14** | -0.87 | +0.09 | -5.09 | 10.38 |
+| S2 | S1 + a = 1/4 | 2.543 | - | - | - | - | - | - |
+| S3 | a = 1/4, omega 0.4352, cap 1.565 | 1.928 | - | - | - | - | - | - |
+| S4 | a = 1/4, omega 0.4810, cap 1.423 | 2.046 | - | - | - | - | - | - |
+| S5 | S1 + Lemma B (omega 0.5256, cap 1.29926) | 0.954 | 1.74 | 1.19 | -1.43 | +0.25 | -6.68 | 10.67 |
+| S6 | S5 + a = 1/4 | 2.267 | - | - | - | - | - | - |
+| S5t | S5 with total z | 1.074 | - | - | - | - | - | - |
+| S7 | S5 + hydrogenic floor | 0.989 | - | - | -1.33 | +0.22 | -2.62 | - |
+| S8 | S1 + hydrogenic floor | 1.217 | - | 1.17 | -0.83 | +0.07 | -1.96 | 10.43 |
+Diagnostic evaluations (not candidates) are listed at the end of section 5.
+Lesson for future rounds: the HF-density proxy and the SVP basis both ranked S5 first. At QZ it is last of the three, because self-consistency
+in a flexible basis flattens the H density more under the larger cap. Any change to the branch cap must be checked by an SCF H atom at QZ.
+
+## 7. What is new (precise; checked against KNOWN_CONDITIONS.md and the round-6 literature check)
+1. **Quantitative diagnosis of the IP error of a one-orbital-exact LC hybrid** (section 1): it is not in the branch (<= 1.3 kcal/mol).
+   For F and HF it is SR-semilocal exchange (+21) partly cancelled by correlation (-12/-18). The exchange part sits in the core-valence
+   shell-boundary region (r < 1 bohr). It is relaxation of core-valence exchange on ionization, which the semilocal SR exchange misses (-1.0 vs -21.7
+   kcal/mol inside 0.6 bohr). For B it is mainly the static correlation of Be-like B+ (+5.8). LR-HF raises the exchange part by about 7 kcal/mol
+   relative to full-range GGAs. Consequence: a global SR-HF fraction cannot fix the IPs without destroying the AEs (shown for 4 derived omegas).
+   Region-selective (core-valence) exact exchange is needed, which a single-omega RSH cannot express. This is a diagnosis, not a theorem.
+2. **Lemma B** (bathtub bound): the conventional exchange energy density of a one-orbital channel at its density maximum obeys
+   F <= (4 pi^2/18)^(1/3) = 1.29926 (lambda^(2/3) for fractional occupation), attained by the uniform ball. It is a pointwise statement, unlike the integrated 1.174.
+   It scales with lambda exactly as the amplitude-quadratic branch does. Tested as S5. Not adopted, because of SCF flattening.
+3. **Gauge caveat for omega rules** (section 4): the branch is not a conventional-gauge energy density (1.174 vs 0.380 at the H nucleus).
+   Rigorous conventional SR bounds would force omega* = 1.14. So every pointwise-bound rule for omega, opus6c's included, is a regularization
+   choice, not a theorem. This qualifies opus6c's L4.
+4. **Hydrogenic floor b >= (pi n_s)^(2/3)/omega^2** (S7/S8): it preserves exactness on the entire hydrogenic family (all Z, all lambda <= 1) and removes
+   most of the bonded-H2+ shape error (-5.09 -> -1.96 kcal/mol). Disclosed alternative, not submitted.
+5. **Repair of a violated known condition:** opus6c's base exchange broke exact spin scaling (total-density z). Fixed with channel z_s.
+   It is not novel, but it is the change that gives the dev improvement (1.21 -> 1.14).
+Not new: everything listed in section 0, the a = 1/4 adiabatic-connection fraction, the bathtub principle itself (Lieb-Loss), and the use of H to fix omega.
+
+## 8. Exact conditions (submitted S1)
+Satisfied: UEG (total; the audit's 0.73 UEG flag is its global-hybrid assumption, because eval_xc returns only the SR semilocal part);
+**exact exchange spin scaling (now actually satisfied)**; e_xc <= 0 (audit NEG 0); local LO (0 violations); one-orbital branch F <= 1.174;
+amplitude-quadratic (lambda^2) one-orbital exchange wherever the cap is inactive (H family f(1/2) = 0.2507); LR exact exchange 100% (-1/r);
+one-orbital SR exchange exact through O(omega^-4) (known expansion); E_c[lambda n1] = 0 (opus4 gate); H atom within 0.9 kcal/mol self-consistently.
+Violated: shape exactness for non-hydrogenic one-orbital densities (H2+ R=2 -5.1; the Gaussian ratio 1.073); hydrogenic ions Z > 1
+(the cap; He+ -0.603 vs -0.625); the cap breaks lambda^2 near the cap (organiser E6); stationarity of the exact H density (SCF flattening, -0.87);
+exchange GE2 (base); flat-plane / fractional spin; dispersion (no VV10); core-valence exchange relaxation (the IP error).
+Audit: DISTINCT (closest single SCAN0, R^2 = 0.902; mix R^2 = 0.963). check_derivs: DERIVATIVES OK.
+
+## 9. With more time
+- Region-selective exact exchange for core-valence relaxation: a second, shorter range parameter (omega_2 >> omega), or a local hybrid
+  whose mixing tracks the shell-boundary indicator. That is where the IP error lives. The harness's single RSH cannot express it.
+- Stabilize the SCF H atom (flattening over 0.05-0.4 bohr): a branch that also uses the O(omega^-6) curvature information. The Laplacian is
+  needed; the harness does not pass it.
+- Adopt the hydrogenic floor (S8) if barrier sets confirm it. It improves bonded H2+ by 3 kcal/mol at essentially unchanged dev score.
+- IP(B): Be-like static correlation, e.g. a B13-type exact-exchange-hole-based static correlation restricted to closed 2s^2 pairs.
+- VV10 for the noncovalent class, with C taken from an exact C6 rather than fitted.
+(Density caches in work/cache_* were deleted to save space; regenerate them with work/cache.py, cache_w.py, exl.py and row2.py.)

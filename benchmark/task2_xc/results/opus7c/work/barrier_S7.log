@@ -1,0 +1,4 @@
+cand S7 0.5256070335369912 1.299259029906918
+H2+ R=2.0 bohr: DFA -66.92  exact -64.31  error -2.62 kcal/mol  conv True True
+H2+ R=6.0 bohr: DFA -7.24  exact -7.46  error 0.22 kcal/mol  conv True True
+H+H2 barrier (def2-QZVP): 10.70 kcal/mol (ref 9.6)  conv True True False  E(H)=-0.5021140

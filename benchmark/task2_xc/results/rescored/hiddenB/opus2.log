@@ -15,3 +15,12 @@
   CS                -435.96497899   19.4s
   H2                  -1.17185488    2.7s
   H3_TS               -1.66618591   14.0s
+  H2O_dimer         -152.77930033   92.0s
+  H2O_a              -76.38536753   15.2s
+  H2O_b              -76.38535218   15.4s
+  NH3                -56.52779470   27.3s
+  NH4_cation         -56.86941808   35.1s
+  H2O                -76.38532822   14.0s
+  H3O_cation         -76.66110863   25.8s
+
+file:results/opus2/submission.py: AE2 MAE=2.96  BH MAE=5.94  NC MAE=0.04  PA MAE=1.55  WTMAD=6.84  MCM=2.62  time=476s
