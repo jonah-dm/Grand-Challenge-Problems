@@ -1,3 +1,4 @@
 pbe: AE MAE=11.52  IP MAE=4.57  WTMAD=3.46  MCM=8.04  time=232s
   CO2               -188.58926032   27.0s
 b3lyp: AE MAE=2.50  IP MAE=4.78  WTMAD=1.13  MCM=3.64  time=219s
+wb97m-v: AE MAE=1.94  IP MAE=1.89  WTMAD=0.70  MCM=1.92  time=3489s
