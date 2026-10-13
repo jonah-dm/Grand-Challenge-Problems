@@ -7,8 +7,15 @@ Started 03:13 UTC. Phase 1 (derivation only, no code, no SCF): 03:13-04:13. Phas
   one-electron SIE freedom, iso-orbital indicator z_s = tau_W,s/tau_s, H-atom norm, PBE0's 1/4 (adiabatic connection).
 - Long-range-corrected hybrids with 100% LR exact exchange (LC-wPBE, wB97X, ...) are known constructions. ITYH
   attenuation of a GGA/meta-GGA enhancement factor (Iikura-Tsuneda-Yanai-Hirao 2001) is known.
-- C1 (E_xc[lambda n1, 0] = -lambda^2 J[n1]) and T2 (no Laplacian-free (n, grad n, tau) exchange satisfies C1 with bounded F)
-  are round-5 results (opus5t, opus5c, sonnet5c). I use them. I do not claim them.
+- C1 (E_xc[lambda n1, 0] = -lambda^2 J[n1]) is KNOWN: Zhang & Yang, JCP 109, 2604 (1998); Mori-Sanchez, Cohen & Yang, JCP 125, 201102
+  (2006); Perdew et al., PRA 76, 040501 (2007), including the open-system hole sum rule (hole integrates to -lambda). This is the organiser's
+  literature check, results/round5_literature_check.md. The impossibility of a semilocal functional exact for all one-electron densities
+  is known in a stronger form: Santra & Perdew, JCP 150, 174106 (2019). The only round-5 parts not found in the literature are the
+  sharp Laplacian-free characterization F(s, z=1) = (5/9) s^-2 with its closed form, and the Gaussian counterexample. I use all of
+  these and claim none of them. I do not use or cite the round-5 "11.6% LP floor", which is a grid artifact.
+- Known related work on the remedy side: LC hybrids reduce delocalization and fractional-charge errors (Vydrov, Scuseria & Perdew
+  2007; Cohen, Mori-Sanchez & Yang 2007). A Laplacian route to one-electron SIE reduction exists (Becke-Roussel 1989; Ramasamy et al.,
+  PRB 112, L161112, 2025). Neither gives a bounded semilocal SR branch that is exactly amplitude-quadratic, which is what I add.
 - opus5c Corollary 4 / section 1i (prior art) already states that with erfc(omega r)/r screening the one-orbital SR branch must be
   s^-2 Psi(2 omega n_s/|grad n_s|), and it gives the hydrogenic Psi = (5/9) R. That is not mine. opus5c recorded it and did not
   implement it. It also did not notice that this branch is bounded. Sections 2-5 below, and the functional, are what I add.
@@ -55,7 +62,12 @@ Checks:
 - Large b (tails, small omega): R -> 1, so F -> (5/9) s^-2, which is T2's form. As omega -> 0 the branch tends to the
   full-range C1 form, as it must.
 
-## 4. Lemmas (new)
+## 4. Lemmas (new, subject to the scope correction below)
+Scope (from the organiser's E2, which I accept): no semilocal functional, with or without the Laplacian, can be exact for all one-electron
+densities even at lambda = 1. The reason is the nonlocal interfragment Hartree term (Santra-Perdew). So what follows removes only the
+AMPLITUDE part of the obstruction. In this construction the interfragment part is assigned to LR exact exchange, where it is exact at
+long range. The lambda = 1 shape error of the SR branch remains for non-hydrogenic shapes and carries over unchanged (times lambda^2)
+to every lambda.
 **L1 (exact C1 for every shape).** Any branch of the form e = n_s^2 g(b) with fixed omega is exactly amplitude-quadratic pointwise,
 because n_s -> lambda n_s leaves b invariant. Hence E_x^{SR,1}[lambda n1] = lambda^2 E_x^{SR,1}[n1] for every one-orbital shape n1,
 not only hydrogenic ones. The fractional-charge curvature of such a channel is then zero. The only remaining one-electron error is the
