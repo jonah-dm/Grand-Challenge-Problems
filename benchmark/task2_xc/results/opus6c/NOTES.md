@@ -155,8 +155,8 @@ flat-plane / two-electron singlets (not addressed); dispersion (no VV10).
   J_2 = (pi/4)(1-2b) erfcx(sqrt b) + sqrt(pi b)/2, gives J_4 = I(b). It is checked against quadrature to 1e-12 for b <= 50 (work/rfun.py).
   For b < 1e-5 the series Q = 1/5 - b/10 + b^2/6 is used, and for b > 400 the asymptotic series of J_4. Both are complex-step safe.
 - PySCF convention verified in the source: RSH = (omega, alpha, beta) means alpha*LR-HF + (alpha+beta)*SR-HF. So RSH = (omega, 1, a-1).
-- check_derivs: DERIVATIVES OK (unpolarized and polarized). Audit: DISTINCT (closest single BHANDHLYP, R^2 = 0.916; mix R^2 = 0.979).
-  NEG and LO are clean. The audit's UEG check reports a deviation of 0.64. This is an artifact of the audit, which assumes a global hybrid:
+- check_derivs: DERIVATIVES OK (unpolarized and polarized). Audit (submitted K2b, audit.log): DISTINCT (closest single SCAN0, R^2 = 0.902; mix R^2 = 0.963; the first K1 run gave BHANDHLYP 0.916).
+  NEG and LO are clean. The audit's UEG check reports a deviation of 0.73 (0.64 for K1). This is an artifact of the audit, which assumes a global hybrid:
   eval_xc returns only the SR semilocal part. At s = 0 and z = 0 it is (1-a) SR-LDA exchange plus PW92, and the HF parts supply the rest.
   For the UEG, LR-HF + a SR-HF equals LR-LDA + a SR-LDA, so the total is LDA.
 - omega* (L4) solved exactly: 0.368708 for the cap 1+kappa = 1.804.
@@ -190,3 +190,81 @@ tuned number (L4 is unchanged; only the bound inserted into it changed).
     CAM-B3LYP   -0.31116  0.3293  0.1143     -31.10 | Gauss  0.970  He+ -0.61444 (exact -0.62500)  fG(1/2)/fG(1)*4  1.373
     WB97X       -0.31385  0.3035  0.0952     -20.98 | Gauss  1.003  He+ -0.62316 (exact -0.62500)  fG(1/2)/fG(1)*4  1.332
     R2SCAN      -0.31250  0.3952  0.1559     -56.94 | Gauss  0.996  He+ -0.62500 (exact -0.62500)  fG(1/2)/fG(1)*4  1.582
+Reading: every existing functional tested, LC ones included, is convex in lambda (LC-wPBE f(1/2) = 0.296, wB97X 0.304, CAM-B3LYP
+0.329, against exact 0.25). The LC base without the branch (K0, K0b) is still off (0.273, 0.261). With the branch (K1, K1b) the
+fractional H atom is exact to 0.001 in f, and the stretched-H2+ limit at the exact density is -0.4 / -0.2 kcal/mol, against -18
+(LC-wPBE) and -21 (wB97X). The amplitude homogeneity on a Gaussian (last column) is broken only by the cap (1.07 for K1b; without the
+cap it would be exactly 1 by L1). The lambda = 1 shape error on a Gaussian is +5.5% for K1b. This is the residual nonlocality error
+that no semilocal form can remove (Santra-Perdew / organiser E2).
+
+## Candidates compared (ALL; no continuous parameter fitted to dev data). def2-SVP dev WTMAD, plus QZ where run
+| id | omega | cap | SR-HF a | weight | SVP WTMAD (AE/IP MAE) | QZ WTMAD (AE/IP MAE) | H2+ R=6 err | H2+ R=2 err | H+H2 barrier (9.6) | E_SCF(H) QZ |
+|---|---|---|---|---|---|---|---|---|---|---|
+| K0 (LC base, no branch) | 0.3687 | - | 1/4 | 0 | 2.14 (5.01/5.82) | - | -11.87 | -0.61 | 7.42 | -0.49438 |
+| K1 | 0.3687 | 1.804 | 1/4 | zeta^2 z_s^2 | 2.31 (5.30/6.89) | killed (H unstable) | +1.29 | -10.96 | 12.56 | -0.50633 |
+| K2 | 0.3687 | 1.804 | 0 | zeta^2 z_s^2 | 3.30 (8.01/6.93) | - | +2.41 | -14.78 | 14.70 | -0.51214 |
+| K3 | 0.3687 | 1.804 | 1/4 | z_s^2 (all channels) | 11.12 (27.9/17.7) | - | - | - | - | - |
+| K0b (LC base, no branch) | 0.5767 | - | 1/4 | 0 | - | - | -5.35 | -0.44 | 9.15 | -0.49801 |
+| K1b | 0.5767 | 1.174 | 1/4 | zeta^2 z_s^2 | 2.90 (6.94/6.76) | 2.27 (5.51/4.91) | +0.04 | -3.74 | 10.38 | -0.50077 |
+| **K2b (SUBMITTED)** | 0.5767 | 1.174 | 0 | zeta^2 z_s^2 | **1.73** (3.66/7.21) | **1.21** (2.08/8.27), MCM 5.17 | **+0.09** | -5.09 | **10.42** | -0.50138 |
+H2+: aug-cc-pVTZ, E(H2+) - E(H) against UHF in the same basis, in kcal/mol. Barrier: linear symmetric H3 with r = 0.930 A at def2-QZVP, UKS,
+grid 4, the harness's run_species (work/barrier.py). opus4 base: H2+ R=6 -28.5, barrier 7.2. opus5t: -6.1, 9.06.
+Selection: the pre-registered rule (best SVP WTMAD among branch candidates that converge everywhere and pass H2+ and the barrier).
+K1/K2/K3 (omega = 0.3687, cap 1.804) are excluded by the SCF flattening (H atom 4-7.5 kcal/mol too low, which inflates the barrier) and,
+for K3, by the expected collapse of closed-shell channels. Between K1b and K2b, K2b wins on SVP (1.73 vs 2.90). The choice of a (1/4
+vs 0) is a discrete choice between two physically motivated values (the PBE0 adiabatic-connection fraction vs pure LC). C1 does not
+depend on a. The selection used dev scores and is disclosed here. K0 and K0b are references without the new branch, not submission
+candidates. K3 confirms the known failure mode (exact one-orbital exchange in closed-shell channels destroys error cancellation).
+
+## Final result (def2-QZVP, submitted K2b): dev WTMAD 1.21, AE MAE 2.08, IP MAE 8.27, MCM 5.17; all 24 species converged (score.json)
+Baselines: PBE 2.95, r2SCAN 1.28, B3LYP 0.97, wB97M-V 0.56. opus5t 1.55, opus4 base 1.10, sonnet3 1.00.
+- AEs: MAE 2.08, close to B3LYP (1.70) and better than r2SCAN (2.57) and opus5t (3.59). The polarized-atom overshoot of F_q is gone:
+  N2 -0.5 (opus5t +7.7), HCN -0.4, F2 -2.2. The largest errors are H2CO +5.4, H2 -5.0 and CH2 +3.4.
+- IPs: MAE 8.27, the weak class. IP(F) +10.4 and IP(B) +9.9 (B3LYP +6.8 / +11.5). Both cations are open-shell or closed-shell species
+  whose 2p-hole spin density gets the branch and pure LC. I did not try to fix this (it would have meant tuning on the dev set).
+- Delocalization: stretched H2+ (R = 6 bohr) error +0.09 kcal/mol, against -28.5 (opus4 base), -6.1 (opus5t), -5.4 (LC base K0b).
+  At R = 2 the error is -5.1, the shape error of the hydrogenic branch at the bonded H2+ midpoint (b -> 0, where the on-top extrapolation
+  overestimates). The H+H2 barrier is 10.42 (ref 9.6, +0.8, against 7.2 for the base). About 0.9 kcal/mol of the overshoot comes from the
+  SCF H atom being 0.87 kcal/mol too low (E(H) = -0.501380).
+
+## Exact conditions: satisfied / violated (submitted)
+Satisfied: UEG (total; the audit's 0.73 "UEG deviation" is its global-hybrid assumption, explained above); exchange spin scaling; e_xc <= 0
+(NEG 0); local LO (0 violations); the one-orbital bound F <= 1.174 for the branch; C1 amplitude homogeneity (degree 2) exactly in
+fully polarized one-orbital channels wherever the cap is inactive, for every shape (L1); C1 exactly for every fractional hydrogenic
+density with Z <= 1 at the exact density (f(1/2) = 0.2506); interfragment exchange at long range exact (LR-HF = 1); -1/r asymptotics of
+v_x; one-orbital SR exchange exact through O(omega^-4) for every shape (E2); E_c[lambda n1] = 0 (Stoll gate, prior art);
+H atom within 0.9 kcal/mol self-consistently.
+Violated: lambda = 1 shape exactness for non-hydrogenic one-orbital densities (impossible for any semilocal form; Gaussian +5.5%, H2+ R=2
+-5 kcal/mol); exactness for Z > 1 hydrogenic ions (the cap is active at the nucleus: He+ off by 0.017 Ha); exchange GE2 in the base;
+flat-plane / fractional spin (not addressed); dispersion (no VV10); the SCF H density is not exactly stationary at the exact density
+(slight flattening, -0.87 kcal/mol).
+
+## What is new (precise), versus KNOWN_CONDITIONS.md, prior_art and the round-5 literature check
+1. L2: range separation evades the Laplacian-free no-go for the AMPLITUDE part. The one-orbital SR branch F = (5/9)(k_s/omega)^2 Q(b),
+   with b = |grad n_s|^2/(4 omega^2 n_s^2), is exactly amplitude-quadratic for every shape and is bounded at every density. Its supremum
+   is the exact on-top SR exchange -(pi/(2 omega^2)) n_s^2, reached at critical points. (The function R was in opus5c's Corollary 4.
+   That it is bounded, the on-top supremum, and the use of b were not.)
+2. L3: C1 plus pointwise finiteness forces 100% long-range exact exchange in one-orbital channels. The LR semilocal complement diverges at
+   every critical point. This is a derivation of alpha_LR = 1 from fractional-charge exactness, not from the -1/r asymptote.
+3. E2 with the hydrogenic check: the O(omega^-4) term of one-orbital SR exchange is Laplacian-free after integration by parts, with
+   coefficient -b/2. The hydrogenic branch reproduces it, so it is shape-exact through second order.
+4. L4: a non-empirical range parameter. omega* is the smallest omega for which the C1-exact branch respects the one-orbital bound on the
+   H atom: omega* = 0.5767 for F <= 1.174 (0.3687 for F <= 1.804, which proved SCF-unstable). It is fixed by the one-electron reference
+   alone and does not depend on the SR exact-exchange fraction.
+5. The construction: the first bounded, Laplacian-free functional in this benchmark with exact fractional-H behaviour (f(1/2) = 0.2506)
+   and near-exact stretched H2+ (+0.09 kcal/mol at 6 bohr) that keeps first-row AEs near B3LYP level (MAE 2.08).
+6. A documented negative result: the variational flattening instability of C1-exact branches in flexible basis sets, and that the tight
+   one-orbital bound (1.174) controls it where the LO bound (1.804) does not.
+Not new: C1 itself (Zhang-Yang 1998; MCY 2006), LC hybrids and ITYH, the Stoll correlation gates, opus4's correlation, sonnet3's
+exchange, zeta^2 z_s^2 weighting (opus5t), the 1.174 and 1.804 bounds.
+
+## Hidden-class expectations
+Barrier heights: good (LC plus delocalization fix; H+H2 10.4). Proton affinities and noncovalent: closed-shell, so pure LC base. NCI has no
+dispersion term and may be weak. Second-row AEs: the polarized atoms P, S, Cl get the branch only in one-orbital-like regions. Risk:
+pure LC with omega = 0.58 underbinding heavier molecules. IPs are the weakest class.
+
+## With more time
+- Constrain Q(b) for b < 1/omega^2 (below the hydrogenic range) with an exact-hole argument instead of the cap. This should remove the SCF
+  flattening and the H2+ R = 2 error, and might allow the smaller omega* = 0.369.
+- Examine the IP(F) and IP(B) errors (2p-hole species) and apply the branch only to the C1 premise (n_s' -> 0) rather than zeta^2.
+- VV10 with C from an exact C6 for the NCI class; second-row AEs.
