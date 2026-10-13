@@ -1,40 +1,26 @@
-Traceback (most recent call last):
-  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 109, in <module>
-    main()
-    ~~~~^^
-  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 83, in main
-    E[name], conv, dt = run_species(atoms, charge, spin, a.basis, a.functional, sub)
-                        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/score.py", line 60, in run_species
-    mf.run()
-    ~~~~~~^^
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/lib/misc.py", line 693, in run
-    self.kernel(*args)
-    ~~~~~~~~~~~^^^^^^^
-  File "<string>", line 2, in kernel
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/scf/hf.py", line 2099, in scf
-    kernel(self, self.conv_tol, self.conv_tol_grad,
-    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-           dm0=dm0, callback=self.callback,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-           conv_check=self.conv_check, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/scf/hf.py", line 132, in kernel
-    vhf = mf.get_veff(mol, dm)
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/uks.py", line 53, in get_veff
-    n, exc, vxc = ni.nr_uks(mol, ks.grids, ks.xc, dm, max_memory=max_memory)
-                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/numint.py", line 1297, in nr_uks
-    for i, ao, mask, wv in block_loop(ao_deriv):
-                           ~~~~~~~~~~^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/numint.py", line 1254, in block_loop
-    exc, vxc = ni.eval_xc_eff(xc_code, rho, deriv=1, xctype=xctype, spin=1)[:2]
-               ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/numint.py", line 2793, in eval_xc_eff
-    out = self.eval_xc1(xc_code, rho, spin, deriv, omega)
-  File "/usr/local/lib/python3.13/dist-packages/pyscf/dft/libxc.py", line 1210, in _eval_xc1
-    libxc_out = _eval_xc(xc_code, rho, spin, deriv=deriv, omega=omega)
-  File "/home/user/Grand-Challenge-Problems/benchmark/task2_xc/results/sonnet4/submission.py", line 133, in eval_xc
-    ta, tb = ra_[5], rb_[5]
-             ~~~^^^
-IndexError: index 5 is out of bounds for axis 0 with size 5
+  H_atom              -0.49428144    0.4s
+  Li_atom             -7.44384615    0.9s
+  B_atom             -24.56464014    1.5s
+  C_atom             -37.73608636    1.4s
+  N_atom             -54.45380915    1.4s
+  O_atom             -74.89468623    3.1s
+  F_atom             -99.51845389    1.7s
+  H2                  -1.14930253    0.9s
+  LiH                 -8.02186395    2.7s
+  CH4                -40.38862208   11.3s
+  NH3                -56.40675937    8.8s
+  H2O                -76.24431828    5.6s
+  HF                -100.22685973    3.1s
+  N2                -109.26942400    4.5s
+  CO                -113.04903383    5.9s
+  F2                -199.09671636    4.5s
+  C2H2               -77.11878737   10.0s
+  HCN                -93.18892386    9.9s
+  H2CO              -114.22801534   12.9s
+  OH                 -75.55660838    4.7s
+  CH2_triplet        -39.03722178    6.8s
+  B_cation           -24.24909502    1.2s
+  F_cation           -98.88159971    1.6s
+  HF_cation          -99.64705636    4.5s
+
+file:results/sonnet4/submission.py: AE MAE=4.99  IP MAE=7.15  WTMAD=2.21  MCM=6.07  time=109s

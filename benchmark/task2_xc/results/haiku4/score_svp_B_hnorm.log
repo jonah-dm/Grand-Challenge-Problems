@@ -14,3 +14,13 @@
   N2                -109.39541880   13.5s
   CO                -113.17484481   18.4s
   F2                -199.25596276   14.7s
+  C2H2               -77.23134121   29.6s
+  HCN                -93.30800424   25.1s
+  H2CO              -114.35799032   29.8s
+  OH                 -75.63163804   11.6s
+  CH2_triplet        -39.09791965   19.3s
+  B_cation           -24.29873067    4.2s
+  F_cation           -98.96379483    5.8s
+  HF_cation          -99.72931904   10.5s
+
+file:results/haiku4/cand_B_hnorm.py: AE MAE=4.33  IP MAE=7.34  WTMAD=1.98  MCM=5.84  time=295s

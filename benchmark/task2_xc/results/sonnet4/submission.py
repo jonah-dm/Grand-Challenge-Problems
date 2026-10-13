@@ -22,9 +22,24 @@ KF3 = (3 * np.pi ** 2) ** (1 / 3)
 EPS = 1e-12
 
 
+Z0 = 0.8
+
+
+def _cap(z):
+    """C^1 cap of the iso-orbital indicator at 1 (cubic Hermite on [Z0,1], identity below Z0)."""
+    L = 1 - Z0
+    u = (z - Z0) / L
+    mid = Z0 + L * (u + u ** 2 - u ** 3)      # value; slope 1 at u=0, slope 0 at u=1
+    return np.where(z.real <= Z0, z, np.where(z.real >= 1, 1.0 + 0 * z, mid))
+
+
+def _dcap(z):
+    u = (z - Z0) / (1 - Z0)
+    return np.where(z <= Z0, 1.0, np.where(z >= 1, 0.0, 1 + 2 * u - 3 * u ** 2))
+
+
 def _zs(n, sg, t):
-    z = sg / (8 * n * t)
-    return np.where(z.real > 1, 1.0, z)
+    return _cap(sg / (8 * n * t))
 
 
 def _ex_spin(n, sg, t):
@@ -97,12 +112,12 @@ def _core(ra, rb, saa, sab, sbb, ta, tb):
             e, dn, ds = _pbec_ss(n, sg)
             ok = (n > EPS) & (t > 1e-20)
             nn = np.where(ok, n, 1.0); tt = np.where(ok, t, 1.0); ss = np.where(ok, sg, 0.0)
-            z = ss / (8 * nn * tt)
-            clip = z > 1
-            z = np.where(clip, 1.0, z)
+            z0_ = ss / (8 * nn * tt)
+            z = _cap(z0_); dc = _dcap(z0_)
             G = np.where(ok, z ** _GP, 0.0)
-            dG = np.where(ok & ~clip, _GP * z ** (_GP - 1), 0.0)   # dG/dz
-            dzn = -z / nn; dzs = np.where(ss > 0, z / np.maximum(ss, 1e-30), 1 / (8 * nn * tt)); dzt = -z / tt
+            dG = np.where(ok, _GP * z ** (_GP - 1), 0.0)   # dG/dz
+            dzn = -z0_ * dc / nn; dzt = -z0_ * dc / tt
+            dzs = np.where(ss > 0, z0_ * dc / np.maximum(ss, 1e-30), dc / (8 * nn * tt))
             E = E - G * e
             dn_t = G * dn + e * dG * dzn
             ds_t = G * ds + e * dG * dzs
@@ -117,7 +132,7 @@ def _core(ra, rb, saa, sab, sbb, ta, tb):
 def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=None):
     if spin == 0:
         r = np.asarray(rho)
-        n = r[0]; g = r[1:4]; sg = np.einsum("ik,ik->k", g, g); t = r[5]
+        n = r[0]; g = r[1:4]; sg = np.einsum("ik,ik->k", g, g); t = r[-1]
         E, va, vb, Vaa, Vab, Vbb, Vta, Vtb = _core(n / 2, n / 2, sg / 4, sg / 4, sg / 4, t / 2, t / 2)
         nn = np.maximum(n, 1e-300)
         exc = E / nn
@@ -130,7 +145,7 @@ def eval_xc(xc_code, rho, spin=0, relativity=0, deriv=1, omega=None, verbose=Non
     ra, rb = ra_[0], rb_[0]
     ga, gb = ra_[1:4], rb_[1:4]
     saa = np.einsum("ik,ik->k", ga, ga); sbb = np.einsum("ik,ik->k", gb, gb); sab = np.einsum("ik,ik->k", ga, gb)
-    ta, tb = ra_[5], rb_[5]
+    ta, tb = ra_[-1], rb_[-1]
     E, va, vb, Vaa, Vab, Vbb, Vta, Vtb = _core(ra, rb, saa, sab, sbb, ta, tb)
     exc = E / np.maximum(ra + rb, 1e-300)
     z = np.zeros_like(ra)

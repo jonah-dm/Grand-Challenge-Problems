@@ -1,0 +1,125 @@
+<title>XC Functional Rounds</title>
+<style>
+/* Layout: two side-by-side panels (stack on phones), one legend row, a table view below. */
+:root {
+  --bg: #fcfcfb; --surface: #fcfcfb; --fg: #0b0b0b; --fg2: #52514e; --grid: #e6e5e0; --rule: #b9b8b0;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --base: #7b7a74; --target: #0ca30c;
+  --font-body: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a19; --surface: #1a1a19; --fg: #f0efec; --fg2: #c3c2b7; --grid: #2f2f2d; --rule: #5a5955;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --base: #8d8c85; --target: #2fbf2f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a19; --surface: #1a1a19; --fg: #f0efec; --fg2: #c3c2b7; --grid: #2f2f2d; --rule: #5a5955;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --base: #8d8c85; --target: #2fbf2f; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); padding-block: 28px; padding-inline: 16px; max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 1.5rem; margin: 0 0 4px; text-wrap: balance; }
+.sub { color: var(--fg2); margin: 0 0 20px; max-width: 65ch; line-height: 1.4; }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 0 0 12px; font-size: 0.9rem; color: var(--fg2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.sw.dash { background: repeating-linear-gradient(90deg, var(--base) 0 3px, transparent 3px 6px); }
+.sw.target { background: var(--target); }
+.panels { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 720px) { .panels { grid-template-columns: 1fr; } }
+.panel h2 { font-size: 1rem; margin: 0 0 6px; }
+.panel p { color: var(--fg2); font-size: 0.85rem; margin: 0 0 8px; }
+svg { width: 100%; height: auto; display: block; }
+.ax { stroke: var(--rule); stroke-width: 1; }
+.gr { stroke: var(--grid); stroke-width: 1; }
+.tk { fill: var(--fg2); font-size: 11px; font-family: var(--font-mono); }
+.lb { fill: var(--fg2); font-size: 11px; }
+.bl { stroke: var(--base); stroke-width: 1.5; stroke-dasharray: 3 3; fill: none; }
+.tg { stroke: var(--target); stroke-width: 2; fill: none; }
+.ln { fill: none; stroke-width: 2; stroke-linejoin: round; }
+.pt { stroke-width: 2; }
+.pt.open { fill: var(--surface); }
+.tip { position: fixed; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 12px; padding: 6px 8px; border-radius: 4px; opacity: 0; transition: opacity .1s; max-width: 260px; line-height: 1.35; }
+@media (prefers-reduced-motion: reduce) { .tip { transition: none; } }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; margin-top: 24px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--fg2); font-weight: 600; }
+td.n { text-align: right; font-family: var(--font-mono); }
+.note { color: var(--fg2); font-size: 0.85rem; margin-top: 10px; max-width: 70ch; line-height: 1.4; }
+.wrap { overflow-x: auto; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+
+<h1>XC Functional Rounds</h1>
+<p class="sub">Dev-set scores of each model's submitted exchange–correlation functional, by round, against the baseline functionals and the 1 kcal/mol chemical-accuracy target. Round 1 submissions were existing functionals (hollow markers). Round 4 is running.</p>
+
+<div class="legend">
+  <span><i class="sw" style="background:var(--s1)"></i>Haiku</span>
+  <span><i class="sw" style="background:var(--s2)"></i>Sonnet</span>
+  <span><i class="sw" style="background:var(--s3)"></i>Opus</span>
+  <span><i class="sw dash"></i>Baselines (PBE, r²SCAN, B3LYP, ωB97M-V)</span>
+  <span><i class="sw target"></i>Chemical accuracy</span>
+</div>
+
+<div class="panels">
+  <div class="panel">
+    <h2>Atomization-energy error</h2>
+    <p>Mean absolute error vs CCSD(T)/CBS, kcal/mol. Lower is better.</p>
+    <svg id="c1" viewBox="0 0 520 330" role="img" aria-label="Atomization energy MAE by round"></svg>
+  </div>
+  <div class="panel">
+    <h2>Overall score (WTMAD)</h2>
+    <p>Atomization and ionization classes, each scaled by its mean reference magnitude. Lower is better.</p>
+    <svg id="c2" viewBox="0 0 520 330" role="img" aria-label="WTMAD by round"></svg>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+
+<div class="wrap">
+<table>
+  <thead><tr><th>Round</th><th>Model</th><th>Submission</th><th>AE MAE</th><th>IP MAE</th><th>WTMAD</th></tr></thead>
+  <tbody id="tb"></tbody>
+</table>
+</div>
+<p class="note">Round 1: loose rules, all three submitted existing functionals (Haiku BLYP, Sonnet a Minnesota blend, Opus r²SCAN). Round 2: novelty rules; Haiku's functional did not converge. Round 3: prior-art and hidden-class disclosure added. Baselines on the same set: PBE 7.32 / 2.95, r²SCAN 2.57 / 1.28, B3LYP 1.70 / 0.97, ωB97M-V 1.34 / 0.56 (AE MAE / WTMAD).</p>
+
+<script>
+const data = [
+  {r:1,m:"Haiku", sub:"BLYP (wrapper)", ae:3.84, ip:5.12, w:1.68, open:true},
+  {r:1,m:"Sonnet",sub:"0.4 MN15 + 0.4 M06-2X + 0.2 PW6B95 (mix)", ae:4.23, ip:1.46, w:1.62, open:true},
+  {r:1,m:"Opus",  sub:"r²SCAN (wrapper)", ae:2.57, ip:6.31, w:1.28, open:true},
+  {r:2,m:"Haiku", sub:"One-orbital meta-GGA (did not converge)", ae:null, ip:null, w:null},
+  {r:2,m:"Sonnet",sub:"OSC-PBE0: z-gated correlation, GE2-exact exchange blend", ae:3.21, ip:3.32, w:1.35},
+  {r:2,m:"Opus",  sub:"BIG exchange + r²SCAN correlation", ae:7.51, ip:9.12, w:3.23},
+  {r:3,m:"Haiku", sub:"z-interpolated exchange, μ₁ from H-atom norm", ae:4.52, ip:5.42, w:1.94},
+  {r:3,m:"Sonnet",sub:"Stoll same-spin correlation removal, 25% HF", ae:2.22, ip:3.56, w:1.00},
+  {r:3,m:"Opus",  sub:"OEC-h: joint one-electron condition on hybrid sum", ae:3.63, ip:4.87, w:1.59},
+];
+const baselines = [
+  {n:"PBE", ae:7.32, w:2.95},{n:"r²SCAN", ae:2.57, w:1.28},{n:"B3LYP", ae:1.70, w:0.97},{n:"ωB97M-V", ae:1.34, w:0.56}];
+const series = [["Haiku","--s1"],["Sonnet","--s2"],["Opus","--s3"]];
+const tip = document.getElementById("tip");
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function draw(id, key, ymax, target){
+  const svg = document.getElementById(id); const W=520,H=330, L=44,R=96,T=16,B=36;
+  const x = r => L + (r-1)*(W-L-R)/3, y = v => T + (H-T-B)*(1 - v/ymax);
+  let s = "";
+  for(let v=0; v<=ymax; v+= (ymax>5?2:1)) s += `<line class="gr" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="tk" x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  s += `<line class="ax" x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}"/>`;
+  [1,2,3,4].forEach(r=> s += `<text class="tk" x="${x(r)}" y="${H-B+18}" text-anchor="middle">R${r}</text>`);
+  s += `<text class="lb" x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle">round</text>`;
+  baselines.forEach(b=>{ const v=b[key]; if(v<=ymax) s += `<line class="bl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="lb" x="${W-R+6}" y="${y(v)+4}">${b.n} ${v.toFixed(2)}</text>`; });
+  if(target) s += `<line class="tg" x1="${L}" x2="${W-R}" y1="${y(target)}" y2="${y(target)}"/><text class="lb" x="${W-R+6}" y="${y(target)+4}">1 kcal/mol</text>`;
+  series.forEach(([m,tok])=>{
+    const pts = data.filter(d=>d.m===m && d[key]!=null).map(d=>({...d, X:x(d.r), Y:y(Math.min(d[key],ymax))}));
+    const c = css(tok);
+    for(let i=1;i<pts.length;i++) s += `<line class="ln" stroke="${c}" x1="${pts[i-1].X}" y1="${pts[i-1].Y}" x2="${pts[i].X}" y2="${pts[i].Y}"${pts[i].r-pts[i-1].r>1?' stroke-dasharray="2 4"':''}/>`;
+    pts.forEach(p=> s += `<circle class="pt${p.open?' open':''}" cx="${p.X}" cy="${p.Y}" r="5" stroke="${c}" fill="${p.open?css('--surface'):c}" data-i="${data.indexOf(p)}"/>`);
+    const last = pts[pts.length-1]; if(last) s += `<text class="lb" x="${last.X+9}" y="${last.Y-8}">${m}</text>`;
+  });
+  svg.innerHTML = s;
+  svg.querySelectorAll("circle").forEach(cc=>{
+    cc.addEventListener("mousemove", e=>{ const d=data[+cc.dataset.i]; tip.style.opacity=1; tip.style.left=(e.clientX+12)+"px"; tip.style.top=(e.clientY+12)+"px";
+      tip.innerHTML=`<b>${d.m}, round ${d.r}</b><br>${d.sub}<br>AE MAE ${d.ae} · IP MAE ${d.ip} · WTMAD ${d.w}`; });
+    cc.addEventListener("mouseleave", ()=> tip.style.opacity=0);
+  });
+}
+draw("c1","ae",8,1); draw("c2","w",3.5,null);
+document.getElementById("tb").innerHTML = data.map(d=>`<tr><td>${d.r}</td><td>${d.m}</td><td>${d.sub}</td><td class="n">${d.ae??"—"}</td><td class="n">${d.ip??"—"}</td><td class="n">${d.w??"—"}</td></tr>`).join("");
+</script>
