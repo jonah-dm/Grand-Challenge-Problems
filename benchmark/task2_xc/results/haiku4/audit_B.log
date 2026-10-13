@@ -1,0 +1,29 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 1.5802508380840383e-15,
+ "POL1_exc_over_LDAx": 0.7825766948535948,
+ "POL1_ok": true,
+ "mix_R2": 0.9999162362714556,
+ "mix_components": {
+  "PBE": 0.1968,
+  "PBE0": 0.4422,
+  "M06-2X": 0.007,
+  "M05-2X": 0.001,
+  "MN12-L": 0.0012,
+  "MN15-L": 0.0087,
+  "PW6B95": 0.0157,
+  "RPBE": 0.1672,
+  "SCAN0": 0.0146,
+  "HSE06": 0.033,
+  "CAM-B3LYP": 0.0023
+ },
+ "closest_single": {
+  "name": "PBE0",
+  "R2": 0.9996551989828556
+ },
+ "verdict": "NEAR-EXISTING"
+}

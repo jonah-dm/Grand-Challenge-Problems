@@ -1,0 +1,22 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 4.471517394104602e-07,
+ "POL1_exc_over_LDAx": 0.9492515574193297,
+ "POL1_ok": true,
+ "mix_R2": 0.9629127280232423,
+ "mix_components": {
+  "LDA,PW": 0.5041,
+  "MN12-L": 0.1194,
+  "MN15-L": 0.0148,
+  "BHANDHLYP": 0.2884
+ },
+ "closest_single": {
+  "name": "SCAN0",
+  "R2": 0.9006919333135264
+ },
+ "verdict": "DISTINCT"
+}
