@@ -1,0 +1,8 @@
+softH fa=0.625 fb=0.625 N=1.250 J=0.34621 F=0.301789 Exc/J=-1.09481 Ec/J=-0.31356 lower=-0.7812 tent=-0.2812 sat_up=True conv=False it=1500
+softH fa=0.500 fb=0.500 N=1.000 J=0.34621 F=0.111618 Exc/J=-1.00080 Ec/J=-0.50080 lower=-0.5000 tent=-0.5000 sat_up=True conv=False it=1500
+softH fa=0.250 fb=0.250 N=0.500 J=0.34621 F=0.055532 Exc/J=-0.25120 Ec/J=-0.12620 lower=-0.1250 tent=-0.1250 sat_up=True conv=False it=1500
+softH fa=0.750 fb=0.750 N=1.500 J=0.34621 F=0.498223 Exc/J=-1.29573 Ec/J=-0.17073 lower=-1.1250 tent=-0.1250 sat_up=True conv=False it=1500
+softH fa=0.875 fb=0.875 N=1.750 J=0.34621 F=0.697029 Exc/J=-1.61479 Ec/J=-0.08354 lower=-1.5312 tent=-0.0312 sat_up=True conv=False it=1500
+softH fa=1.000 fb=1.000 N=2.000 J=0.34621 F=0.897195 Exc/J=-2.05493 Ec/J=-0.05493 lower=-2.0000 tent=-0.0000 sat_up=True conv=False it=1500
+softH fa=1.000 fb=0.500 N=1.500 J=0.34621 F=0.499306 Exc/J=-1.29260 Ec/J=-0.04260 lower=-1.0000 tent=-0.0000 sat_up=True conv=False it=1500
+softH fa=0.750 fb=0.250 N=1.000 J=0.34621 F=0.111671 Exc/J=-1.00065 Ec/J=-0.37565 lower=-0.3750 tent=-0.3750 sat_up=True conv=False it=1500

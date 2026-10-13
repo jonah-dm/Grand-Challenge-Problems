@@ -70,6 +70,49 @@ Remarks.
 - The hole-branch bound is not tight at the corner: the gap equals the dynamic correlation of the
   pair (for the He-like pair, about 0.04 Ha). I verify the whole profile numerically in phase 2.
 
+
+## 2b. Corollary C2-HD (high-density / scaling form). NEW
+Let n1_g(r) = g^3 n1(g r) (uniform coordinate scaling). Then T_W scales as g^2 and J as g. By scaling,
+F[f n1_g] = inf over ensembles G -> (f_a n1, f_b n1) of { g^2 T(G) + g W(G) }. As g -> infinity the minimiser
+must have T = T_s at leading order. The ensembles with T = T_s are exactly the mixtures of the four states built
+from phi (vac, up, down, singlet up-down). States with two same-spin electrons or a second orbital cost O(g^2).
+The first-order term is the degenerate Goerling-Levy minimum of W over that manifold: an LP whose minimum is at
+p_2 = max(0, N-1). Hence
+   lim_{g->inf} E_c[f_a n1_g, f_b n1_g] / g  =  -2 min{ f_a f_b , (1-f_a)(1-f_b) } J[n1],
+so **the C2 upper bound is exact at leading order in the high-density limit on the whole square**. The
+gap in (ii) is O(g^0): the dynamic correlation of the pair.
+Consequences (new as stated):
+- For fractional one-orbital densities, correlation scales like exchange. E_c[n_g] = g E_c[n] holds exactly on the
+  particle triangle, so the Levy-Perdew correlation scaling inequality is saturated there. On the open hole
+  triangle, E_c[n_g] = -2(1-f_a)(1-f_b) g J + O(1).
+- The high-density limit of correlation, finite for integer systems (a listed condition), is -infinity
+  (linear in g) everywhere on the open square except the three integer corners (0,0), (1,0)/(0,1), (1,1),
+  where the prefactor vanishes.
+- Every semilocal correlation built with a finite high-density limit (PW92/PBE/SCAN/r2SCAN by
+  design, LYP, B95, opus4) has E_c[n_g]/g -> 0 on the square. All of them violate C2-HD at leading order.
+
+## 3a. Rigorous version of T3 on the hydrogenic family (replaces the "pointwise sense" caveat)
+For n = N Z^3 e^{-2Zr}/pi, |grad n| = 2Z n, so s k_F = Z: each hydrogenic shape lies on one curve
+s = Z/k_F(n) of the (n, s) plane, and its maximum density is w = N Z^3/pi. On that curve
+e_c = G(n), and E(w) = (pi/(2 Z^3)) int_0^w G(u) ln^2(w/u) du/u. With D = w d/dw this gives D^3 E = (2 pi/(2 Z^3))... more precisely
+G(w) = (Z^3/pi) D^3 E(w). C2(i) gives E(w) = -(1-zeta^2)(5 pi^2/32) w^2/Z^5 for every w <= Z^3/pi (all N <= 1),
+hence G(u) = -(1-zeta^2)(5 pi/4) u^2/Z^2. Using Z = s k_F:
+   e_c(n, zeta, s; z=1) = -(1-zeta^2) * 5/(4 (3 pi^2)^{2/3}) * pi * n^{4/3} s^{-2}    for all s >= s* = (3 pi)^{-1/3} = 0.4730
+(the point (n, s) is reached by a hydrogenic N <= 1 density iff s >= s*). At zeta = 1 the same formula holds for exchange
+(it is round 5's 5/9 s_sigma^-2 law). So **the particle law determines any meta-GGA correlation uniquely on
+s >= 0.473**. There the form is bounded (|e_c| <= const n^{4/3}/s*^2).
+Gaussian orbital at amplitude lambda: the region s < s* is a ball of radius O(lambda^{1/3}). Any e_c with
+|e_c| <= C n^{4/3} there contributes O(lambda^{7/3}), while the forced s^-2 part gives 5x the exact value at
+order lambda^2 (round 5's analytic factor; I re-derived int n^{4/3} s^-2 = 2 (3 pi^2)^{2/3} sqrt(a)/pi^{3/2}).
+**Theorem T3 (rigorous):** a (n, grad n, tau) correlation with any finite Lieb-Oxford-type bound that satisfies
+C2(i) on all hydrogenic one-orbital densities at some |zeta| < 1 has
+E_c^sl[lambda g]/E_c^exact[lambda g] -> 5 for Gaussian orbitals as lambda -> 0. No such functional satisfies C2(i).
+By-product: for hydrogenic shapes, s at the nucleus is (3 pi N)^{-1/3}, a local occupation meter
+(N = 1: 0.473, N = 2: 0.375). It fails for cuspless shapes, so it cannot remove the T3b obstruction in general.
+Along the closed-shell axis on hydrogenic shapes, D^2 E = (pi/Z^3) int_0^w G du/u is continuous in w for any locally
+integrable G. So a semilocal E_c(N) is C^1 across N = 1. Any kink of the exact one (tested in V1) is therefore unreachable
+(this is the known "no derivative discontinuity" statement, here localised to the correlation ray).
+
 ## 3. Theorem T3 (no-go for semilocal correlation). NEW
 Let E_c^sl = int e_c(n_a, n_b, grad n_a, grad n_b, tau_a, tau_b) be any meta-GGA correlation. On
 one-orbital densities, tau_s = tau_W,s, so z_a = z_b = z = 1. The local variables reduce to n, the constant zeta,
@@ -97,6 +140,51 @@ and s, which scales as s -> lambda^-1/3 s when n -> lambda n.
     [(1-a)(1+zeta^2)/2 + (1-zeta^2)/2] e_x^C1[n,0]. That is, the static-correlation part is NOT reduced by
     the hybrid fraction, while the exchange part is.
 
+
+## 3c. Theorem T4 (pair catastrophe: the flat-plane axis forces over-correlation of two-electron singlets). NEW
+Hypotheses: a (n, grad n, tau) correlation with e_c <= 0 pointwise (SCAN-type negativity, satisfied by PW92, PBE,
+SCAN, r2SCAN and B95) that obeys C2(i) at zeta = 0 on hydrogenic one-orbital densities. This is the
+constancy condition for every fractional-spin hydrogenic ion, plus its N < 1 extension.
+Claim: for every two-electron closed-shell hydrogenic density n = 2 Z^3 e^{-2Zr}/pi,
+   E_c^sl <= -(5/8) (ln^2 2 / 2 + ln 2 / 2 + 1/4) Z = -0.5230 Z  Ha,
+which is 84% of the absolute lower bound -2J[n1] = -(5/8) Z from C2(ii). For a He-like orbital (Z = 27/16) this is
+-0.88 Ha, against an exact pair correlation of about -0.042 Ha (He).
+Proof: on the curve s k_F = Z the pair density covers u in (0, 2 w1] with w1 = Z^3/pi. Its outer part
+u <= w1 (r >= ln2/(2Z), s >= s*) is fixed by section 3a: G(u) = -(5 pi/4) u^2/Z^2. The inner part contributes <= 0
+by negativity. With the Mellin form, E_outer = (pi/(2Z^3)) int_0^{w1} G(u) ln^2(2 w1/u) du/u
+= -(5/8) Z int_0^1 t ln^2(2/t) dt = -(5/8) Z (ln^2 2/2 + ln 2/2 + 1/4). QED.
+For a constant spin polarisation the prefactor is (1 - zeta^2).
+Meaning: in any semilocal correlation with e_c <= 0, the static-correlation axis (fractional spin, the flat plane)
+and the two-electron singlet are not just locally indistinguishable (T3b). Enforcing the first on hydrogenic ions
+quantitatively destroys the second, by more than 0.5 Z Ha. This is the correlation counterpart of round-5's
+exchange obstruction, stated for real (integer, closed-shell) densities. It is also why every working semilocal
+correlation (PBE, r2SCAN, B95, opus4) violates the constancy condition by an amount of order J. Related prior
+observation: opus5c's (round 5) shift map n_H/2-spin <-> 2-electron density at r + ln2/(2Z), used there for exchange.
+
+## 0b. Literature positioning (added after the organiser's round-5 literature check)
+Known, no credit claimed:
+- Zhang & Yang 1998; Mori-Sanchez, Cohen & Yang 2006 (lambda^2 amplitude scaling, i.e. the f_b = 0 edge of C2(i)).
+- Cohen, Mori-Sanchez & Yang, JCP 129, 121104 (2008): constancy for fractional spins, i.e. C2(i) at N = 1, as energy
+  statements. MCY PRL 102, 066403 (2009): the flat plane. The particle-triangle law E_xc = -N^2 J (any shape) follows
+  from these with the Lieb argument. I treat C2(i), including the product form E_c = -2 f_a f_b J, as **known/implicit**.
+- Gould & Dobson JCP 2013 (LEXX, piecewise-linear exact exchange for fractional occupations) and Gould & Pittalis
+  PRL 119, 243001 (2017). The latter defines the ensemble Hartree-exchange as the lambda -> 0+ derivative of the ensemble
+  universal functional. My C2-HD limit is the one-orbital instance of that ensemble-Hx minimum. Expressing it as the
+  tent -2 min{f_a f_b, (1-f_a)(1-f_b)} J for the **1-RDM-convention correlation** (the one hybrids and semilocal
+  correlations are built for) is my reformulation, not a new concept. I claim at most the explicit hole-branch sandwich
+  C2(ii) and its consequences, and I mark it "likely implicit in Gould-Dobson/Gould-Pittalis" (full texts not read).
+- Santra & Perdew 2019: no semilocal functional is exact for all one-electron densities. The fragment argument (n1 = (n_A+n_B)/2)
+  applies to correlation as well. So "no semilocal correlation satisfies the constancy condition for all shapes" is
+  known in substance, and T3's conclusion carries no credit.
+Claimed as new, beyond those papers:
+1. T3 (rigorous, hydrogenic family): the particle law forces a unique e_c = -(1-zeta^2) (5 pi/(4 (3pi^2)^{2/3})) n^{4/3} s^-2
+   on s >= (3 pi)^{-1/3}, with the factor (1-zeta^2) uniquely fixed, and the Gaussian factor 5 for correlation.
+2. T4: the quantitative pair catastrophe (E_c <= -0.523 Z for two-electron singlets) for any e_c <= 0 semilocal correlation
+   that satisfies the flat-plane axis on hydrogenic ions. This is the "second condition of the same kind for two-electron singlets" requested.
+3. Section 4: the one-orbital manifold is a property of the total density (z_tot, not z_s). This gives a derived weight for any
+   bounded C1/C2 construction, and the spin-blind joint xc form with the hybrid split [(1-a)(1+zeta^2)/2 + (1-zeta^2)/2].
+4. The numerical verifications V1/V2.
+
 ## 4. Where C2 tells a construction something new: the one-orbital manifold is a property of the TOTAL density
 C1 (round 5) was enforced with a per-channel weight zeta^2 z_s^2. C2 shows that the exact
 amplitude law holds on the one-orbital manifold only when **both** channels hold the same orbital or one is empty. This is the condition
@@ -123,6 +211,26 @@ correlation factor for 0 < |zeta| < 1 one-orbital regions.
 Candidates planned (all will be listed with scores): A base (no C1/C2); B opus5t-type per-channel C1
 (W_s = zeta^2 z_s^2, exchange only) on my base (prior-art comparator); C = SB (submission candidate).
 
+
+**T4' (shape-free form).** The forced form of section 3a is a pointwise statement about e_c(n, zeta=0, s, z=1) on
+s >= s*. Every two-electron singlet density (any shape: He, H-, Li+, H2 at any R) has z = 1 and zeta = 0 everywhere. So, under the
+same hypotheses, for EVERY two-electron singlet density n:
+   E_c^sl[n] <= -(5 pi / (4 (3 pi^2)^{2/3})) * int_{s(r) >= s*} n^{4/3} s^{-2} d^3r,   s* = (3 pi)^{-1/3}.
+(Hydrogenic shape: -0.523 Z.) Phase 2 evaluates the right-hand side on HF densities of He and H2 and compares it with the
+near-exact E_c (He -0.0420, H2 -0.0409 Ha).
+Corollary along the closed-shell hydrogenic axis, N in [1,2]: E_c^sl(N) <= -(5Z/8)(1/4 + ln N/2 + ln^2 N/2). This keeps
+decreasing past N = 1, while the exact C2(ii) upper bound -(5Z/8)(1 - N/2)^2 turns back towards 0. A semilocal
+correlation that satisfies the particle law cannot follow the far side of the tent.
+
+## Phase-1 decisions for the construction (before any run)
+Base: 25% HF + 75% PBE exchange + opus4 pair-aware Stoll correlation on PBE (all prior art). I cannot use sonnet3's
+exchange because its tail form is not fully specified in prior_art and I do not read other submissions' code.
+Closed shells are therefore PBE0-exchange plus opus4 correlation. The audit, which is unpolarised, may report NEAR-EXISTING for that reason. The new
+content acts only in spin-polarised one-orbital-manifold regions.
+Candidates to score (SVP, all disclosed): A = base; B = per-channel C1 (opus5t-type, W_s = zeta^2 z_s^2) on the base;
+C = spin-blind SB (W = zeta^2 z_tot^2), the submission candidate. c_q comes from the H norm at the exact density. If the TS SCF fails,
+the H norm is imposed self-consistently, as in opus5t.
+
 ## 5. Phase-2 verification plan
 V1. Exact Lieb functional, computed by me, for a 1D soft-Coulomb one-orbital density along
     (f, f), f in (0, 1], and off-diagonal (f_a, f_b) points. Method: concave maximisation over v of
@@ -131,3 +239,47 @@ V1. Exact Lieb functional, computed by me, for a 1D soft-Coulomb one-orbital den
 V2. 3D exact H-shaped and Gaussian orbitals. Compare E_c and E_xc of LDA, PBE, TPSS, SCAN, r2SCAN, B3LYP,
     PBE0, M06-L and the base/candidates with C2 on the square.
 V3. Derivative check, audit, SVP dev scores for A/B/C, QZ for the chosen one, H2+ at R = 6 bohr, H+H2 barrier.
+
+## Verification results (computed during phase 1 as part of the derivation; no SCF and no functional code; scripts in work/)
+### V1: exact 1D Lieb functional (work/lieb1d.py, v1.out)
+Soft-Coulomb 1D model: w = 1/sqrt(x^2+1), n1 = ground density of v = -1/sqrt(x^2+1), 61-point grid, J[n1] = 0.34621.
+Spin-resolved Lieb functional over the N <= 2 Fock space. Method: concave dual maximisation over (v_a, v_b), entropic
+smoothing annealed to T = 4e-4. The computed F is a lower bound on the true F; the error is <= T ln 6 = 7e-4 Ha
+(0.002 J) plus incomplete convergence.
+
+| (f_a, f_b) | N | E_c/J computed | C2 lower -2 f_a f_b | C2 upper (tent) | status |
+|---|---|---|---|---|---|
+| (0.25, 0.25) | 0.5 | -0.1262 | -0.125 | -0.125 | equality (within the 0.002 smoothing bound) |
+| (0.5, 0.5) | 1.0 | -0.5008 | -0.500 | -0.500 | equality |
+| (0.75, 0.25) | 1.0 | -0.3757 | -0.375 | -0.375 | equality |
+| (0.625, 0.625) | 1.25 | -0.3136 | -0.781 | -0.281 | inside, 0.032 J below the tent |
+| (0.75, 0.75) | 1.5 | -0.1707 | -1.125 | -0.125 | inside, 0.046 J below |
+| (0.875, 0.875) | 1.75 | -0.0835 | -1.531 | -0.031 | inside, 0.052 J below |
+| (1, 1) | 2.0 | -0.0549 | -2.000 | 0 | inside (1D pair dynamic correlation, 0.019 Ha) |
+| (1, 0.5) | 1.5 | -0.0426 | -1.000 | 0 | inside |
+The particle triangle is reproduced to 0.1%. On the hole triangle the exact E_c follows the tent, offset by a smooth gap
+that grows to the pair dynamic correlation at (1,1), as C2-HD predicts (an O(g^0) gap). The exact E_c(N) on the closed-shell axis
+has a strong kink at N = 1: left slope -1.00 J, right slope about +0.75 J. Section 3a shows that any semilocal E_c is C^1 there.
+
+### V2: 3D exact one-orbital shapes, existing functionals (work/v2_dfa.py, v2.out). "!" = C2 violated
+H 1s (J = 5/16). E_c/J, correlation-only functionals:
+| | (0.5,0) | (0.25,0.25) | (0.5,0.5) | (0.75,0.25) | (0.75,0.75) | (1,0.5) | (1,1) |
+|---|---|---|---|---|---|---|---|
+| exact / tent bound | 0 | -0.125 | -0.500 | -0.375 | <= -0.125 | <= 0 | <= 0 |
+| LDA(PW92) | -0.032 | -0.059! | -0.132! | -0.121! | -0.211 | -0.203 | -0.294 |
+| PBE | -0.006 | -0.016! | -0.048! | -0.041! | -0.087! | -0.083 | -0.133 |
+| LYP | 0 | -0.014! | -0.044! | -0.038! | -0.081! | -0.076 | -0.122 |
+| TPSS | 0 | -0.018! | -0.051! | -0.047! | -0.089! | -0.087 | -0.133 |
+| SCAN / r2SCAN | 0 | -0.022! | -0.051! | -0.044! | -0.081! | -0.076 | -0.113 |
+| B95 | 0 | -0.018! | -0.045! | -0.035! | -0.077! | -0.070 | -0.112 |
+| M06-L (c) | 0 | -0.002! | -0.032! | -0.019! | -0.066! | -0.058 | -0.103 |
+- Every correlation functional misses 75-95% of the particle-triangle static correlation (the known fractional-spin error, now on
+  the whole triangle and as a pure-correlation statement).
+- **New violation: the hole-triangle bound at (3/4, 3/4)**, E_c <= -J/8. All GGA/meta-GGA correlations
+  (PBE, LYP, TPSS, SCAN, r2SCAN, B95, M06-L) are above it, i.e. not negative enough. Only LDA satisfies it. The Gaussian shape gives the same
+  picture (v2.out).
+- For total E_xc (with the hybrid's exact exchange), every functional violates the particle equality at N = 1 (E_xc/J between
+  -0.77 and -0.90 vs -1, too high: static correlation error), and at N = 1/2 is too low (-0.30 to -0.41 vs -0.25: delocalisation
+  error). The two errors have opposite signs on the same triangle. The hole E_xc bound is met by all of them, except LDA on the
+  Gaussian pair (1,1), where E_xc^LDA = -1.970 J > E_x = -2 J.
+- T4 check: the forced-form bound for the hydrogenic pair is -0.52309 (Z=1) and -0.88243 (Z=27/16), numerically. The analytic value is -0.5230 Z.

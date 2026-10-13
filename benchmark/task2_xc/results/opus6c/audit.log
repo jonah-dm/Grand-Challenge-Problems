@@ -1,0 +1,23 @@
+{
+ "META": true,
+ "HYB": 0.25,
+ "SMOOTH": true,
+ "NEG_frac_positive": 0.0,
+ "LO_frac_violating": 0.0,
+ "UEG_max_rel_dev": 0.6409188010877056,
+ "POL1_exc_over_LDAx": 0.7307726776609192,
+ "POL1_ok": true,
+ "mix_R2": 0.9794086359993315,
+ "mix_components": {
+  "SCAN": 0.162,
+  "M05": 0.0875,
+  "MN12-L": 0.0307,
+  "wB97M-V": 0.1679,
+  "CAM-B3LYP": 0.3156
+ },
+ "closest_single": {
+  "name": "BHANDHLYP",
+  "R2": 0.9157993787430884
+ },
+ "verdict": "DISTINCT"
+}

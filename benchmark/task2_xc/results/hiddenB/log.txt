@@ -9,3 +9,5 @@ file:results/haiku3/submission.py: AE2 MAE=7.36  BH MAE=4.20  NC MAE=0.80  PA MA
 file:results/opus3/submission.py: AE2 MAE=3.44  BH MAE=4.61  NC MAE=0.89  PA MAE=1.54  WTMAD=7.15  MCM=2.62  time=332s
 file:results/sonnet3/submission.py: AE2 MAE=4.32  BH MAE=3.65  NC MAE=0.48  PA MAE=0.42  WTMAD=5.75  MCM=2.22  time=1238s
 BATCH-DONE
+file:results/opus4/submission.py: AE2 MAE=1.08  BH MAE=3244.09  NC MAE=0.68  PA MAE=0.96  WTMAD=3076.80  MCM=811.70  time=1356s
+file:results/sonnet4/submission.py: AE2 MAE=2.60  BH MAE=2.93  NC MAE=0.43  PA MAE=0.90  WTMAD=4.46  MCM=1.72  time=311s
