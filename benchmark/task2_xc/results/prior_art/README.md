@@ -48,3 +48,9 @@ where every new functional loses to B3LYP; barrier heights are where self-intera
   bounded under erfc screening (b = |∇n_s|²/(4ω²n_s²) is amplitude-invariant); ω* = 0.5767 from the
   one-orbital bound. H₂⁺ at 6 bohr +0.09 kcal/mol (base −28.5); f(½) = 0.2506; N₂ −0.5. Dev 1.21:
   AE MAE 2.08 (best new) but IP MAE 8.27 (IP(B) +9.9, IP(F) +10.4). Literature check pending.
+- LITERATURE CHECK round 6 (results/round6_literature_check.md): T4 is the one creditable new
+  quantitative result (caveats: fixed densities, whole lower triangle needed, He bound −0.85…−0.89 Ha
+  basis-dependent). opus6c ingredients all known (ITYH, LC-ωPBE, GAP 1996, TCS 2004, Modrzejewski
+  2016); new only the hydrogenic branch and the finiteness⇒100% LR-HF argument. opus6c's branch is
+  NOT bounded at fixed s as density grows (cap needed) and the cap breaks exact λ² on compact shapes
+  (4E[n/2]/E[n] = 1.18 on a Gaussian); it overestimates SR self-exchange 1.45–1.81× there.

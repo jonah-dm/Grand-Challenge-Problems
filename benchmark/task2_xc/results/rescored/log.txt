@@ -1,1 +1,3 @@
 dev sonnet3: file:results/sonnet3/submission.py: AE MAE=2.27  IP MAE=3.65  WTMAD=1.03  MCM=2.96  time=407s
+hiddenA sonnet3: file:results/sonnet3/submission.py: AE MAE=3.12  IP MAE=3.63  WTMAD=1.18  MCM=3.37  time=640s
+hiddenB sonnet3: file:results/sonnet3/submission.py: AE2 MAE=4.00  BH MAE=3.79  NC MAE=0.50  PA MAE=0.47  WTMAD=5.81  MCM=2.19  time=526s

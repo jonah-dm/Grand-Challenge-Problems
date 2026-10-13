@@ -21,3 +21,8 @@
   N_cation           -54.02394745    4.4s
   O_cation           -74.53243806    4.3s
   H2O_cation         -75.93711444   25.0s
+  NH3_cation         -56.13235366   43.0s
+  H2O                -76.39947031   14.6s
+  NH3                -56.53015977   22.4s
+
+file:results/sonnet3/submission.py: AE MAE=3.12  IP MAE=3.63  WTMAD=1.18  MCM=3.37  time=640s
