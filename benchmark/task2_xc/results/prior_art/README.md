@@ -38,3 +38,13 @@ where every new functional loses to B3LYP; barrier heights are where self-intera
   PRB 112, L161112 (2025)) and only fixes amplitude scaling, not the λ=1 nonlocality obstruction.
 - Harness bug found by opus5t (zeros vlapl displacing vtau); fixed; all META scores being redone.
 - Dev scores: opus5t 1.55, sonnet5c 1.53, opus5c 1.94.
+
+## Round 6
+- opus6t (theory): occupation-square hole-triangle bounds; T3 (flat-plane axis forces s⁻² correlation
+  on hydrogenic densities); T4 (nowhere-positive semilocal correlation + flat-plane axis ⇒ 10–33×
+  over-correlation of two-electron singlets), verified against an exact 1D Lieb-functional model.
+  Direct enforcement wrecks open-shell atoms (negative result). Functional B2 (prior-art pieces) dev 1.37.
+- opus6c (construction): LC hybrid, 100% LR-HF, 0% SR-HF; SR one-orbital branch exactly λ² and
+  bounded under erfc screening (b = |∇n_s|²/(4ω²n_s²) is amplitude-invariant); ω* = 0.5767 from the
+  one-orbital bound. H₂⁺ at 6 bohr +0.09 kcal/mol (base −28.5); f(½) = 0.2506; N₂ −0.5. Dev 1.21:
+  AE MAE 2.08 (best new) but IP MAE 8.27 (IP(B) +9.9, IP(F) +10.4). Literature check pending.

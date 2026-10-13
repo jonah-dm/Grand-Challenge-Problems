@@ -58,19 +58,18 @@ Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the mos
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
-ROUND-6 FOCUS. Round 5 proved (three independent derivations, organiser-verified; see
-results/prior_art/README.md "Round 5") that no (n, grad n, tau) exchange can be free of one-electron
-delocalization error, and that the Laplacian invariant w = n*lap(n)/|grad n|^2 removes the
-obstruction. The harness cannot pass the Laplacian, so round 6 asks:
-  CONSTRUCTION: the best BOUNDED, Laplacian-free enforcement of the amplitude condition C1 that
-    keeps atomization energies at B3LYP level. opus5t's F_q fixes H2+ and the barrier but raises
-    polarized atoms (N2 +9.6, IP(B) +7.8). Find the construction that gets both: e.g. make the C1
-    weight depend on a delocalization indicator (low density AND large s AND one-orbital) rather
-    than on zeta*z alone, so atomic valence regions are left to the base functional; or enforce C1
-    through range separation (SR semilocal exchange has amplitude degree 2 where omega >> k_F).
-    Score on the dev set AND report self-consistent H2+ at R = 6 bohr and the H+H2 barrier.
-  THEORY: a second exact condition of the same kind for CORRELATION or for two-electron singlets
-    (the flat-plane axis), with the same standard of proof and numerical verification.
+ROUND-7 FOCUS (CONSTRUCTION). opus6c (results/prior_art/opus6c.md, results/opus6c/submission.py)
+removed the one-electron delocalization error with derived constants (H2+ at 6 bohr +0.09 kcal/mol,
+f(1/2)=0.2506, barrier 10.4) and has the best atomization-energy MAE of any new functional (2.08),
+but ionization potentials are off by +10 kcal/mol (B, F) and the dev WTMAD is 1.21. Keep its
+one-orbital SR branch and the 100% LR exact exchange, and recover the IPs. Diagnose first: is the
+IP error in the cation or the neutral, in exchange or correlation (compare against HF exchange and
+CCSD(T)-HF correlation on both), and in which spatial region? Candidate levers, all to be derived
+not fitted: the SR exact-exchange fraction (0 vs 1/4 changes the cation/neutral balance), the
+range parameter's dependence on the local one-orbital bound, the z_s-weight of the branch in
+partially polarized valence regions, and the correlation gate's behaviour for the cation. Report
+dev WTMAD, H2+ at 6 bohr, the H+H2 barrier, and per-item IP errors. Target: dev WTMAD below 0.97
+(B3LYP) with the delocalization fix intact.
 
 PRIOR ART. Read results/prior_art/README.md and the *.md files there first. Four rounds of this
 benchmark re-derived, in order, PBE0, TPSS-style self-correlation gates, B95-style same-spin
