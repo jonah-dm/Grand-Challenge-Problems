@@ -6,10 +6,11 @@ from pyscf.dft import libxc
 
 HYB = 0.25
 META = True
+NLC = (6.0, 0.0093) if os.environ.get("XS4_NLC", "1") == "1" else None   # VV10 (published C from C6 asymptotics)
 _XV = os.environ.get("XS4_X", "pbe")     # twonorm | pbe | hnorm
 _WP = float(os.environ.get("XS4_W", "2"))
 _CO = float(os.environ.get("XS4_C", "1.3607362"))   # opposite-spin rescale in singlet 2e regions (He exact Ec)
-_PP = float(os.environ.get("XS4_P", "1"))
+_PP = float(os.environ.get("XS4_P", "4"))
 _GP = float(os.environ.get("XS4_G", "2"))   # gate exponent on z_s (2 = Stoll z^2); 0 = no gate
 
 KAPPA = 0.804
