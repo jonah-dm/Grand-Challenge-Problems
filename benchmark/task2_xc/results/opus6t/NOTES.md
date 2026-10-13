@@ -283,3 +283,45 @@ H 1s (J = 5/16). E_c/J, correlation-only functionals:
   error). The two errors have opposite signs on the same triangle. The hole E_xc bound is met by all of them, except LDA on the
   Gaussian pair (1,1), where E_xc^LDA = -1.970 J > E_x = -2 J.
 - T4 check: the forced-form bound for the hydrogenic pair is -0.52309 (Z=1) and -0.88243 (Z=27/16), numerically. The analytic value is -0.5230 Z.
+
+---------------------------------------------------------------------------------------------
+# Phase 2 (04:13 onward): implementation, construction, scores
+
+## Implementation
+submission.py is a complex-safe numpy implementation (PBE exchange and PW92/PBE correlation checked against libxc:
+1e-15 / 2e-8 relative). vrho, vsigma and vtau come from complex-step derivatives. The Laplacian slot is None. check_derivs: OK (both spin paths).
+Constants, all from the H-atom norm at the exact density (work/cq.py), none from dev data: c_q = 2.208864 (matches round 5),
+B1 = 0.0377299 (matches sonnet5c's 0.037713). z regulator eps = 1e-3 (numerical only, not varied).
+
+## 6. Construction outcome: the spin-blind (SB) form FAILS, and C2 explains why (negative result, new)
+Candidate C, the section-4 SB form with W = zeta^2 z_tot^2, lowers every open-shell atom by 9-39 kcal/mol (N -39, C -27, F+ -29)
+and gives SVP WTMAD 14.0. Diagnosis on the N atom (work/diag_N.py): the change comes from r = 0.6-2 bohr, where the
+**total** valence density has z_tot = 0.7-0.97 and zeta = 0.6. A spherical open shell is locally almost on the one-orbital
+manifold, so z_tot cannot tell it from a fractional-spin one-orbital density. This is T3b's obstruction again, now at
+zeta != 0, and section 4's claim that z_tot is the right manifold indicator is **refuted numerically**.
+The theory gives the reason. The SB form applies the **particle-triangle** law (static correlation (1-zeta^2)/2).
+But in integer-occupation KS a one-orbital majority channel is always full, f_a = 1. That is the **hole edge** of the
+square, and there the C2-HD tent -2(1-f_a)(1-f_b)J **vanishes**: no static correlation, and E_xc = per-channel exact
+exchange + dynamic correlation, not spin-blind. So the C2-consistent construction for integer KS is: (i) per-channel
+C1 exchange where a channel is one-orbital (exact by exchange spin scaling, whatever the other channel holds); (ii) no
+static-correlation term; (iii) leave closed-shell pairs (the (1,1) corner) to the base. That is the B family
+(W_s = zeta^2 z_s^2, the opus5t form). **Section 4's z_tot argument is withdrawn.** The spin-blind particle-triangle form is relevant only to
+genuinely fractional (ensemble / fractional-occupation) calculations.
+
+## Candidates compared (all disclosed; def2-SVP dev WTMAD; no continuous parameter fitted to dev data)
+| id | base exchange | C1/C2 term | SVP WTMAD | AE MAE | IP MAE |
+|---|---|---|---|---|---|
+| A  | PBE (PBE0 x) | none | 2.00 | 4.38 | 7.48 |
+| B  | PBE | per-channel C1 corner, W_s = zeta^2 z_s^2 | 2.10 | 4.54 | 8.26 |
+| C  | PBE | spin-blind SB, W = zeta^2 z_tot^2 | 14.03 | 35.0 | 23.3 |
+| A2 | z^2-blend, H-normed F_1 (sonnet5c) | none | 2.03 | 4.31 | 8.33 |
+| **B2 (SUBMITTED)** | z^2-blend | per-channel C1 corner | **1.87** | 3.86 | 8.49 |
+| C2 | z^2-blend | spin-blind SB | 13.99 | 34.9 | 23.6 |
+Selection: C/C2 are excluded on physics (section 6) and also on score. B2 was chosen over B by dev score, and A/A2 do not enforce
+anything from C2. Audit: A/B/C (PBE base) give NEAR-EXISTING with closest PBE0 R^2 = 0.99999, because closed shells are almost PBE0. That is
+another reason to use the z-blend base. B2: **DISTINCT** (closest SCAN0 R^2 = 0.938, mix R^2 = 0.993); UEG 5e-7, LO 0, NEG 0.
+
+### Extra numerical checks of the theory (phase 2)
+- T4' on HF densities (work/t4_hf.py, aug-cc-pVQZ): forced-form bound for any e_c <= 0 semilocal correlation that
+  obeys the flat-plane axis on hydrogenic ions: He <= -0.876 Ha, H2 <= -0.418, Li+ <= -1.418, against near-exact
+  -0.042 / -0.041 / -0.0435. That is 10-33x over-correlation of real two-electron singlets.

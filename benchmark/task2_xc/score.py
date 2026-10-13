@@ -110,7 +110,8 @@ def main():
            "all_converged": all(m["converged"] for m in meta.values()),
            "total_seconds": sum(m["seconds"] for m in meta.values())}
     print(f"\n{a.functional}: " + "  ".join(f"{c} MAE={v['MAE']:.2f}" for c, v in summary.items())
-          + f"  WTMAD={wtmad:.2f}  MCM={mean_class_mae:.2f}  time={out['total_seconds']:.0f}s")
+          + f"  WTMAD={wtmad:.2f}  MCM={mean_class_mae:.2f}  time={out['total_seconds']:.0f}s"
+          + ("" if out["all_converged"] else "  UNCONVERGED: " + ",".join(k for k, m in meta.items() if not m["converged"])))
     if a.out:
         json.dump(out, open(a.out, "w"), indent=1)
 
