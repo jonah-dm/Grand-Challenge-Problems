@@ -289,3 +289,49 @@ self-correlation of VV10 is only the nonlocal -0.3 mEh/H. I also derived a close
 finite systems it is a poor approximation. Conclusion: VV10 self-interaction is chemically
 negligible. No credit is claimed here. With exact H density and C = 0.0093, C6(H–H) = 5.94
 (exact 6.499), so a C6-normed C would be about 0.0078.
+
+## 6. Decisive Phase-1 finding: charge linearity is variationally unstable → construction pivots to potential exactness
+
+### 6a. Theorem 3 (charge-linear ⇒ the H density is not stationary)
+Theorem 1 fixes F_1 = (5/9)/s^2 on the whole H density, so it also fixes the semilocal potential
+there. Using v = ∂e/∂n - ∇·(∂e/∂∇n) with |∇n| = 2n:
+v_x^{F1}(r) = -5 pi n_H(r) (3 - 1/r) = -5 e^{-2r}(3 - 1/r). This is repulsive at the nucleus
+(+5/r) and is not -v_H(r) + const. So phi_H is not a stationary point of any charge-linear semilocal
+functional. The SCF energy at q = 1 is strictly below -1/2, even though the functional is exact at
+n_H. Radial variational check (h_variational.py, a = 1/4): the single trial direction
+phi = e^{-r} - 0.354 e^{-2r} already lowers E by 28 mEh, and a flexible 9-exponential minimization
+of a peaked decreasing F lowers it by 52 mEh (ipth.py). PBE exchange in the same test: 0.48 mEh.
+**Conclusion: in semilocal DFT, exactness along the fractional-charge line (Theorem 1) and
+self-consistent exactness of the H atom are mutually exclusive.** The same holds for the weaker
+"IP theorem + H norm" pair: it requires ∫ e_x^{LDA} s F'(s) = +2J > 0, i.e. an iso-orbital F that
+decreases on average with s, and that is non-stationary too (52 mEh).
+Theorems 1–3 are offered as the theory result. The submitted functional cannot use F_1
+self-consistently without ruining every H-containing energy by more than 17 kcal/mol, so it does not.
+
+### 6b. Construction actually submitted: a potential-exact one-orbital branch (Theorem 4)
+Requiring the GGA exchange potential on the hydrogen density to equal the exact one,
+v_x[n_H](r) = -v_H(r) + c, gives a linear second-order ODE for F(s) on the H density. Write
+s = s0 e^{2r/3}; then n^{1/3} s is constant, which makes the reduction possible:
+
+    (3/4) F_rr + (3/(2r) - 5/2) F_r + (4/3) F = e^{2r/3} (v_x^exact(r) + c) / (C_x pi^{-1/3}).
+
+r = 0 is a regular singular point (indicial roots 0 and -1). The regular solution has
+F'(s0) = 0, so the potential has no nuclear singularity. Shooting on F(s0) removes the s^4 mode.
+Properties, all derived rather than fitted:
+- Energy exact by the Levy–Perdew virial relation E_x = -∫ n r·∇v_x, whatever c is.
+- The exact H density is a self-consistent solution, and the radial variational test confirms
+  stability (relaxation < 0.01 mEh against 0.48 for PBE).
+- By uniform scaling, all of this holds for every hydrogenic ion: v_x is exact to Z·c pointwise.
+  That is "exact one-electron exchange pointwise for a whole family of one-orbital densities", in
+  the potential and self-consistent sense, not just the H energy norm.
+- c (the familiar semilocal-potential shift) is the one remaining constant. It is fixed by
+  requiring e_x <= 0 (F >= 0): **c+ = 0.18950** is the smallest shift for which F stays
+  non-negative up to its first interior minimum, at s ≈ 10.5 where F = 0. F is held constant beyond
+  that minimum and below s0 (F' = 0 at both points, so the function is C1).
+  Model one-orbital densities (hscan.py): H2 channel at R = 1.4 within ~0.6 mEh (PBE form: +5 mEh).
+  H2+ is about 6 mEh (2%) too negative (PBE form: -6 mEh).
+- It cannot be charge-linear (Theorem 3).
+Because F_H is accurate for the paired H2 channel, the spin-scaling-exact weight W2 (L_s = h(z_s)
+for every one-orbital channel) is now viable, and Theorem 2 does not apply (F_H is not
+degree-2 homogeneous). W1 (lone electrons only) stays as the alternative candidate.
+Status at the end of Phase 1 (01:39): design frozen. Phase 2 implements it.
