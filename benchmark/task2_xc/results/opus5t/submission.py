@@ -16,7 +16,10 @@ OMEGA = float(os.environ.get('O4_OMEGA', '0'))
 _MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','pairz'); PW=float(os.environ.get('O4_PW','2')); XSPIN=0; _W=os.environ.get('O5_W','zeta2')
 F_LO = 1.804
 ZREG = 1e-2   # numerical regulator of z_s in the C1 weight
-C_Q = 2.208864761915739   # H-atom norm of F_q (work/norm.py)
+# H-atom norm of F_q: 'exact' = E_x^sl[n_H] = -5/16 at the exact density (work/norm.py);
+# 'scf' = E_SCF(H) = -0.5 at the self-consistent def2-QZVP density (work/scnorm.py)
+_NORM = os.environ.get('O5_NORM', 'scf')
+C_Q = 2.1500991092371597 if _NORM == 'scf' else 2.208864761915739
 
 HYB = 0.25
 META = True

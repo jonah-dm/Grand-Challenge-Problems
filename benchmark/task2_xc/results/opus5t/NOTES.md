@@ -127,3 +127,67 @@ w-regions; the exchange GE2 coefficient; no long-range -1/r potential.
   (~50-60 kcal/mol). T2(b) says that a 25% hybrid keeps 75% of this.
 - Delocalization error as amplitude-degree deficit: any functional that is exact at lambda=1 and has
   amplitude degree p gives a fractional-H error (lambda^p - lambda^2) E_x[n_H]. Only p=2 is exact.
+
+---------------------------------------------------------------------------------------------
+# Phase 2 (01:40 onward): implementation, verification, scores
+
+## Correction to a phase-1 hand number
+The "-58 kcal/mol for LDA" stretched-H2+ estimate assumed an LDA that is exact for H at lambda=1.
+The computed values at the exact density, 2E_xc[n_H/2] + 5/32, are in the table below.
+They are LDA -35, PBE -61, r2SCAN -57, B3LYP -54.
+
+## Numerical verification of T2 and the C1 violations (work/norm.py, work/c1_table.py; exact analytic H density)
+- T2 constant: c = 0.55556 = **5/9 exactly** (spin-scaled s). It reproduces E_x[lambda n_H] = -lambda^2 5/16 for all lambda.
+- Gaussian one-orbital density: the c s^-2 functional gives 4.99999 times the exact -J (analytic prediction 5). So the
+  unique C1-exact (s,z) form fails by a factor of 5 on cuspless densities, as T2(a) states.
+- C1 violation on the fractional H atom (f = E_xc[lambda n_H]/(-5/16); exact f(1/2)=0.25, f(1/4)=0.0625;
+  last column = delocalization error of stretched H2+ at the exact density, kcal/mol):
+
+| functional | E_xc[H] | f(1/2) | f(1/4) | H2+(R->inf) error |
+|---|---|---|---|---|
+| LDA | -0.2680 | 0.340 | 0.135 | -35.4 |
+| PBE | -0.3119 | 0.413 | 0.172 | -63.7 |
+| B88 x | -0.3098 | 0.414 | 0.175 | -64.4 |
+| TPSS x | -0.3125 | 0.406 | 0.166 | -61.0 |
+| SCAN / r2SCAN | -0.3125 | 0.395 | 0.156 | -56.9 |
+| PBE0 | -0.3136 | 0.373 | 0.145 | -48.4 |
+| B3LYP | -0.3146 | 0.387 | 0.155 | -53.6 |
+| sonnet3 / opus4 | -0.3106 | 0.372 | 0.145 | -48.0 |
+| **opus5t (exact-density norm)** | -0.3126 | **0.318** | **0.100** | **-26.8** |
+| exact | -0.3125 | 0.250 | 0.0625 | 0 |
+
+Every existing functional tested violates C1. The construction removes about 45% of the violation of
+its own base. The rest is the price of boundedness (T2).
+- Bounded variant with the small-s limit kept at sonnet3's (F = (1+mu s^2)/(1+mu s^4/c), H-normed c=20.6):
+  f(1/2) = 0.419, so it gives **no** C1 improvement. Corollary of T2 checked numerically: with F(0)=1 and the
+  H norm, a bounded iso-orbital F cannot reduce the fractional violation. C1 needs F(0) > 1 in polarized
+  one-orbital regions, hence F_LO.
+
+## Self-consistent H2+ (aug-cc-pVTZ; exact = UHF in same basis), E(H2+) - E(H), kcal/mol (work/barrier.py)
+| R (bohr) | exact | opus4 base (vtau fixed) | opus5t |
+|---|---|---|---|
+| 2 | -64.3 | -66.9 | -69.7 |
+| 4 | -28.8 | -44.8 | -31.6 |
+| 6 | -7.5 | -36.0 | -13.5 |
+The stretched-bond delocalization error drops from -28.5 to -6.1 kcal/mol at R=6 bohr. That is the
+physical content of C1, and the mechanism behind barrier heights and charge-transfer errors.
+
+## HARNESS FINDING (affects every prior MGGA submission)
+PySCF's define_xc_ wrapper (libxc.py `_eval_xc1`) drops `None` entries of vxc and then truncates to the
+expected length. Returning vxc = (vrho, vsigma, np.zeros(N), vtau), as sonnet3/opus4 and earlier rounds did,
+puts the zero "vlapl" array into the **vtau slot** and silently discards vtau. Those SCFs were therefore
+not variational in tau. I found this because the C1 term (strongly tau-dependent through z_s) drove the H atom
+SCF to a stationary point 5 kcal/mol above a directly minimised energy. Diagnosis: work/hdiag10.py and
+hdiag11.py. The PySCF XC matrix equalled the vrho+vsigma part exactly (diff 4e-15) with no tau term.
+Fix: return vlapl = None. With the fix, the Fock-matrix and finite-difference energy gradients agree to 1e-11.
+For the opus4 form the effect on dev energies is small (SVP WTMAD 1.82 -> 1.83). For tau-heavy forms it is
+large.
+
+## Numerical regulator
+z_s in the C1 weight uses (tau_W,s + eps tau_unif,s)/(tau_s + eps tau_unif,s) with eps = 1e-2. This removes
+0/0 at points where grad n = tau = 0 (Gaussian-basis nuclei). It changes nothing where tau >> 0.01 tau_unif.
+It is numerical, not fitted, and I did not vary it.
+
+## Checks
+- check_derivs: OK (check_derivs.log). audit: DISTINCT (audit.log; closest PBE0 R^2 = 0.970).
+- All 24 dev species converge (QZ).

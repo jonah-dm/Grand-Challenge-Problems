@@ -13,7 +13,7 @@ import numpy as np
 
 X1 = os.environ.get('S5_X1', 'H')            # one-orbital branch: 'none' | 'H' | 'HHe' | 'LIB'
 CORR = os.environ.get('S5_CORR', 'pair')     # 'pbe' | 'stoll' | 'pair'
-ZX = os.environ.get('S5_ZX', 'chan')         # 'chan': per-spin-channel z (exact spin scaling) | 'tot': total z
+ZX = os.environ.get('S5_ZX', 'tot')         # 'chan': per-spin-channel z (exact spin scaling) | 'tot': total z
 PW = float(os.environ.get('S5_WP', '2'))     # w = z^PW   (2: smallest integer keeping GE2 of the GGA branch)
 
 HYB = 0.25

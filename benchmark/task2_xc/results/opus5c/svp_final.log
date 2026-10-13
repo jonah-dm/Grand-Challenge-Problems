@@ -16,3 +16,11 @@
   F2                -199.17280577   24.0s
   C2H2               -77.15607081   48.9s
   HCN                -93.22568824   38.9s
+  H2CO              -114.28127356   45.4s
+  OH                 -75.58824992   38.3s
+  CH2_triplet        -39.06788645   62.1s
+  B_cation           -24.26513816    8.1s
+  F_cation           -98.92401479   18.9s
+  HF_cation          -99.68865392   41.0s
+
+file:results/opus5c/submission.py: AE MAE=5.41  IP MAE=9.12  WTMAD=2.47  MCM=7.27  time=1353s

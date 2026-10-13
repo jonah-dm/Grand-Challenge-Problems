@@ -1,3 +1,35 @@
+# >>> FINAL STATUS (read first)
+- Submission: `submission.py` (HYB = 0.25, META = True, W2 weight, mu = beta pi^2/3, c = 0.22451, capped F_H).
+  `score.json` is the def2-QZVP run of the byte-identical copy `submission_final_snapshot.py`.
+- **Final dev WTMAD (def2-QZVP) = 1.94** (AE MAE 4.50, IP MAE 5.52, MCM 5.01; all 24 species converged).
+  This is worse than r2SCAN (1.28), B3LYP (0.97), wB97M-V (0.56) and PBE0 (1.31). It beats only PBE (2.95).
+  Largest errors: CH4 +12.5, CH2 +10.4, IP:B +8.4, N2 -6.8, IP:HF -6.4.
+- Audit: DISTINCT (closest single HSE06, R^2 = 0.9946; mix R^2 = 0.9987; NEG 0, LO 0, UEG 4e-7).
+  check_derivs: OK.
+- What is new (the derivation is the main contribution; none of it is on KNOWN_CONDITIONS.md):
+  Theorem 1 (the unique semilocal charge-linear one-electron exchange, F = (5/9)/s^2, i.e.
+  E_x = -10 pi ∫ n^4/|grad n|^2, exact on the whole charge line for every hydrogenic ion); Corollary 2
+  (pointwise F <= 1.174 or 1.804 bounds preclude piecewise linearity for H); Theorem 2 (no
+  Laplacian-free meta-GGA can have both charge-linear paired exchange and fractional-spin constancy;
+  bound >= 68 kcal/mol for H); Theorem 3 (charge-linearity makes the H density non-stationary, so SCF
+  energies drop by >= 28 mEh: charge linearity and self-consistent exactness are incompatible
+  semilocally); Theorem 4 (construction: the ODE-defined GGA one-orbital branch whose exchange
+  potential on hydrogenic densities is exact up to a constant, with exact energy by the virial
+  relation and a stable SCF; validated uncapped: H +0.16, He +0.20 kcal/mol).
+- What the submitted functional actually satisfies is weaker: Section 8 explains that the cap needed
+  for LO and atomic tails costs the H exactness (+2.3 kcal/mol). The construction claim therefore
+  rests on the uncapped branch (Sections 6–7), and the scored functional is a Ne-normed descendant.
+- Phase rules: one disclosed slip. SVP runs were launched at 01:35 and killed within about 10 s
+  (Phase 2 header).
+- With more time: (i) find a tail treatment for F_H that keeps the potential exact where the H
+  density lives without unbounded F, e.g. by imposing the exact condition on an s-cutoff that
+  scales with the local density instead of a fixed s; (ii) a range-separated version using the
+  fully determined SR branch of Corollary 4 (charge-linear lone electrons at short range, HF at long
+  range), where Theorem 3's instability may be weaker because the SR potential is screened;
+  (iii) VV10 with C from the exact H–H C6 (C ≈ 0.0078); I found no derivable b; (iv) an explicit
+  treatment of the B+ 2s^2 near-degeneracy that causes the large IP:B error in all non-fitted functionals.
+# <<<
+
 # opus5c — CONSTRUCTION track
 # "Charge-linear one-electron exchange": a semilocal exchange that is exact on the whole
 # fractional-charge line 0 <= N <= 1 for every hydrogenic one-electron system
@@ -397,3 +429,26 @@ generated from my own HF calculation. It fixes the single remaining constant. Th
 choice c+ and the monotonicity choice c* = 0.2795 are disclosed above as rejected
 alternatives. The capped Ne-normed functional is DISTINCT in the audit (closest single HSE06,
 R^2 = 0.9946; NEG 0, LO 0, UEG 4e-7). check_derivs is OK.
+
+### Final functional, SVP and small-system results
+SVP dev (final, capped, c = 0.22451): **WTMAD 2.47** (AE 5.41, IP 9.12), against PBE0 2.12 and W0 2.12.
+Per item vs W0: N2 -8.5 (-1.2), H2O -8.3, HF -7.9, CH4 +12.4, CH2 +10.8, IP:B +10.3, IP:HF -12.8.
+
+Self-consistent small systems with the FINAL (capped) functional, aug-cc-pVQZ:
+
+| system | error, kcal/mol | (uncapped c+ version, Sec. 7) |
+|---|---|---|
+| H atom | +2.31 | +0.16 |
+| He atom | +6.20 | +0.20 |
+| H2+ | -1.80 | -1.81 |
+| H2 | +0.27 (SCF flagged not fully converged at 1e-9) | -2.01 |
+
+Fractional-charge H, E(1/2) - E(1)/2: -0.0390 Eh (PBE0 -0.0393).
+**Honest assessment.** Capping F_H at 1.804 for s > 2.64, which is needed for pointwise LO and for
+sane atomic tails, destroys the virial guarantee. The H atom is then off by 2.3 kcal/mol and He
+by 6.2, and the delocalization gain disappears. The exactness results of Sections 6–7 hold for the
+uncapped branch only. The capped functional that is actually submitted is a Ne-normed
+iso-orbital meta-GGA hybrid whose one-orbital branch has the shape of the H-potential-exact
+solution out to s = 2.64. It has no proven exactness, and it is somewhat worse than PBE0 on the dev
+set. I did not find, within the time, a single c with a tail treatment that keeps H exact, keeps
+the atomic tails sane, and satisfies pointwise LO. Theorem 3 suggests the tension is structural.
