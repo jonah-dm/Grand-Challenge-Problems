@@ -58,18 +58,13 @@ Before any SCF run, verify your derivatives (wrong spin-polarized vxc is the mos
 argument justifies it, and which exact conditions your functional satisfies and violates.
 Submissions judged to be re-fits or wrappers of existing functionals are disqualified.
 
-PRIOR ART. Earlier rounds of this benchmark produced the attempts in results/prior_art/*.md (read
-them first; *3.md are the latest). None beat B3LYP (0.97) yet. Frontier so far:
-  - sonnet3 (dev WTMAD 1.00): 25% hybrid meta-GGA; correlation = E_c^PBE[n_a,n_b] - sum_s z_s^2
-    E_c^PBE[n_s,0] (Stoll partition: no same-spin correlation in a channel holding one orbital).
-  - opus3 (1.59): joint one-electron condition on (1-a)E_x^SL + E_c; H atom exact by construction;
-    showed no PBE-form iso-orbital exchange can meet both H and He norms.
-Known failure modes: one-orbital exchange norms that underbind X-H bonds; gates that kill genuine
-opposite-spin correlation in open-shell atoms (N2, C2H2 overbind); wrong spin-polarized
-derivatives; constraint-only exchange rebuilding r2SCAN. Build on or go beyond these; do not
-repeat them. Ideas named but untried: a per-spin same-spin removal paired with an opposite-spin
-correlation built for it; an iso-orbital exchange meeting both H and He norms (s^-1/2 tail);
-range separation for IPs/barriers; nonlocal correlation for noncovalent interactions.
+PRIOR ART. Read results/prior_art/README.md and the *.md files there first. Four rounds of this
+benchmark re-derived, in order, PBE0, TPSS-style self-correlation gates, B95-style same-spin
+removal (sonnet3, dev WTMAD 1.00, the best so far) and SCAN-style norms, plus a pair-aware
+refinement (opus4, 1.08). Every one of those is on the known list and earns no credit now.
+Known failure modes: one-orbital exchange norms underbind X-H bonds; gates that remove
+opposite-spin correlation in singlets or open-shell atoms; constraint-only exchange rebuilds
+r2SCAN; range parameters fixed from H/He alone do not transfer. Do not repeat any of this.
 
 HARNESS. Besides HYB and META, submission.py may define RSH = (omega, alpha, beta) for a
 range-separated hybrid (alpha*HF + beta*short-range HF with erfc(omega r)/r; eval_xc then gets
