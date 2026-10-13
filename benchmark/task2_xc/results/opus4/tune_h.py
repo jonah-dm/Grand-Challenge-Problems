@@ -11,5 +11,6 @@ def run(om, basis='aug-cc-pvqz', atom='H 0 0 0', spin=1):
     mf=mf.define_xc_(m.eval_xc,'MGGA',hyb=m.HYB,rsh=rsh); mf.conv_tol=1e-10; mf.run()
     ea=mf.mo_energy[0][mf.mo_occ[0]>0].max()
     return mf.e_tot, ea
+ATOM=os.environ.get('TUNE_ATOM','H 0 0 0'); SP=int(os.environ.get('TUNE_SPIN','1'))
 for om in [float(x) for x in sys.argv[1:]]:
-    e,h=run(om); print(f'omega={om:.4f} E(H)={e:.6f}  -eps_HOMO={-h:.5f}', flush=True)
+    e,h=run(om,atom=ATOM,spin=SP); print(f'omega={om:.4f} E(H)={e:.6f}  -eps_HOMO={-h:.5f}', flush=True)
