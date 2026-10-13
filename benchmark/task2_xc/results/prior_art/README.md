@@ -31,5 +31,10 @@ where every new functional loses to B3LYP; barrier heights are where self-intera
   form exact for all fractional hydrogenic densities). Harness cannot pass the Laplacian.
 - Bounded partial enforcement (opus5t, F_q = F_LO/(1+F_LO s²/c_q), weight ζ²z_s²): H₂⁺ at 6 bohr
   −28.5 → −6.1 kcal/mol, H+H₂ barrier 7.2 → 9.06 (exact 9.6); dev 1.55 (polarized atoms raised).
+- LITERATURE CHECK (results/round5_literature_check.md): (1) is KNOWN (Zhang & Yang 1998; MCY 2006);
+  (2) PARTIALLY KNOWN, stronger form in Santra & Perdew, JCP 150, 174106 (2019); the s⁻² closed form
+  and Gaussian counterexample are the new parts; (3) the 11.6% LP floor is a GRID ARTIFACT (→0% on fine
+  grids), do not cite it; (4) Laplacian escape PARTIALLY KNOWN (Becke–Roussel 1989; Ramasamy et al.
+  PRB 112, L161112 (2025)) and only fixes amplitude scaling, not the λ=1 nonlocality obstruction.
 - Harness bug found by opus5t (zeros vlapl displacing vtau); fixed; all META scores being redone.
 - Dev scores: opus5t 1.55, sonnet5c 1.53, opus5c 1.94.

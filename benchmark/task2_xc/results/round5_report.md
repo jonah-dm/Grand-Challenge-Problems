@@ -9,10 +9,21 @@
 See REVIEW.md in each folder. Organiser verified: closed form exact for H (−5/16), N² scaling,
 uniqueness argument, Gaussian counterexample (2.5×), and the PySCF vtau bug.
 
-## Assessment
-First publication-adjacent output of the benchmark: a clean no-go theorem for Laplacian-free
-semilocal exchange on one-electron delocalization, with a quantified floor and a constructive
-escape. Three independent derivations in one round. Novelty vs. literature (Becke–Roussel 1989
-Laplacian hole model; Perdew–Ruzsinszky–Csonka 2007 density scaling; MCY 2008) is unverified and
-is the subject of the round-6 literature check. No functional beat B3LYP; the theorem explains why
-the semilocal attempts of rounds 2–5 plateaued on self-interaction-sensitive quantities.
+## Assessment, revised after the literature check (results/round5_literature_check.md)
+- (1) λ² amplitude scaling: KNOWN (follows from PPLB 1982 + PZ 1981; Zhang & Yang 1998; MCY 2006).
+- (2) No-go for Laplacian-free semilocal exchange: PARTIALLY KNOWN. Santra & Perdew 2019 state the
+  stronger result (no semilocal functional is exact for all one-electron densities; Hartree is
+  nonlocal). Creditable and not found in print: the sharp characterization F(s, z=1) = (5/9)s⁻²,
+  the closed form E_x = −10π∫n⁴/|∇n|², the hydrogenic-family uniqueness, and the Gaussian
+  counterexample.
+- (3) LP floor ≥ 11.6%: INVALID. Grid artifact; finer grids give 6% (1000 pts) and 0% (5000 pts).
+  The qualitative theorem stands; the number does not.
+- (4) Laplacian escape: PARTIALLY KNOWN (Becke–Roussel 1989; Ramasamy et al., PRB 112, L161112
+  (2025), a Laplacian meta-GGA that greatly reduces H₂⁺ SIE) and OVERSTATED: the Laplacian fixes
+  only the amplitude scaling; the nonlocality obstruction at λ = 1 (separated fragments) remains.
+- Derivations checked correct: ensemble proof of (1), uniqueness proof, c = 5/9, −10π prefactor,
+  Gaussian factor, s₀. Misattribution corrected: density scaling is Borgoo–Teale–Tozer, JCP 136,
+  034101 (2012).
+Net: a correct, well-verified re-derivation with a few sharp new corollaries; not a publishable
+theorem on its own. The benchmark's reviewer step (literature check) was necessary: without it the
+round would have been recorded as a new result. No functional beat B3LYP.
