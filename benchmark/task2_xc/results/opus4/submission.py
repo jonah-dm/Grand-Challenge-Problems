@@ -12,7 +12,7 @@ import os
 import numpy as np
 from scipy.special import erf as _erf
 OMEGA = float(os.environ.get('O4_OMEGA', '0'))
-_MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','pairz'); PW=float(os.environ.get('O4_PW','2')); XSPIN=int(os.environ.get('O4_XSPIN','1'))
+_MUMODE=os.environ.get('S3_MU','pbe'); _GATE=os.environ.get('S3_GATE','pairz'); PW=float(os.environ.get('O4_PW','2')); XSPIN=int(os.environ.get('O4_XSPIN','0'))
 
 HYB = 0.25
 META = True

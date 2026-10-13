@@ -1,7 +1,9 @@
 # haiku4 NOTES
 
 Submission: `results/haiku4/submission.py` (= `cand_B_hnorm.py`), hybrid meta-GGA, HYB = 0.25, META = True.
-Final dev-set WTMAD (def2-qzvp): **QZ_WTMAD_PLACEHOLDER** (QZ AE/IP MAE in `score.json`).
+Final dev-set WTMAD (def2-qzvp): **1.30** (AE MAE 3.01, IP MAE 3.71, MCM 3.36; all species converged; `score.json`, `score_qzvp.log`).
+This is slightly worse than r2SCAN (1.28), better than PBE (2.95), and not better than B3LYP (0.97). It does not beat the frontier.
+Note: the first QZ run was killed mid-way by the environment (no output written); it was rerun in full with the same file.
 def2-svp WTMAD: 1.98 (AE MAE 4.33, IP MAE 7.34 kcal/mol). Baselines: PBE 2.95, r2SCAN 1.28, B3LYP 0.97, wB97M-V 0.56.
 Audit (`audit_B.log`): UEG rel. dev 1.6e-15, LO violations 0, negativity 0, mix R2 0.9999, closest single PBE0
 (R2 0.9997), verdict **NEAR-EXISTING**. check_derivs: OK (complex-step derivatives, max rel. err 1e-5).
@@ -43,6 +45,7 @@ Violated / not imposed:
 Logs: `score_svp_A_tail.log/json`, `score_svp_B_hnorm.log/json`. The difference is 0.01 in WTMAD and is within
 noise of the choice; B was selected because it is the one that satisfies the H-atom exchange norm exactly, which is
 the constraint the candidate is built on, and because its MCM is lower. Only B was run at def2-qzvp.
+WTMAD at def2-qzvp for B is 1.30 (see top); no QZ run was made for A.
 Sonnet3's own submitted form scores 1.99 at def2-svp in its notes; candidate A reproduces that (1.99), which is a
 consistency check on this reimplementation.
 No continuous parameter was fitted to the dev set. kappa, mu0, beta are fixed by LO / GE / PBE; mu1 by the H atom.
