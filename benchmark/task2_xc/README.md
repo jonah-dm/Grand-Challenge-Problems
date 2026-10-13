@@ -29,3 +29,22 @@ baseline on any class by more than a stated tolerance. Must converge on every sp
 - `score.py` — score a functional: `python score.py dev_set kit/dev_reference.json pbe`
 - `results/baselines/` — baseline functionals
 - `results/<model>/` — model submissions and scores
+
+## Evaluation pipeline (as run overnight 2026-10-12/13)
+1. Contestant agent in a sandbox with CONTESTANT_PROMPT.md, KNOWN_CONDITIONS.md, the public dev
+   set, score.py, audit.py, check_derivs.py and prior_art/ (notes from earlier rounds, with
+   organiser verdicts). Fixed time budget, one CPU thread, derivation-only first phase.
+2. Automatic gates: check_derivs.py (vxc vs finite differences, both spin paths); audit.py
+   (wrapper/mix detection against ~40 libxc functionals; UEG, Lieb–Oxford, negativity; a
+   spin-polarized one-orbital probe). WRAPPER/MIX disqualify; NEAR-EXISTING goes to review.
+3. Scoring: dev set, hidden set A (same classes, new molecules), hidden set B (unseen classes).
+   Ranking on hidden set B by MCM. The hidden sets live on the `hidden-references` branch.
+4. Organiser review (REVIEW.md per submission): numerical re-verification of the central claim,
+   check of disclosed candidate selection, classification against KNOWN_CONDITIONS.md.
+5. Literature check by a separate reviewer agent with web search for any claimed theory result
+   (results/round5_literature_check.md is the template). Round 5 showed this step is essential:
+   three agents' "new theorem" was mostly known, and one quantitative claim was an artifact.
+6. Rounds are cumulative: each round's notes and verdicts feed the next round's prior art.
+Harness bugs found and fixed along the way: HYB ignored for custom functionals (round 1);
+Newton fallback needing fxc (round 2); vtau displaced by a zeros vlapl (round 5, found by a
+contestant).
